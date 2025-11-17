@@ -1,26 +1,83 @@
-@import "tailwindcss";
+/* 전체 사이트 배경 */
+.page-bg {
+  width: 100vw;
+  height: 100vh;
+  background: white;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* 키오스크 전체 화면(검정) */
+.kiosk {
+  width: 420px;               /* 너비 */
+  height: 950px;              /* 전체 키오스크 높이 */
+  background: #000000;        /* 전체를 검정으로 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 0px;          /* 위쪽 여백 */
+  border-radius: 0px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* 버튼 영역(검정 안에 위치) */
+.button-zone {
+  margin-top: 250px;           /* 버튼을 아래로 내림 */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 60px;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* 버튼 */
+.kiosk-button {
+  width: 260px;
+  height: 150px;
+  background: #C9C9C9;
+  border-radius: 25px;
+  border: 4px solid white;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  color: white;
+  font-size: 22px;
+  font-weight: 500;
+  text-align: center;
+  line-height: 1.4;
+  cursor: pointer;
+}
+
+/* ===== 인트로 화면 스타일 ===== */
+
+.start-screen {
+  width: 100vw;
+  height: 100vh;
+  background: #000;
+  color: white;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  padding-bottom: 120px;
+  text-align: center;
+
+  cursor: pointer;
+}
+
+.start-text {
+  font-size: 24px;
+  line-height: 1.5;
+  margin-bottom: 60px;
+  opacity: 0.9;
+}
+
+.start-sub {
+  font-size: 18px;
+  line-height: 1.4;
+  opacity: 0.6;
 }
