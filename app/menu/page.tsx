@@ -18,7 +18,7 @@ export default function MenuPage() {
         <div className="button-zone">
           <button
   className="kiosk-button"
-  onClick={() => router.push("/first_screen")}
+  onClick={() => router.push("/Waste")}
 >
   일반 재활용<br/>안내
 </button>
