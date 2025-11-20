@@ -121,7 +121,7 @@ export default function FirstScreen() {
             className="photo-btn"
             onClick={() => {
               localStorage.setItem("wasteImage", photoBase64);
-              router.push("/Waste/loading");
+              router.push("/waste/analyze");
             }}
             disabled={!photoBase64}
           >
@@ -150,7 +150,7 @@ export default function FirstScreen() {
           <button
             className="ask-btn"
             onClick={() =>
-              router.push("/Waste/loading?text=" + encodeURIComponent(textQuestion))
+              router.push("/Waste/analyze?text=" + encodeURIComponent(textQuestion))
             }
             disabled={!textQuestion}
           >

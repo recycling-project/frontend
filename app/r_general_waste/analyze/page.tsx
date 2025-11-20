@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 
-export default function WasteLoading() {
+export default function wasteLoading() {
     const router = useRouter();
     const searchParams = useSearchParams();
 
@@ -33,7 +33,7 @@ export default function WasteLoading() {
 
             const data = await res.json();
 
-            router.push("/Waste/result?data=" + encodeURIComponent(JSON.stringify(data)));
+            router.push("/waste/result?data=" + encodeURIComponent(JSON.stringify(data)));
         }
 
         analyze();
