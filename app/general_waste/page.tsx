@@ -58,7 +58,7 @@ export default function FirstScreen() {
     const base64 = canvas.toDataURL("image/png");
 
     localStorage.setItem("wasteImage", base64);
-    router.push("/Waste/loading");
+    router.push("/general_waste/analyze");
   };
 
   return (
@@ -100,7 +100,7 @@ export default function FirstScreen() {
           {/* QR 업로드 */}
           <button
             className="photo-btn"
-            onClick={() => router.push("/Waste/qr")}
+            onClick={() => router.push("/general_waste/qr")}
           >
             QR로 사진 업로드
           </button>
@@ -121,7 +121,7 @@ export default function FirstScreen() {
             className="photo-btn"
             onClick={() => {
               localStorage.setItem("wasteImage", photoBase64);
-              router.push("/waste/analyze");
+              router.push("/general_waste/analyze");
             }}
             disabled={!photoBase64}
           >
@@ -150,7 +150,7 @@ export default function FirstScreen() {
           <button
             className="ask-btn"
             onClick={() =>
-              router.push("/Waste/analyze?text=" + encodeURIComponent(textQuestion))
+              router.push("/general_waste/analyze?text=" + encodeURIComponent(textQuestion))
             }
             disabled={!textQuestion}
           >
