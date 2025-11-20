@@ -6,7 +6,7 @@ export const revalidate = 0;
 
 import { useSearchParams } from "next/navigation";
 
-export default function WasteResult() {
+export default function wasteResult() {
   const searchParams = useSearchParams();
   const data = searchParams.get("data");
 
