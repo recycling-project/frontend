@@ -1,6 +1,7 @@
 "use client";
 
-export const dynamic = "force-dynamic";   // 🔥 SSR 프리렌더링 완전 차단
+export const dynamic = "force-dynamic";
+export const runtime = "edge";
 
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
