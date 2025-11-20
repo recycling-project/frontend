@@ -1,67 +1,77 @@
 "use client";
 
+export const dynamic = "force-dynamic";   // 🔥 SSR 프리렌더링 완전 차단
+
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 
-export default function wasteLoading() {
-    const router = useRouter();
-    const searchParams = useSearchParams();
+export default function WasteAnalyze() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
-    const base64 =
-        typeof window !== "undefined" ? localStorage.getItem("wasteImage") : null;  //사진모드
-    const text = searchParams.get("text");  // 텍스트모드 
+  const base64 =
+    typeof window !== "undefined"
+      ? localStorage.getItem("wasteImage")
+      : null;
 
-    //페이지 진입 즉시 분석 시작
-    useEffect(() => {
-        async function analyze() {
-            let body;
+  const text = searchParams.get("text");
 
-            if (base64) {
-                body = JSON.stringify({ image: base64 });   // 사진 모드
-            } else if (text) {
-                body = JSON.stringify({ text: text }); // 텍스트 질문 모드
-            } else {
-                return;
-            }
+  useEffect(() => {
+    async function analyze() {
+      let body;
 
-            const res = await fetch("http://localhost:8080/recycle/analyze", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body,
-            });
+      // 사진 모드
+      if (base64) {
+        body = JSON.stringify({ image: base64 });
 
-            const data = await res.json();
+      // 텍스트 질문 모드
+      } else if (text) {
+        body = JSON.stringify({ text: text });
 
-            router.push("/waste/result?data=" + encodeURIComponent(JSON.stringify(data)));
-        }
+      } else {
+        return;
+      }
 
-        analyze();
-    }, [base64, text]);
+      // 🚨 여기 수정: localhost 직접 호출 금지
+      // 환경변수에서 API 주소 가져오기
+      const api = process.env.NEXT_PUBLIC_API_URL;
 
+      const res = await fetch(`${api}/recycle/analyze`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body,
+      });
 
-    return (
-        <div className="page-bg">
-            <div className="kiosk">
+      const data = await res.json();
 
-                {/* 상단 뒤로가기 버튼 */}
-                <img
-                    src="/back_icon.png"
-                    alt="뒤로가기"
-                    className="back-btn"
-                    onClick={() => router.back()}
-                />
+      router.push(
+        "/general_waste/result?data=" +
+          encodeURIComponent(JSON.stringify(data))
+      );
+    }
 
-                {/* 로딩 움짤 */}
-                <div className="loading-wrapper">
-                    <img
-                        src="/Loding.gif"
-                        alt="로딩 움짤"
-                        className="loading-gif"
-                    />
-                </div>
+    analyze();
+  }, [base64, text]);
 
-            </div>
+  return (
+    <div className="page-bg">
+      <div className="kiosk">
+        <img
+          src="/back_icon.png"
+          alt="뒤로가기"
+          className="back-btn"
+          onClick={() => router.back()}
+        />
+
+        <div className="loading-wrapper">
+          <img
+            src="/Loding.gif"
+            alt="로딩 움짤"
+            className="loading-gif"
+          />
         </div>
-    );
+      </div>
+    </div>
+  );
 }
