@@ -5,9 +5,10 @@ import { useSearchParams } from "next/navigation";
 
 export default function WasteLoading() {
     const router = useRouter();
-    const searchParams = useSearchParams();   
+    const searchParams = useSearchParams();
 
-    const base64 = searchParams.get("img");  //사진모드
+    const base64 =
+        typeof window !== "undefined" ? localStorage.getItem("wasteImage") : null;  //사진모드
     const text = searchParams.get("text");  // 텍스트모드 
 
     //페이지 진입 즉시 분석 시작
@@ -35,7 +36,7 @@ export default function WasteLoading() {
         }
 
         analyze();
-    }, [base64,text]);
+    }, [base64, text]);
 
 
     return (
