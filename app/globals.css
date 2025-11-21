@@ -377,3 +377,62 @@
   font-size: 16px;
   cursor: pointer;
 }
+
+/*----------------------------------------------------------------*/
+
+/* Waste 파일 첨부 영역 */
+.bottom-button-area {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  margin-top: auto;
+  padding-bottom: 30px;
+}
+
+/* 파일 업로드 input */
+.file-input {
+  width: 260px;
+  padding: 12px;
+  border-radius: 10px;
+  background: white;
+  font-size: 16px;
+}
+
+/* 텍스트 입력 input */
+.text-input {
+  width: 260px;
+  padding: 12px;
+  border-radius: 10px;
+  background: white;
+  font-size: 16px;
+}
+
+/* 버튼 공통 */
+.photo-btn,
+.ask-btn {
+  width: 260px;
+  padding: 14px;
+  background: #ffffff;
+  border-radius: 10px;
+  border: 2px solid #fff;
+  color: rgb(0, 0, 0);
+  font-size: 20px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.camera-preview {
+  width: 100%;
+  height: 40vh;       /* 상단 40% 카메라 영역 */
+  object-fit: cover;
+  background: #000;   /* 화면 검게 */
+  border-radius: 10px;
+}
+
+.detect-content {
+  margin-top: 20px;
+  z-index: 10;
+  position: relative;
+}
