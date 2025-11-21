@@ -442,6 +442,7 @@ html, body {
   cursor: pointer;
 }
 
+
 .camera-preview {
   width: 100%;
   height: 40vh;       /* 상단 40% 카메라 영역 */
@@ -477,7 +478,7 @@ html, body {
 
 .general_waste .bottom-button-area {
   position: absolute;
-  bottom: 50px;        /* ✅ 하단 기준으로 위로 이동 */
+  bottom: 280px;        /* ✅ 하단 기준으로 위로 이동 */
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -492,4 +493,49 @@ html, body {
   display: flex;
   justify-content: center;  /* 가로 중앙 */
   align-items: center;      /* 세로 중앙 */
+}
+
+/*질문하기 채팅창*/
+/* 채팅 영역 */
+.chat-area {
+  width: 100%;
+  height: 300px;
+  padding: 20px;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+/* 기본 안내 */
+.chat-placeholder {
+  color: #888;
+  text-align: center;
+  margin-top: 100px;
+}
+
+/* 말풍선 */
+.chat-bubble {
+  max-width: 80%;
+  padding: 14px 18px;
+  border-radius: 18px;
+  margin: 10px 0;
+  line-height: 1.4;
+  font-size: 16px;
+}
+
+/* 사용자 말풍선 */
+.chat-bubble.user {
+  background: #ffffff;
+  color: black;
+  align-self: flex-end;
+  margin-left: auto;
+}
+
+/* 입력창 */
+.text-input {
+  width: 260px;
+  height: 70px;
+  border-radius: 12px;
+  border: 2px solid white;
+  font-size: 18px;
+  text-align: center;
 }
