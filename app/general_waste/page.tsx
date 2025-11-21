@@ -11,16 +11,17 @@ export default function FirstScreen() {
   const [photoBase64, setPhotoBase64] = useState("");
   const [showKeyboard, setShowKeyboard] = useState(false);
 
-  // 카메라
+  // 🎥 실제 카메라 Ref
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
-  // 카메라 켜기
+  // ✅ 카메라 실행
   useEffect(() => {
     async function startCamera() {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
-          video: true,
+          video: { facingMode: "environment" }
         });
+
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
         }
@@ -32,33 +33,11 @@ export default function FirstScreen() {
     startCamera();
   }, []);
 
-  // 사진 파일 업로드 → base64 변환
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-
-    reader.onloadend = () => {
-      const base64 = reader.result as string;
-
-      // base64 형식 체크
-      if (!base64.startsWith("data:image/")) {
-        alert("이미지 파일만 업로드 가능합니다.");
-        return;
-      }
-
-      // 🔥 상태 + localStorage에 동시에 저장
-      setPhotoBase64(base64);
-      localStorage.setItem("wasteImage", base64);
-    };
-
-    reader.readAsDataURL(file);
-  };
-
-  // 촬영하기 기능
+  // 📷 촬영
   const capturePhoto = () => {
-    const video = videoRef.current!;
+    if (!videoRef.current) return;
+
+    const video = videoRef.current;
     const canvas = document.createElement("canvas");
 
     canvas.width = video.videoWidth;
@@ -68,8 +47,8 @@ export default function FirstScreen() {
     ctx.drawImage(video, 0, 0);
 
     const base64 = canvas.toDataURL("image/png");
-
     localStorage.setItem("wasteImage", base64);
+
     router.push("/general_waste/analyze");
   };
 
@@ -85,93 +64,60 @@ export default function FirstScreen() {
           onClick={() => router.back()}
         />
 
-        {/*  카메라 화면 */}
-        <video
-          ref={videoRef}
-          autoPlay
-          playsInline
-          className="camera-preview"
-        />
+        <div className="general_waste">
 
-        <div className="detect-content">
-          <img src="/Green_camera.png" alt="camera icon" className="detect-icon" />
-          <p className="detect-text">
-            분리수거할 품목을 카메라에<br />
-            잘 보이게 배치해 주세요.
-          </p>
-        </div>
-
-        {/* 버튼 영역 */}
-        <div className="bottom-button-area">
-
-          {/* 촬영하기 */}
-          <button className="photo-btn" onClick={capturePhoto}>
-            촬영하기
-          </button>
-
-          {/* QR 업로드 */}
-          <button
-            className="photo-btn"
-            onClick={() => router.push("/general_waste/qr")}
-          >
-            QR로 사진 업로드
-          </button>
-
-          {/* 파일 업로드 추후 삭제예정*/}
-          <label className="file-label">
-            사진 파일 선택
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleFileUpload}
-              className="file-input"
+          {/* ✅ 실제 카메라 화면 (배경) */}
+          <div className="camera-layer">
+            <video
+              ref={videoRef}
+              autoPlay
+              playsInline
+              className="camera-preview"
             />
-          </label>
+          </div>
 
-          {/* 사진 분석 추후 삭제예정*/}
-          <button
-            className="photo-btn"
-            onClick={() => {
-              if (!photoBase64) {
-                alert("이미지를 먼저 업로드하세요.");
-                return;
-              }
-              router.push("/general_waste/analyze");
-            }}
-          >
-            사진으로 분석하기
-          </button>
-
-          {/* 텍스트 입력 */}
-          <input
-            type="text"
-            placeholder="텍스트로 직접 질문하기"
-            value={textQuestion}
-            readOnly
-            onClick={() => setShowKeyboard(true)}
-            className="text-input"
-          />
-
-          {showKeyboard && (
-            <KeyboardModal
-              value={textQuestion}
-              onChange={setTextQuestion}
-              onClose={() => setShowKeyboard(false)}
-            />
+          {/* ✅ 안내 UI (카메라 아이콘 + 문구) */}
+          {!showKeyboard && (
+            <div className="camera-icon">
+            <div className="detect-content">
+              <img src="/Green_camera.png" alt="camera icon" className="detect-icon" />
+              <p className="detect-text">
+                분리수거할 품목을 카메라에<br />
+                잘 보이게 배치해 주세요.
+              </p>
+            </div>
+            </div>
           )}
 
-          {/* 질문하기 */}
-          <button
-            className="ask-btn"
-            onClick={() =>
-              router.push("/general_waste/analyze?text=" + encodeURIComponent(textQuestion))
-            }
-            disabled={!textQuestion}
-          >
-            질문하기
-          </button>
+          {/* ✅ 하단 버튼 영역 */}
+          <div className="bottom-button-area">
+
+            {!showKeyboard && (
+              <>
+                <button className="photo-btn" onClick={capturePhoto}>
+                  촬영하기
+                </button>
+
+                <button
+                  className="photo-btn"
+                  onClick={() => router.push("/general_waste/qr")}
+                >
+                  QR로 사진 업로드
+                </button>
+              </>
+            )}
+          </div>
         </div>
       </div>
+
+      {/* ✅ 키보드 모달은 항상 최상단 overlay */}
+      {showKeyboard && (
+        <KeyboardModal
+          value={textQuestion}
+          onChange={setTextQuestion}
+          onClose={() => setShowKeyboard(false)}
+        />
+      )}
     </div>
   );
 }

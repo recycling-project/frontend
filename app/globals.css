@@ -1,9 +1,15 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;   }
+
 /* 전체 사이트 배경 */
 .page-bg {
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100dvh; /* ✅ 모바일 주소창 포함 대응 */
   background: white;
-
   display: flex;
   justify-content: center;
   align-items: center;
@@ -20,15 +26,20 @@
   align-items: center;
   padding-top: 0px;          /* 위쪽 여백 */
   border-radius: 0px;
+  overflow: hidden;
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
 }
+
 
 /* 버튼 영역(검정 안에 위치) */
 .button-zone {
-  margin-top: 250px;           /* 버튼을 아래로 내림 */
+  height: 100%;
   display: flex;
   flex-direction: column;
+  justify-content: center;   /* ✅ 세로 중앙 정렬 */
   align-items: center;
-  gap: 60px;
+  gap: 40px;
 }
 
 /* 버튼 */
@@ -141,11 +152,13 @@
 /* 뒤로가기 */
 .back-btn {
   z-index: 10;   /* 다른 요소보다 위에 위치 */
-  top: 20px;
+  position: fixed;                /* 화면 기준 고정 */
+  transform: translate(10px, 30px); /*제가 위치 조절할때 자주쓰는건데 좌표 하나만 쓰려면
+  trabslateX나 Y 하나만 쓰세요. 두 개 다쓸려면 지금 코드로 해야해. 트렌스레이트 두 개이상 못씀*/
   left: 20px;
-  position: absolute;
   width: 50px;
   height: 50px;
+  z-index: 1000;
 }
 
 /* 프레임 */
@@ -404,16 +417,21 @@
 /* 텍스트 입력 input */
 .text-input {
   width: 260px;
-  padding: 12px;
-  border-radius: 10px;
-  background: white;
-  font-size: 16px;
+  height: 60px;             /* ✅ 버튼과 동일 */
+  border-radius: 12px;
+  border: 2px solid #fff;
+  background: #ffffff;
+  font-size: 20px;
+  font-weight: 600;
+  text-align: center;
+  box-sizing: border-box;
 }
 
 /* 버튼 공통 */
 .photo-btn,
 .ask-btn {
   width: 260px;
+  height: 60px;
   padding: 14px;
   background: #ffffff;
   border-radius: 10px;
@@ -423,6 +441,7 @@
   font-weight: 600;
   cursor: pointer;
 }
+
 
 .camera-preview {
   width: 100%;
@@ -436,4 +455,87 @@
   margin-top: 20px;
   z-index: 10;
   position: relative;
+}
+
+/*generak_waste_page.tsx 용*/
+
+.kiosk {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100dvh;
+  background: black;
+  overflow: hidden;
+}
+.general_waste {
+  position: relative;
+  height: 100%;
+}
+
+.general_waste .detect-content {
+  transform: translateY(-220px);    /* ✅ 전체 그룹을 위로 올리는 핵심 */
+}
+
+.general_waste .bottom-button-area {
+  position: absolute;
+  bottom: 280px;        /* ✅ 하단 기준으로 위로 이동 */
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+/*큐알 코드 위치*/
+.qr-wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;  /* 가로 중앙 */
+  align-items: center;      /* 세로 중앙 */
+}
+
+/*질문하기 채팅창*/
+/* 채팅 영역 */
+.chat-area {
+  width: 100%;
+  height: 300px;
+  padding: 20px;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+/* 기본 안내 */
+.chat-placeholder {
+  color: #888;
+  text-align: center;
+  margin-top: 100px;
+}
+
+/* 말풍선 */
+.chat-bubble {
+  max-width: 80%;
+  padding: 14px 18px;
+  border-radius: 18px;
+  margin: 10px 0;
+  line-height: 1.4;
+  font-size: 16px;
+}
+
+/* 사용자 말풍선 */
+.chat-bubble.user {
+  background: #ffffff;
+  color: black;
+  align-self: flex-end;
+  margin-left: auto;
+}
+
+/* 입력창 */
+.text-input {
+  width: 260px;
+  height: 70px;
+  border-radius: 12px;
+  border: 2px solid white;
+  font-size: 18px;
+  text-align: center;
 }

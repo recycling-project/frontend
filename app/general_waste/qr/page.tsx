@@ -1,20 +1,32 @@
 "use client";
-
+import { useRouter } from "next/navigation";
 import { QRCodeCanvas } from "qrcode.react";
 
 export default function QRPage() {
   const uploadUrl =
     "https://frontend-self-delta-10.vercel.app/general_waste/mobile-upload";
-
+  const router = useRouter();
   return (
     <div className="page-bg">
       <div className="kiosk">
-        <h2>휴대폰으로 사진을 업로드하세요</h2>
 
-        <QRCodeCanvas value={uploadUrl} size={260} />
+        {/* 상단 뒤로가기 버튼 */}
+        <img
+          src="/back_icon.png"
+          alt="뒤로가기"
+          className="back-btn"
+          onClick={() => router.back()}
+        />
 
-        <p>QR을 휴대폰으로 스캔하세요</p>
-      </div>2.
+        <h2 className="qr-title">휴대폰으로 사진을 업로드하세요</h2>
+
+        <div className="qr-wrapper">
+          <QRCodeCanvas value={uploadUrl} size={260} />
+        </div>
+
+        <p className="qr-guide">QR을 휴대폰으로 스캔하세요</p>
+
+      </div>
     </div>
   );
 }
