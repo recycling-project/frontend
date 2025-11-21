@@ -10,6 +10,7 @@ export default function FirstScreen() {
   const [textQuestion, setTextQuestion] = useState("");
   const [photoBase64, setPhotoBase64] = useState("");
   const [showKeyboard, setShowKeyboard] = useState(false);
+  // const [keyboardOpen, setKeyboardOpen] = useState(false);  // ✅ 이제 안 써도 됨
 
   // 카메라
   const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -85,91 +86,79 @@ export default function FirstScreen() {
           onClick={() => router.back()}
         />
 
-        {/*  카메라 화면 */}
-        <video
-          ref={videoRef}
-          autoPlay
-          playsInline
-          className="camera-preview"
-        />
+        <div className="general_waste">
 
-        <div className="detect-content">
-          <img src="/Green_camera.png" alt="camera icon" className="detect-icon" />
-          <p className="detect-text">
-            분리수거할 품목을 카메라에<br />
-            잘 보이게 배치해 주세요.
-          </p>
-        </div>
-
-        {/* 버튼 영역 */}
-        <div className="bottom-button-area">
-
-          {/* 촬영하기 */}
-          <button className="photo-btn" onClick={capturePhoto}>
-            촬영하기
-          </button>
-
-          {/* QR 업로드 */}
-          <button
-            className="photo-btn"
-            onClick={() => router.push("/general_waste/qr")}
-          >
-            QR로 사진 업로드
-          </button>
-
-          {/* 파일 업로드 추후 삭제예정*/}
-          <label className="file-label">
-            사진 파일 선택
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleFileUpload}
-              className="file-input"
-            />
-          </label>
-
-          {/* 사진 분석 추후 삭제예정*/}
-          <button
-            className="photo-btn"
-            onClick={() => {
-              if (!photoBase64) {
-                alert("이미지를 먼저 업로드하세요.");
-                return;
-              }
-              router.push("/general_waste/analyze");
-            }}
-          >
-            사진으로 분석하기
-          </button>
-
-          {/* 텍스트 입력 */}
-          <input
-            type="text"
-            placeholder="텍스트로 직접 질문하기"
-            value={textQuestion}
-            readOnly
-            onClick={() => setShowKeyboard(true)}
-            className="text-input"
+          {/* 카메라 화면 */}
+          <video
+            ref={videoRef}
+            autoPlay
+            playsInline
+            className="camera-preview"
           />
 
-          {showKeyboard && (
-            <KeyboardModal
-              value={textQuestion}
-              onChange={setTextQuestion}
-              onClose={() => setShowKeyboard(false)}
-            />
+          {/* ✅ 키보드 모달이 떠 있을 때는 위 안내영역 숨기기 */}
+          {!showKeyboard && (
+            <div className="detect-content">
+              <img src="/Green_camera.png" alt="camera icon" className="detect-icon" />
+              <p className="detect-text">
+                분리수거할 품목을 카메라에<br />
+                잘 보이게 배치해 주세요.
+              </p>
+            </div>
           )}
 
-          {/* 질문하기 */}
-          <button
-            className="ask-btn"
-            onClick={() =>
-              router.push("/general_waste/analyze?text=" + encodeURIComponent(textQuestion))
-            }
-            disabled={!textQuestion}
-          >
-            질문하기
-          </button>
+          {/* 버튼 영역 */}
+          <div className="bottom-button-area">
+            {/* ✅ 키보드 모달이 떠 있을 때는 위 2개 버튼 숨기기 */}
+            {!showKeyboard && (
+              <>
+                {/* 촬영하기 */}
+                <button className="photo-btn" onClick={capturePhoto}>
+                  촬영하기
+                </button>
+
+                {/* QR 업로드 */}
+                <button
+                  className="photo-btn"
+                  onClick={() => router.push("/general_waste/qr")}
+                >
+                  QR로 사진 업로드
+                </button>
+              </>
+            )}
+
+            {/* 텍스트 입력 */}
+            <input
+              type="text"
+              placeholder="텍스트로 직접 질문하기"
+              value={textQuestion}
+              readOnly                 // ✅ 기본 키보드 안 뜨게
+              onClick={() => setShowKeyboard(true)} // ✅ 클릭 시 커스텀 키보드 열기
+              className="text-input"
+            />
+
+            {showKeyboard && (
+              <KeyboardModal
+                value={textQuestion}
+                onChange={setTextQuestion}
+                onClose={() => setShowKeyboard(false)}
+              />
+            )}
+
+            {/* 질문하기 */}
+            <button
+              className="ask-btn"
+              onClick={() =>
+                router.push(
+                  "/general_waste/analyze?text=" +
+                    encodeURIComponent(textQuestion)
+                )
+              }
+              disabled={!textQuestion}
+            >
+              질문하기
+            </button>
+          </div>
         </div>
       </div>
     </div>
