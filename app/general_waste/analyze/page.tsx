@@ -37,11 +37,11 @@ export default function WasteAnalyze() {
         return;
       }
 
-      // 🚨 여기 수정: localhost 직접 호출 금지
+      // localhost 직접 호출 금지
       // 환경변수에서 API 주소 가져오기
       const api = process.env.NEXT_PUBLIC_API_URL;
 
-      const res = await fetch(`${api}/recycle/analyze`, {
+      const res = await fetch("/api/analyze", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body,
@@ -68,24 +68,24 @@ export default function WasteAnalyze() {
 
 
 
-return (
-  <div className="page-bg">
-    <div className="kiosk">
-      <img
-        src="/back_icon.png"
-        alt="뒤로가기"
-        className="back-btn"
-        onClick={() => router.back()}
-      />
-
-      <div className="loading-wrapper">
+  return (
+    <div className="page-bg">
+      <div className="kiosk">
         <img
-          src="/Loding.gif"
-          alt="로딩 움짤"
-          className="loading-gif"
+          src="/back_icon.png"
+          alt="뒤로가기"
+          className="back-btn"
+          onClick={() => router.back()}
         />
+
+        <div className="loading-wrapper">
+          <img
+            src="/Loding.gif"
+            alt="로딩 움짤"
+            className="loading-gif"
+          />
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
 }
