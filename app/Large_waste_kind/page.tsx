@@ -29,7 +29,12 @@ return (
           <button className="kind-btn" onClick={() => goDetails("책상")}>책상</button>
           <button className="kind-btn" onClick={() => goDetails("서랍장")}>서랍장</button>
         </div>
-
+/*| 함수         | 정체              | 목적               | 인자                        |
+| ------------- | ------------      | -------------      | -----------------           |
+| **goToMenu**  | Next.js 라우터용   | 페이지 이동         | 필요 없음                    | 
+| **goDetails** | 네가 만든 함수     | 버튼에 따른          |                            |
+                                    |    데이터 처리       | `"장롱"` 같은 값 전달 가능   |
+ */
       </div>
     </div>
   );
