@@ -38,9 +38,21 @@ export default function FirstScreen() {
     if (!file) return;
 
     const reader = new FileReader();
-    reader.onload = () => {
-      setPhotoBase64(reader.result as string);
+
+    reader.onloadend = () => {
+      const base64 = reader.result as string;
+
+      // base64 형식 체크
+      if (!base64.startsWith("data:image/")) {
+        alert("이미지 파일만 업로드 가능합니다.");
+        return;
+      }
+
+      // 🔥 상태 + localStorage에 동시에 저장
+      setPhotoBase64(base64);
+      localStorage.setItem("wasteImage", base64);
     };
+
     reader.readAsDataURL(file);
   };
 
@@ -91,7 +103,7 @@ export default function FirstScreen() {
 
         {/* 버튼 영역 */}
         <div className="bottom-button-area">
-          
+
           {/* 촬영하기 */}
           <button className="photo-btn" onClick={capturePhoto}>
             촬영하기
@@ -105,7 +117,7 @@ export default function FirstScreen() {
             QR로 사진 업로드
           </button>
 
-          {/* 파일 업로드 추후 삭제예정*/} 
+          {/* 파일 업로드 추후 삭제예정*/}
           <label className="file-label">
             사진 파일 선택
             <input
@@ -120,10 +132,12 @@ export default function FirstScreen() {
           <button
             className="photo-btn"
             onClick={() => {
-              localStorage.setItem("wasteImage", photoBase64);
+              if (!photoBase64) {
+                alert("이미지를 먼저 업로드하세요.");
+                return;
+              }
               router.push("/general_waste/analyze");
             }}
-            disabled={!photoBase64}
           >
             사진으로 분석하기
           </button>

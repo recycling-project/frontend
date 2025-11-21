@@ -1,21 +1,26 @@
 "use client";
 
-export const dynamic = "force-dynamic";
-export const fetchCache = "force-no-store";
-export const revalidate = 0;
-
 import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function wasteResult() {
   const searchParams = useSearchParams();
   const data = searchParams.get("data");
 
-  // URL 인코딩 해제 → JSON 문자열 → JS 객체
   const decoded = data ? decodeURIComponent(data) : null;
   const result = decoded ? JSON.parse(decoded) : null;
 
-  // GPT 한국어 결과 부분만 추출
   const content = result?.choices?.[0]?.message?.content;
+
+  const [photo, setPhoto] = useState("");
+  //사진 불러오기
+  useEffect(() => {
+    const img = localStorage.getItem("wasteImage");
+    if (img) setPhoto(img);
+    //사진을 먼저 불러오고 바로 삭제
+    localStorage.removeItem("wasteImage");
+  }, []);
+
 
   return (
     <div className="page-bg">
@@ -23,17 +28,31 @@ export default function wasteResult() {
         <div
           style={{
             color: "white",
-            marginTop: "200px",
+            marginTop: "50px",
             textAlign: "center",
             padding: "20px",
             fontSize: "20px",
           }}
         >
+
+          {/* 🔥 여기: 분석한 사진 보여주는 영역 */}
+          {photo && (
+            <img
+              src={photo}
+              alt="분석한 사진"
+              style={{
+                width: "250px",
+                borderRadius: "10px",
+                marginBottom: "20px",
+                border: "2px solid #ffffff55",
+              }}
+            />
+          )}
+
+          {/* 분석 결과 */}
           {content ? (
             <>
               <h2>재활용 분석 결과</h2>
-
-              {/* GPT 결과만 출력 */}
               <pre
                 style={{
                   whiteSpace: "pre-wrap",
