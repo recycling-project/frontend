@@ -17,8 +17,10 @@ html, body {
 
 /* 키오스크 전체 화면(검정) */
 .kiosk {
-  width: 420px;               /* 너비 */
-  height: 950px;              /* 전체 키오스크 높이 */
+  position: fixed;
+  inset: 0;
+  width: 100%;               /* 너비 */
+  height: 100dvh;              /* 전체 키오스크 높이 */
   background: #000000;        /* 전체를 검정으로 */
   display: flex;
   flex-direction: column;
@@ -30,7 +32,6 @@ html, body {
   padding-top: env(safe-area-inset-top);
   padding-bottom: env(safe-area-inset-bottom);
 }
-
 
 /* 버튼 영역(검정 안에 위치) */
 .button-zone {
@@ -193,7 +194,10 @@ html, body {
 /* Latge_waste_loding*/
 
 .loading-wrapper {
-  margin-top: 350px;  /* 원하는 위치 조정 */
+  position: absolute;
+  bottom: 300px;     
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -402,7 +406,7 @@ html, body {
   align-items: center;
   gap: 15px;
   margin-top: auto;
-  padding-bottom: 30px;
+  transform: translateY(100px);
 }
 
 /* 파일 업로드 input */
@@ -467,24 +471,24 @@ html, body {
   background: black;
   overflow: hidden;
 }
-.general_waste {
+/* .general_waste {
   position: relative;
   height: 100%;
 }
 
 .general_waste .detect-content {
   transform: translateY(-220px);    /* ✅ 전체 그룹을 위로 올리는 핵심 */
-}
+/*}
 
 .general_waste .bottom-button-area {
   position: absolute;
   bottom: 280px;        /* ✅ 하단 기준으로 위로 이동 */
-  width: 100%;
+ /* width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 20px;
-}
+} */
 
 /*큐알 코드 위치*/
 .qr-wrapper {
@@ -497,45 +501,116 @@ html, body {
 
 /*질문하기 채팅창*/
 /* 채팅 영역 */
-.chat-area {
-  width: 100%;
-  height: 300px;
+.questiontext-input {
+  transform: translateY(120px);
+}
+
+.question_back{
+  transform: translate(10px, 10px);
+  width: 50px;
+  z-index: 9999; 
+}
+
+/* 🔥 채팅 박스 */
+.chat-box {
+  width: 80%;
+  height: 250px;
+  background: white;
+  border-radius: 18px;
+  margin-top: -220px;
   padding: 20px;
-  box-sizing: border-box;
   overflow-y: auto;
 }
 
-/* 기본 안내 */
-.chat-placeholder {
-  color: #888;
-  text-align: center;
-  margin-top: 100px;
-}
-
-/* 말풍선 */
-.chat-bubble {
-  max-width: 80%;
-  padding: 14px 18px;
-  border-radius: 18px;
-  margin: 10px 0;
-  line-height: 1.4;
-  font-size: 16px;
-}
-
-/* 사용자 말풍선 */
-.chat-bubble.user {
-  background: #ffffff;
+/* 분석 결과 텍스트 */
+.chat-text {
+  white-space: pre-wrap;
+  font-size: 18px;
+  line-height: 1.6;
   color: black;
-  align-self: flex-end;
-  margin-left: auto;
 }
 
-/* 입력창 */
-.text-input {
+.chat-placeholder {
+  text-align: center;
+  font-size: 18px;
+  color: gray;
+  margin-top: 80px;
+}
+
+/*  입력칸  */
+.ask-container {
+  position: absolute;
+  bottom: 240px; /* 기본 위치 */
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  transition: bottom 0.3s ease;
+}
+
+/* 키보드 열렸을 때 */
+.ask-container.down {
+  bottom: 400px;
+}
+
+/* 입력칸 */
+.questiontext-input {
   width: 260px;
-  height: 70px;
+  height: 60px;
+  background: white;
+  color: black;
   border-radius: 12px;
   border: 2px solid white;
-  font-size: 18px;
+  font-size: 20px;
+  text-align: center;
+}
+
+/* 질문 버튼 */
+.ask-btn {
+  width: 260px;
+  height: 60px;
+  background: white;
+  color: black;
+  border-radius: 12px;
+  border: 2px solid white;
+  font-size: 20px;
+  font-weight: 600;
+  transform: translateY(280px);
+}
+
+/*first 아이콘들 위치 조정*/
+.recyleset {
+  transform: translateY(90px);
+}
+
+/*---------*/
+
+/* 카메라 화면 (상단 60%) */
+/* .camera-preview {
+  width: 100%;
+  height: 60vh;
+  object-fit: cover;
+  display: block;
+  background: #ffffff;
+} */
+
+/* 로딩 영역 */
+/* .loading-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+} */
+
+/* .loading-gif {
+  width: 180px;
+  height: 180px;
+} */
+
+
+/* general_waste 아이콘 위치 조정 */
+.nomalset {
+  margin-top: -250px;
   text-align: center;
 }

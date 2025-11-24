@@ -1,9 +1,11 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function wasteResult() {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const data = searchParams.get("data");
 
@@ -34,6 +36,22 @@ export default function wasteResult() {
             fontSize: "20px",
           }}
         >
+
+{/* 뒤로가기 */}
+      <img
+        src="/back_icon.png"
+        alt="뒤로가기"
+        className="question_back"
+        onClick={() => router.back()}
+        style={{
+          position: "absolute",
+          top: 20,
+          left: 20,
+          width: 50,
+          height: 50,
+          zIndex: 20
+        }}
+      />
 
           {/* 🔥 여기: 분석한 사진 보여주는 영역 */}
           {photo && (

@@ -1,81 +1,86 @@
 "use client";
+
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import KeyboardModal from "@/app/components/KeyboardModal";
 
-export default function FirstScreen() {
+export default function TestKeyboard() {
   const router = useRouter();
 
-  // 상태값
-  const [textQuestion, setTextQuestion] = useState("");
+  const [text, setText] = useState("");
   const [showKeyboard, setShowKeyboard] = useState(false);
 
   return (
-    <div className="page-bg">
-      <div className="kiosk">
+    <div
+      style={{
+        width: "100vw",
+        height: "100vh",
+        background: "black",
+        color: "white",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        position: "relative"
+      }}
+    >
 
-        {/* 뒤로가기 */}
-        <img
-          src="/back_icon.png"
-          alt="뒤로가기"
-          className="back-btn"
-          onClick={() => router.back()}
-        />
+      
+      {/* 뒤로가기 */}
+      <img
+        src="/back_icon.png"
+        alt="뒤로가기"
+        className="question_back"
+        onClick={() => router.back()}
+        style={{
+          position: "absolute",
+          top: 20,
+          left: 20,
+          width: 50,
+          height: 50,
+          zIndex: 20
+        }}
+      />
 
-        <div className="general_waste">
-
-          {/* ✅ 카메라 제거 대신 레이아웃 유지용 공간 */}
-          <div className="camera-spacer"></div>
-
-          {/* ✅ 채팅 영역 */}
-          <div className="chat-area">
-            {textQuestion ? (
-              <div className="chat-bubble user">{textQuestion}</div>
-            ) : (
-              <div className="chat-placeholder">
-                여기에 질문 내용이 표시됩니다.
-              </div>
-            )}
-          </div>
-
-          {/* ✅ 하단 입력 영역 */}
-          <div className="bottom-button-area">
-
-            <input
-              type="text"
-              placeholder="에러로 인해 키보드가 안 뜹니다"
-              value={textQuestion}
-              readOnly
-              onClick={() => setShowKeyboard(true)}
-              className="text-input"
-            />
-
-            <button
-              className="ask-btn"
-              onClick={() =>
-                router.push(
-                  "/general_waste/analyze?text=" +
-                    encodeURIComponent(textQuestion)
-                )
-              }
-              disabled={!textQuestion}
-            >
-              질문하기
-            </button>
-
-          </div>
+        {/* 상단 챗 표시 박스 */}
+      <div className="chat-box">
+        <div className="chat-placeholder">
+          여기에 분석 결과가 표시됩니다
         </div>
       </div>
-
-      {/* ✅ 키보드는 항상 최상단 overlay로 */}
-      {showKeyboard && (
-        <KeyboardModal
-          value={textQuestion}
-          onChange={setTextQuestion}
-          onClose={() => setShowKeyboard(false)}
-        />
-      )}
       
-    </div>
+      {/* 입력칸 */}
+      <div className={`ask-container ${showKeyboard ? "down" : ""}`}>
+  <input
+    readOnly
+    className="questiontext-input"
+    value={text}
+    placeholder="텍스트로 질문하기"
+    onClick={() => setShowKeyboard(true)}
+  />
+</div>
+      {/* 질문하기 버튼 — 키보드 열리면 아래로 이동 */}
+      <div className={`askbtn-container ${showKeyboard ? "down" : ""}`}></div>
+      <button
+    className="ask-btn"
+    disabled={!text}
+    onClick={() =>
+      router.push("/general_waste/analyze?text="+encodeURIComponent(text))
+    }
+  >
+    질문하기
+  </button>
+
+
+      {/* 키보드 */}
+      
+{showKeyboard && (
+  <KeyboardModal
+    value={text}
+    onChange={setText}
+    onClose={() => setShowKeyboard(false)}
+  />
+)}
+</div>
   );
 }
