@@ -31,6 +31,14 @@ html, body {
   overflow: hidden;
   padding-top: env(safe-area-inset-top);
   padding-bottom: env(safe-area-inset-bottom);
+  z-index: 10;
+}
+
+/*카메라화면result하단바*/
+.bottom-bar{
+  position: fixed;
+  bottom: 0;
+  z-index: 5;
 }
 
 /* 버튼 영역(검정 안에 위치) */
@@ -614,3 +622,4 @@ html, body {
   margin-top: -250px;
   text-align: center;
 }
+

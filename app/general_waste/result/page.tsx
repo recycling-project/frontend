@@ -26,66 +26,72 @@ export default function wasteResult() {
 
   return (
     <div className="page-bg">
-      <div className="kiosk">
-        <div
-          style={{
-            color: "white",
-            marginTop: "50px",
-            textAlign: "center",
-            padding: "20px",
-            fontSize: "20px",
-          }}
-        >
+  <div className="kiosk">
 
-{/* 뒤로가기 */}
-      <img
-        src="/back_icon.png"
-        alt="뒤로가기"
-        className="question_back"
-        onClick={() => router.back()}
+{/* 상단 뒤로가기 버튼 */}
+        <img
+          src="/back_icon.png"
+          alt="뒤로가기"
+          className="back-btn"
+          onClick={() => router.back()}
+        />
+
+    {/* 🔼 상단 60% : 사진 영역 */}
+    <div
         style={{
-          position: "absolute",
-          top: 20,
-          left: 20,
-          width: 50,
-          height: 50,
-          zIndex: 20
+          height: "70vh",
+          width: "100vw",              
+          background: "black",           // 테스트용 (나중에 black으로)
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          position: "relative"
         }}
-      />
-
-          {/* 🔥 여기: 분석한 사진 보여주는 영역 */}
-          {photo && (
-            <img
-              src={photo}
-              alt="분석한 사진"
-              style={{
-                width: "250px",
-                borderRadius: "10px",
-                marginBottom: "20px",
-                border: "2px solid #ffffff55",
-              }}
-            />
-          )}
-
-          {/* 분석 결과 */}
-          {content ? (
-            <>
-              <h2>재활용 분석 결과</h2>
-              <pre
-                style={{
-                  whiteSpace: "pre-wrap",
-                  color: "white",
-                  fontSize: "18px",
-                }}
-              >
-                {content}
-              </pre>
-            </>
-          ) : (
-            <p>결과 데이터를 불러올 수 없습니다.</p>
-          )}
-        </div>
-      </div>
+      >
+      {photo ? (
+        <img
+          src={photo}
+          alt="분석한 사진"
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "cover"
+          }}
+        />
+      ) : (
+        <p style={{ color: "white" }}>사진 없음</p>
+      )}
     </div>
+
+    {/* 🔽 하단 40% : 결과 영역 */}
+    <div className="bottom-bar">
+    <div
+      style={{
+        minHeight: "40vh",
+        padding: "20px",
+        color: "white"
+        
+      }}
+    >
+      {content ? (
+        <>
+          <h2>재활용 분석 결과</h2>
+          <pre
+            style={{
+              whiteSpace: "pre-wrap",
+              fontSize: "18px",
+            }}
+          >
+            {content}
+          </pre>
+        </>
+      ) : (
+        <p>결과 데이터를 불러올 수 없습니다.</p>
+      )}
+    </div>
+</div>
+  </div>
+</div>
+
   );
 }
