@@ -36,7 +36,7 @@ export default function wasteResult() {
           onClick={() => router.push("/menu")}
         />
 
-    {/* 🔼 상단 60% : 사진 영역 */}
+    {/* 🔼 상단 70% : 사진 영역 */}
     <div
         style={{
           height: "70vh",
