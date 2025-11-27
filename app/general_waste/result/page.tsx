@@ -33,7 +33,7 @@ export default function wasteResult() {
           src="/back_icon.png"
           alt="뒤로가기"
           className="back-btn"
-          onClick={() => router.push("/menu")}
+          onClick={() => router.replace("/menu")}
         />
 
     {/* 🔼 상단 70% : 사진 영역 */}

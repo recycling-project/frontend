@@ -1,40 +1,38 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState, useRef, useEffect } from "react";
+import { useRef, useEffect } from "react";
 
-export default function FirstScreen() {
+export default function GeneralWastePage() {
   const router = useRouter();
-
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
-  // 🔥 카메라 실행
+  // ✅ 카메라 실시간 실행
   useEffect(() => {
-    async function startCamera() {
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: "environment" },
-        });
+  async function startCamera() {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: "environment" },
+      });
 
-        if (videoRef.current) {
-          videoRef.current.srcObject = stream;
-        }
-      } catch (err) {
-        console.error("카메라 실행 실패:", err);
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
       }
+    } catch (err) {
+      console.warn("카메라 미지원 - 테스트 모드");
     }
+  }
+  startCamera();
+}, []);
 
-    startCamera();
-  }, []);
 
-  // 📷 촬영 후 이동
+  // ✅ 촬영 기능
   const capturePhoto = () => {
     if (!videoRef.current) return;
 
     const video = videoRef.current;
     const canvas = document.createElement("canvas");
 
-    // 모바일에서 videoWidth/Height 0인 버그 방지
     const width = video.videoWidth || 640;
     const height = video.videoHeight || 480;
 
@@ -50,7 +48,6 @@ export default function FirstScreen() {
     router.push("/general_waste/analyze");
   };
 
-
   return (
     <div className="page-bg">
       <div className="kiosk">
@@ -58,44 +55,46 @@ export default function FirstScreen() {
         {/* 뒤로가기 */}
         <img
           src="/back_icon.png"
-          alt="back"
+          alt="뒤로가기"
           className="back-btn"
-          onClick={() => router.back()}
+          onClick={() => router.replace("/menu")}
         />
 
+        {/* ✅ 카메라 + 오버레이 컨테이너 */}
+        <div className="camera-wrap">
 
-        <div className="general_waste">
-
-          {/*  카메라 화면 (상단 60%) */}
+          {/* 실제 카메라 */}
           <video
             ref={videoRef}
             autoPlay
             playsInline
             className="camera-preview"
           />
-          <div className="nomalset">
-          {/* 안내 UI */}
-          <div className="detect-content">
-            <img src="/Green_camera.png" className="detect-icon" />
-            <p className="detect-text">
-              분리수거할 품목을 카메라에<br />
-              잘 보이게 배치해 주세요.
-            </p>
-          </div>
 
-          {/* 버튼 영역 */}
-          <div className="bottom-button-area">
-            <button className="photo-btn" onClick={capturePhoto}>
-              촬영하기
-            </button>
+          {/* UI 오버레이 */}
+          <div className="camera-overlay">
 
-            <button
-              className="photo-btn"
-              onClick={() => router.push("/general_waste/qr")}
-            >
-              QR로 사진 업로드
-            </button>
-          </div>
+            <div className="detect-content">
+              <img src="/Green_camera.png" className="detect-icon" />
+              <p className="detect-text">
+                분리수거할 품목을 카메라에<br />
+                잘 보이게 배치해 주세요.
+              </p>
+            </div>
+
+            <div className="camera-bottom-button-area">
+              <button className="photo-btn" onClick={capturePhoto}>
+                촬영하기
+              </button>
+
+              <button
+                className="photo-btn"
+                onClick={() => router.push("/general_waste/qr")}
+              >
+                QR로 사진 업로드
+              </button>
+            </div>
+
           </div>
         </div>
       </div>
