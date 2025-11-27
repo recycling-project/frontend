@@ -1,0 +1,92 @@
+"use client";
+
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { useSearchParams } from "next/navigation";
+
+export default function WasteAnalyze() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  // 사진(base64) 또는 텍스트
+  const base64 =
+    typeof window !== "undefined"
+      ? localStorage.getItem("wasteImage")
+      : null;
+
+  const text = searchParams.get("text");
+
+  // API 호출
+  useEffect(() => {
+    async function analyze() {
+      let body = null;
+
+      // 사진 모드
+      if (base64) {
+        body = JSON.stringify({ image: base64 });
+      }
+      // 텍스트 모드
+      else if (text) {
+        body = JSON.stringify({ text });
+      }
+
+      if (!body) return;
+
+      try {
+        const res = await fetch("/api/analyze", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body,
+        });
+
+        const data = await res.json();
+
+        if (base64) {
+          router.push(
+            "/general_waste/result?type=photo&data=" +
+              encodeURIComponent(JSON.stringify(data))
+          );
+        } else {
+          router.push(
+            "/general_waste/result?type=text&data=" +
+              encodeURIComponent(JSON.stringify(data))
+          );
+        }
+      } catch (e) {
+        router.push(
+          "/general_waste/result?type=error&data=" +
+            encodeURIComponent(JSON.stringify({ error: true }))
+        );
+      }
+    }
+
+    analyze();
+  }, [base64, text]);
+
+  return (
+    <div className="page-bg">
+      <div className="kiosk">
+        <img
+          src="/back_icon.png"
+          alt="뒤로가기"
+          className="back-btn"
+          onClick={() => router.back()}
+        />
+
+        {/* 📸 촬영 결과 이미지 (상단 60vh) */}
+        {base64 && (
+          <img src={base64} alt="preview" className="camera-preview" />
+        )}
+
+        {/* 🔄 분석중 UI */}
+        <div className="loading-wrapper">
+          <img
+            src="/Loding.gif"
+            alt="로딩중"
+            className="loading-gif"
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
