@@ -18,9 +18,7 @@ export default function MobileUploadPage() {
     reader.onloadend = async () => {
       const base64 = reader.result as string;
 
-      // 🔥 여기 추가! 카메라 모드와 동일하게 로컬스토리지에 저장
-      localStorage.setItem("wasteImage", base64);
-
+      // 백엔드로 업로드
       try {
         const res = await fetch(
           process.env.NEXT_PUBLIC_API_URL + "/recycle/analyze",
@@ -33,11 +31,10 @@ export default function MobileUploadPage() {
 
         const data = await res.json();
 
-        // 🔥 사진 모드처럼 데이터 저장
-        localStorage.setItem("analyzeResult", JSON.stringify(data));
-
-        router.push("/general_waste/result?type=photo");
-
+        router.push(
+          "/general_waste/result?type=photo&data=" +
+            encodeURIComponent(JSON.stringify(data))
+        );
       } catch (err) {
         console.error("업로드 실패:", err);
       } finally {
