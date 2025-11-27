@@ -18,16 +18,13 @@ export default function MobileUploadPage() {
     reader.onloadend = async () => {
       const base64 = reader.result as string;
 
-      // 백엔드로 업로드
       try {
-        const res = await fetch(
-          process.env.NEXT_PUBLIC_API_URL + "/recycle/analyze",
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ image: base64 }),
-          }
-        );
+        // 🔥 프록시로 호출 (HTTPS 문제 해결)
+        const res = await fetch("/api/analyze", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ image: base64 }),
+        });
 
         const data = await res.json();
 
