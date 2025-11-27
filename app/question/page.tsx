@@ -44,27 +44,15 @@ export default function TestKeyboard() {
         overflow: "hidden",
       }}
     >
-      {/* 뒤로가기 */}
-      <img
-        src="/back_icon.png"
-        alt="뒤로가기"
-        onClick={() => router.push("/main")}
-        style={{
-          position: "absolute",
-          top: 20,
-          left: 20,
-          width: 50,
-          height: 50,
-          zIndex: 20,
-        }}
-      />
+     {/* 상단 뒤로가기 버튼 */}
+        <img
+          src="/back_icon.png"
+          alt="뒤로가기"
+          className="back-btn"
+          onClick={() => router.push("/")}
+        />
 
-      {/* 분석 결과 박스 */}
-      <div className="chat-box">
-        <div className="chat-placeholder">
-          여기에 분석 결과가 표시됩니다
-        </div>
-      </div>
+      
 
       {/* ✅ 입력칸 (이것만 움직임) */}
       <div
@@ -72,7 +60,7 @@ export default function TestKeyboard() {
         style={{
           position: "fixed",
           left: "50%",
-          bottom: "8dvh",
+          bottom: "50dvh",
           transform: showKeyboard
             ? `translate(-50%, -${keyboardOffset + 180}px)`
             : "translate(-50%, 0)",
@@ -95,14 +83,14 @@ export default function TestKeyboard() {
         disabled={!text}
         style={{
           position: "fixed",
-          bottom: "4dvh",
+          bottom: "15dvh",
           left: "50%",
           transform: "translateX(-50%)",
           zIndex: 100,
         }}
         onClick={() =>
           router.push(
-            "/general_waste/analyze?text=" + encodeURIComponent(text)
+            "/question_answer?text=" + encodeURIComponent(text)
           )
         }
       >
