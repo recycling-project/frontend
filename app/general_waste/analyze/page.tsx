@@ -23,36 +23,44 @@ export default function WasteAnalyze() {
 
   useEffect(() => {
     async function analyze() {
-      let body;
+      let finalBase64 = base64;
 
-      // 사진 모드
-      if (base64) {
-        body = JSON.stringify({ image: base64 });
+      const api = process.env.NEXT_PUBLIC_API_URL;
 
-        // 텍스트 질문 모드
-      } else if (text) {
-        body = JSON.stringify({ text: text });
+      // 📌 QR 업로드 흐름: base64가 없고 type=photo라면 백엔드에서 가져오기
+      if (!finalBase64 && searchParams.get("type") === "photo") {
+        const resImg = await fetch(`${api}/recycle/mobile-image`);
+        const dataImg = await resImg.json();
 
-      } else {
-        return;
+        finalBase64 = dataImg.image;
+
+        // 프론트에서도 저장 (결과 페이지에서 보여야 하니까)
+        localStorage.setItem("wasteImage", finalBase64);
       }
 
-      // localhost 직접 호출 금지
-      // 환경변수에서 API 주소 가져오기
-      const api = process.env.NEXT_PUBLIC_API_URL;
+      if (!finalBase64 && !text) return;
+
+      let body;
+
+      // 사진 분석
+      if (finalBase64) {
+        body = JSON.stringify({ image: finalBase64 });
+      }
+      // 텍스트 분석
+      else if (text) {
+        body = JSON.stringify({ text });
+      }
 
       const res = await fetch(`${api}/recycle/analyze`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body,
       });
 
       const data = await res.json();
 
-      //  여기서 분석 종류에 따라 라우팅을 분리 텍스트,포토
-      if (base64) {
+      // 사진 or 텍스트 결과 페이지 이동
+      if (finalBase64) {
         router.push(
           "/general_waste/result?type=photo&data=" +
           encodeURIComponent(JSON.stringify(data))
