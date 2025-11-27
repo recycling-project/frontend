@@ -1,13 +1,34 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import KeyboardModal from "@/app/components/KeyboardModal";
 
 export default function TestKeyboard() {
   const router = useRouter();
   const [text, setText] = useState("");
   const [showKeyboard, setShowKeyboard] = useState(false);
+  const [keyboardOffset, setKeyboardOffset] = useState(0);
+
+  // ✅ 키보드 높이 자동 감지
+  useEffect(() => {
+    const handleResize = () => {
+      const viewport = window.visualViewport;
+      if (!viewport) return;
+
+      const diff = window.innerHeight - viewport.height;
+
+      if (diff > 150) {
+        setKeyboardOffset(diff);
+      } else {
+        setKeyboardOffset(0);
+      }
+    };
+
+    window.visualViewport?.addEventListener("resize", handleResize);
+    return () =>
+      window.visualViewport?.removeEventListener("resize", handleResize);
+  }, []);
 
   return (
     <div
@@ -38,15 +59,27 @@ export default function TestKeyboard() {
         }}
       />
 
-      {/* 상단 분석 결과 박스 */}
+      {/* 분석 결과 박스 */}
       <div className="chat-box">
         <div className="chat-placeholder">
           여기에 분석 결과가 표시됩니다
         </div>
       </div>
 
-      {/* ✅ 입력 + 버튼 묶음 영역 */}
-      <div className={`question-area ${showKeyboard ? "up" : ""}`}>
+      {/* ✅ 입력칸 (이것만 움직임) */}
+      <div
+        className="ask-container"
+        style={{
+          position: "fixed",
+          left: "50%",
+          bottom: "8dvh",
+          transform: showKeyboard
+            ? `translate(-50%, -${keyboardOffset + 180}px)`
+            : "translate(-50%, 0)",
+          transition: "transform 0.35s cubic-bezier(.4,0,.2,1)",
+          zIndex: 120,
+        }}
+      >
         <input
           readOnly
           className="questiontext-input"
@@ -54,19 +87,27 @@ export default function TestKeyboard() {
           placeholder="텍스트로 질문하기"
           onClick={() => setShowKeyboard(true)}
         />
-
-        <button
-          className="ask-btn"
-          disabled={!text}
-          onClick={() =>
-            router.push(
-              "/general_waste/analyze?text=" + encodeURIComponent(text)
-            )
-          }
-        >
-          질문하기
-        </button>
       </div>
+
+      {/* ✅ 질문 버튼 - 절대 고정 */}
+      <button
+        className="ask-btn"
+        disabled={!text}
+        style={{
+          position: "fixed",
+          bottom: "4dvh",
+          left: "50%",
+          transform: "translateX(-50%)",
+          zIndex: 100,
+        }}
+        onClick={() =>
+          router.push(
+            "/general_waste/analyze?text=" + encodeURIComponent(text)
+          )
+        }
+      >
+        질문하기
+      </button>
 
       {/* 키보드 */}
       {showKeyboard && (
@@ -79,3 +120,4 @@ export default function TestKeyboard() {
     </div>
   );
 }
+``

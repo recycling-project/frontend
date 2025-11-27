@@ -511,7 +511,7 @@ html, body {
 /*질문하기 채팅창*/
 /* 채팅 영역 */
 .questiontext-input {
-  transform: translateY(120px);
+  transform: translateY(-50px);
 }
 
 /* 뒤로가기 */
@@ -540,7 +540,7 @@ html, body {
 .chat-text {
   white-space: pre-wrap;
   font-size: 18px;
-  line-height: 1.6;
+  line-height: 1.8;
   color: black;
 }
 
@@ -555,15 +555,16 @@ html, body {
 /* ✅ 입력 + 버튼 영역 전체 */
 .ask-container {
   position: fixed;
-  bottom: 120px;   /* ✅ 키보드 위 고정 */
-  width: 100%;
-  display: flex;
-  justify-content: center;
+  left: 50%;
+  bottom: 12dvh;   /* ✅ 입력칸 기본 위치 */
+  transform: translateX(-50%);
+  transition: transform 0.35s cubic-bezier(.4,0,.2,1);
+  z-index: 120;
 }
 
-/* 키보드 열렸을 때 위로 이동 */
-.ask-container.down {
-  transform: translateY(-260px);
+/* 키보드 열릴 때 위로 */
+.ask-container.up {
+  transform: translate(-50%, -60px);
 }
 
 
@@ -580,18 +581,27 @@ html, body {
 }
 
 
-/* 질문 버튼 */
 .ask-btn {
+  position: fixed;
+  bottom: 4dvh;
+  left: 50%;
+  transform: translateX(-50%);
   width: 260px;
   height: 60px;
-  bottom: 40px;
   background: white;
   color: black;
   border-radius: 14px;
   border: none;
   font-size: 20px;
   font-weight: 600;
+  z-index: 100;
 }
+
+/* ✅ 키보드 올라오면 버튼만 위로 */
+.ask-btn.up {
+  bottom: 48dvh;
+}
+
 
 
 /* 아이콘 위치 */

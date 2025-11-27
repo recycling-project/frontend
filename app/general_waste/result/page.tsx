@@ -41,7 +41,7 @@ export default function wasteResult() {
         style={{
           height: "70vh",
           width: "100%",              
-          background: "red",           // 테스트용 (나중에 black으로)
+          background: "black",           // 테스트용 (나중에 black으로)
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
