@@ -12,7 +12,7 @@ export default function MenuPage() {
           src="/back_icon.png"
           alt="뒤로가기"
           className="back-btn"
-          onClick={() => router.back()}
+          onClick={() => router.push("/")}
         />
         
         <div className="button-zone">

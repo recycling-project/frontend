@@ -62,7 +62,7 @@ export default function FirstScreen() {
                 잘 보이게 배치해 주세요.
               </p>
             </div>
-
+</div>
             <div className="bottom-button-area">
               <button
                 className="first-btn"
@@ -70,7 +70,7 @@ export default function FirstScreen() {
               >
                 사진 첨부 파일 추가
               </button>
-            </div>
+            
           </div>
 
         </div>

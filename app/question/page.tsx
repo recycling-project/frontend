@@ -48,7 +48,7 @@ export default function TestKeyboard() {
       <img
         src="/back_icon.png"
         alt="뒤로가기"
-        onClick={() => router.back()}
+        onClick={() => router.push("/main")}
         style={{
           position: "absolute",
           top: 20,

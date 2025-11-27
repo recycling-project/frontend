@@ -154,7 +154,7 @@ html, body {
 
   cursor: pointer;
 
-  transform: translateY(-30px);
+  transform: translateY(-150px);
 }
 
 /* Latge_waste*/
@@ -606,7 +606,7 @@ html, body {
 
 /* 아이콘 위치 */
 .recyleset {
-  margin-top: 200px;
+  margin-top:100px;
 }
 
 
