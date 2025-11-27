@@ -41,7 +41,7 @@ export default function WasteAnalyze() {
       // 환경변수에서 API 주소 가져오기
       const api = process.env.NEXT_PUBLIC_API_URL;
 
-      const res = await fetch(`${api}/recycle/analyze`, {
+      const res = await fetch("/api/analyze", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -50,12 +50,13 @@ export default function WasteAnalyze() {
       });
 
       const data = await res.json();
-      console.log(" GPT 응답 data >>>", data); //확인용!!!!!!!!!
 
       //  여기서 분석 종류에 따라 라우팅을 분리 텍스트,포토
       if (base64) {
-        localStorage.setItem("analyzeResult", JSON.stringify(data));
-        router.push("/general_waste/result?type=photo");
+        router.push(
+          "/general_waste/result?type=photo&data=" +
+          encodeURIComponent(JSON.stringify(data))
+        );
       } else {
         router.push(
           "/general_waste/result?type=text&data=" +

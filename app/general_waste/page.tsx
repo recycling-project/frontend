@@ -3,78 +3,48 @@
 import { useRouter } from "next/navigation";
 import { useRef, useEffect } from "react";
 
-export default function FirstScreen() {
+export default function GeneralWastePage() {
   const router = useRouter();
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
-  // 🔥 카메라 실행
+  // ✅ 카메라 실시간 실행
   useEffect(() => {
-    async function startCamera() {
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: "environment" }, // 후면 카메라
-        });
+  async function startCamera() {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: "environment" },
+      });
 
-        if (videoRef.current) {
-          videoRef.current.srcObject = stream;
-        }
-      } catch (err) {
-        console.error("카메라 실행 실패:", err);
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
       }
+    } catch (err) {
+      console.warn("카메라 미지원 - 테스트 모드");
     }
+  }
+  startCamera();
+}, []);
 
-    startCamera();
-  }, []);
 
-  // 📷 촬영하기
+  // ✅ 촬영 기능
   const capturePhoto = () => {
     if (!videoRef.current) return;
 
     const video = videoRef.current;
-
-    // 🔥 카메라 초기화 안 되면 캡처 불가
-    if (video.videoWidth === 0 || video.videoHeight === 0) {
-      console.error("카메라 초기화 전에 촬영 시도됨!");
-      return;
-    }
+    const canvas = document.createElement("canvas");
 
     const width = video.videoWidth || 640;
     const height = video.videoHeight || 480;
 
-    const canvas = document.createElement("canvas");
     canvas.width = width;
     canvas.height = height;
 
-    const ctx = canvas.getContext("2d");
-    if (!ctx) {
-      console.error("2D context 생성 실패");
-      return;
-    }
-
-    // 🔥 비디오 프레임 캡처
+    const ctx = canvas.getContext("2d")!;
     ctx.drawImage(video, 0, 0, width, height);
 
-    // 🔥 JPEG 강제 변환
-    let base64 = canvas.toDataURL("image/jpeg", 0.7);
-
-    // 혹시 PNG일 경우 강제 변환
-    if (base64.includes("image/png")) {
-      const newCanvas = document.createElement("canvas");
-      newCanvas.width = width;
-      newCanvas.height = height;
-
-      const newCtx = newCanvas.getContext("2d");
-      if (newCtx) {
-        newCtx.drawImage(canvas, 0, 0);
-        base64 = newCanvas.toDataURL("image/jpeg", 0.7);
-      }
-    }
-
-    console.log("🔥 최종 캡처 포맷:", base64.slice(0, 40));
-
+    const base64 = canvas.toDataURL("image/png");
     localStorage.setItem("wasteImage", base64);
 
-    // 🔥 분석 페이지로 이동
     router.push("/general_waste/analyze");
   };
 
@@ -85,14 +55,15 @@ export default function FirstScreen() {
         {/* 뒤로가기 */}
         <img
           src="/back_icon.png"
-          alt="back"
+          alt="뒤로가기"
           className="back-btn"
-          onClick={() => router.back()}
+          onClick={() => router.replace("/menu")}
         />
 
-        <div className="general_waste">
+        {/* ✅ 카메라 + 오버레이 컨테이너 */}
+        <div className="camera-wrap">
 
-          {/* 카메라 화면 */}
+          {/* 실제 카메라 */}
           <video
             ref={videoRef}
             autoPlay
@@ -100,9 +71,9 @@ export default function FirstScreen() {
             className="camera-preview"
           />
 
-          <div className="nomalset">
+          {/* UI 오버레이 */}
+          <div className="camera-overlay">
 
-            {/* 안내 UI */}
             <div className="detect-content">
               <img src="/Green_camera.png" className="detect-icon" />
               <p className="detect-text">
@@ -111,8 +82,7 @@ export default function FirstScreen() {
               </p>
             </div>
 
-            {/* 버튼 영역 */}
-            <div className="bottom-button-area">
+            <div className="camera-bottom-button-area">
               <button className="photo-btn" onClick={capturePhoto}>
                 촬영하기
               </button>
