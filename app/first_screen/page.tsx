@@ -14,7 +14,7 @@ export default function FirstScreen() {
           className="back-btn"
           onClick={() => router.back()}
         />
-        
+        <div className="recyleset">
         <div className="detect-content">
           <img
             src="/Green_camera.png"
@@ -34,7 +34,7 @@ export default function FirstScreen() {
           사진 첨부 파일 추가<br/>
         </button>
         </div>
-
+</div>
       </div>
     </div>
   );

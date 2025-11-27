@@ -7,6 +7,7 @@ interface Props {
   value: string;
   onChange: (val: string) => void;
   onClose: () => void;
+  styleOverride?: React.CSSProperties;
 }
 
 export default function KeyboardModal({ value, onChange, onClose }: Props) {
@@ -70,7 +71,19 @@ export default function KeyboardModal({ value, onChange, onClose }: Props) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/70 z-[9999] flex flex-col justify-end">
+    <div
+      className="fixed inset-0 bg-black/70 z-[9999] flex flex-col justify-start"
+      style={{
+    position: "absolute",
+    top: "500px",   // 키보드 세로 위치 조절
+    left: 0,
+    width: "100%",
+    zIndex: 9999,
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center"
+  }}
+>
 
       <div className="flex justify-end p-4">
         <button

@@ -1,7 +1,6 @@
 "use client";
 
 export const dynamic = "force-dynamic";
-export const runtime = "edge";
 
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -18,6 +17,10 @@ export default function WasteAnalyze() {
 
   const text = searchParams.get("text");
 
+  console.log("API URL >>>", process.env.NEXT_PUBLIC_API_URL);
+  console.log("base64:", base64?.substring(0, 50));
+
+
   useEffect(() => {
     async function analyze() {
       let body;
@@ -26,7 +29,7 @@ export default function WasteAnalyze() {
       if (base64) {
         body = JSON.stringify({ image: base64 });
 
-      // 텍스트 질문 모드
+        // 텍스트 질문 모드
       } else if (text) {
         body = JSON.stringify({ text: text });
 
@@ -34,11 +37,11 @@ export default function WasteAnalyze() {
         return;
       }
 
-      // 🚨 여기 수정: localhost 직접 호출 금지
+      // localhost 직접 호출 금지
       // 환경변수에서 API 주소 가져오기
       const api = process.env.NEXT_PUBLIC_API_URL;
 
-      const res = await fetch(`${api}/recycle/analyze`, {
+      const res = await fetch("/api/analyze", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body,
@@ -46,14 +49,24 @@ export default function WasteAnalyze() {
 
       const data = await res.json();
 
-      router.push(
-        "/general_waste/result?data=" +
+      //  여기서 분석 종류에 따라 라우팅을 분리 텍스트,포토
+      if (base64) {
+        router.push(
+          "/general_waste/result?type=photo&data=" +
           encodeURIComponent(JSON.stringify(data))
-      );
+        );
+      } else {
+        router.push(
+          "/general_waste/result?type=text&data=" +
+          encodeURIComponent(JSON.stringify(data))
+        );
+      }
     }
 
     analyze();
   }, [base64, text]);
+
+
 
   return (
     <div className="page-bg">
