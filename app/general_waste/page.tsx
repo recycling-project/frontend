@@ -34,17 +34,22 @@ export default function FirstScreen() {
     const video = videoRef.current;
     const canvas = document.createElement("canvas");
 
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
+    // 모바일에서 videoWidth/Height 0인 버그 방지
+    const width = video.videoWidth || 640;
+    const height = video.videoHeight || 480;
+
+    canvas.width = width;
+    canvas.height = height;
 
     const ctx = canvas.getContext("2d")!;
-    ctx.drawImage(video, 0, 0);
+    ctx.drawImage(video, 0, 0, width, height);
 
     const base64 = canvas.toDataURL("image/png");
     localStorage.setItem("wasteImage", base64);
 
     router.push("/general_waste/analyze");
   };
+
 
   return (
     <div className="page-bg">
