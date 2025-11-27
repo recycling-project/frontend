@@ -33,15 +33,15 @@ export default function wasteResult() {
           src="/back_icon.png"
           alt="뒤로가기"
           className="back-btn"
-          onClick={() => router.back()}
+          onClick={() => router.push("/menu")}
         />
 
     {/* 🔼 상단 60% : 사진 영역 */}
     <div
         style={{
           height: "70vh",
-          width: "100vw",              
-          background: "black",           // 테스트용 (나중에 black으로)
+          width: "100%",              
+          background: "red",           // 테스트용 (나중에 black으로)
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
