@@ -43,7 +43,9 @@ export default function WasteAnalyze() {
 
       const res = await fetch(`${api}/recycle/analyze`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+        },
         body,
       });
 
