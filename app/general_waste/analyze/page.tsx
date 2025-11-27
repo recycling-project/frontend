@@ -41,7 +41,7 @@ export default function WasteAnalyze() {
       // 환경변수에서 API 주소 가져오기
       const api = process.env.NEXT_PUBLIC_API_URL;
 
-      const res = await fetch("/api/analyze", {
+      const res = await fetch(`${api}/recycle/analyze`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
