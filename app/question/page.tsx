@@ -62,7 +62,7 @@ export default function TestKeyboard() {
           left: "50%",
           bottom: "50dvh",
           transform: showKeyboard
-            ? `translate(-50%, -${keyboardOffset + 180}px)`
+            ? `translate(-50%, -${keyboardOffset + 50}px)`
             : "translate(-50%, 0)",
           transition: "transform 0.35s cubic-bezier(.4,0,.2,1)",
           zIndex: 120,
@@ -83,7 +83,7 @@ export default function TestKeyboard() {
   disabled={!text}
   style={{
     position: "fixed",
-    bottom: "15dvh",
+    bottom: "25dvh",
     left: "50%",
     transform: "translateX(-50%)",
     zIndex: 100,

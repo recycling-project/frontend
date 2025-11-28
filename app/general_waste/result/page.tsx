@@ -54,10 +54,11 @@ export default function WasteResult() {
           style={{
             width: "75%",
             maxWidth: "350px",
-            aspectRatio: "1 / 1",
+            aspectRatio: "1/ 1",
+            marginTop: "3vh",
             background: "black",
             borderRadius: "12px",
-            // border: "2px dashed red", // 네모칸 있는지 확인용
+            border: "2px dashed red", // 네모칸 있는지 확인용
             overflow: "hidden",
             display: "flex",
             justifyContent: "center",
@@ -90,7 +91,7 @@ export default function WasteResult() {
             borderRadius: "14px",
             padding: "18px",
             color: "white",
-            // border: "2px dashed red", // 네모칸 있는지 확인용
+            border: "2px dashed red", // 네모칸 있는지 확인용
             overflowY: "auto",
             textAlign: "left",
             lineHeight: "1.8",
