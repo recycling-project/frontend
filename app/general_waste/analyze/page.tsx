@@ -3,70 +3,101 @@
 export const dynamic = "force-dynamic";
 
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
 export default function WasteAnalyze() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const base64 =
+  // 📌 기존 localStorage 값 (카메라 촬영)
+  const storedBase64 =
     typeof window !== "undefined"
       ? localStorage.getItem("wasteImage")
       : null;
 
+  // 📌 QR 업로드로 받은 base64를 저장할 state
+  // (이게 핵심 수정!)
+  const [photoFromQR, setPhotoFromQR] = useState(null);
+
   const text = searchParams.get("text");
-
-  console.log("API URL >>>", process.env.NEXT_PUBLIC_API_URL);
-  console.log("base64:", base64?.substring(0, 50));
-
 
   useEffect(() => {
     async function analyze() {
-      let body;
+      const api = process.env.NEXT_PUBLIC_API_URL;
 
-      // 사진 모드
-      if (base64) {
-        body = JSON.stringify({ image: base64 });
+      // -----------------------------
+      // 1) QR 업로드인 경우 (type=photo + localStorage 없음)
+      // -----------------------------
+      if (!storedBase64 && searchParams.get("type") === "photo") {
+        const resImg = await fetch(`${api}/recycle/mobile-image`);
+        const dataImg = await resImg.json();
 
-        // 텍스트 질문 모드
-      } else if (text) {
-        body = JSON.stringify({ text: text });
+        // 📌 QR base64를 state에 저장
+        setPhotoFromQR(dataImg.image);
 
-      } else {
+        // 📌 QR base64도 localStorage에 저장 해줘야
+        //    result 페이지에서 사진이 보임
+        localStorage.setItem("wasteImage", dataImg.image);
+
+        // 🔥 여기서 return 하지 않으면 analyze()가
+        //    state 업데이트 전에 다음 요청을 보내려고 하면서
+        //    finalBase64가 null이 되어버림 → 무한 로딩
         return;
       }
 
-      // localhost 직접 호출 금지
-      // 환경변수에서 API 주소 가져오기
-      const api = process.env.NEXT_PUBLIC_API_URL;
+      // -----------------------------
+      // 2) 실제 사용할 base64 결정
+      // -----------------------------
+      const finalImage = storedBase64 || photoFromQR;
+
+      // -----------------------------
+      // 3) base64도 없고 text도 없으면 분석할 게 없음
+      // -----------------------------
+      if (!finalImage && !text) return;
+
+      let body;
+
+      // -----------------------------
+      // 4) 사진 분석
+      // -----------------------------
+      if (finalImage) {
+        body = JSON.stringify({ image: finalImage });
+      }
+      // -----------------------------
+      // 5) 텍스트 분석
+      // -----------------------------
+      else if (text) {
+        body = JSON.stringify({ text });
+      }
 
       const res = await fetch("/api/analyze", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body,
-      });
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body,
+});
 
       const data = await res.json();
 
-      //  여기서 분석 종류에 따라 라우팅을 분리 텍스트,포토
-      if (base64) {
+      // -----------------------------
+      // 6) 결과 페이지로 이동
+      // -----------------------------
+      if (finalImage) {
         router.push(
           "/general_waste/result?type=photo&data=" +
-          encodeURIComponent(JSON.stringify(data))
+            encodeURIComponent(JSON.stringify(data))
         );
       } else {
         router.push(
           "/general_waste/result?type=text&data=" +
-          encodeURIComponent(JSON.stringify(data))
+            encodeURIComponent(JSON.stringify(data))
         );
       }
     }
 
     analyze();
-  }, [base64, text]);
-
-
+    // 🔥 storedBase64 변경 또는 photoFromQR 변경 시 다시 실행
+  }, [storedBase64, photoFromQR, text]);
 
   return (
     <div className="page-bg">
