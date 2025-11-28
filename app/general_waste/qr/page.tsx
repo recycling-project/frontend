@@ -3,7 +3,8 @@ import { useRouter } from "next/navigation";
 import { QRCodeCanvas } from "qrcode.react";
 
 export default function QRPage() {
-  const uploadUrl = "https://backend-production-fc4f.up.railway.app/recycle/upload-mobile";
+  const uploadUrl =
+  "https://recyclingfrontend.vercel.app/general_waste/mobile-upload";
 
   const router = useRouter();
   return (
