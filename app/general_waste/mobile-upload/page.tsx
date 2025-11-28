@@ -1,10 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 
 export default function MobileUploadPage() {
-  const router = useRouter();
   const [loading, setLoading] = useState(false);
 
   const handleMobileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -19,8 +17,9 @@ export default function MobileUploadPage() {
       const base64 = reader.result as string;
 
       try {
+        // 모바일은 분석 요청 금지 → 업로드 전용 API 호출
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/recycle/analyze`,
+          `${process.env.NEXT_PUBLIC_API_URL}/recycle/upload-mobile`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -28,12 +27,13 @@ export default function MobileUploadPage() {
           }
         );
 
-        const data = await res.json();
+        const data = await res.json(); // { id: "abc123" }
 
-        router.push(
-          "/general_waste/result?type=photo&data=" +
-          encodeURIComponent(JSON.stringify(data))
-        );
+        console.log("업로드 된 ID:", data.id);
+
+        //   모바일은 이동 금지 → 결과는 키오스크에 표시됨
+        alert("사진 업로드 완료!");
+
       } catch (err) {
         console.error("업로드 실패:", err);
       } finally {
@@ -49,6 +49,7 @@ export default function MobileUploadPage() {
       <div className="kiosk" style={{ textAlign: "center", padding: "40px" }}>
         <h2 style={{ color: "white" }}>휴대폰에서 사진 선택</h2>
 
+        {/* 업로드만 수행 */}
         <input
           type="file"
           accept="image/*"
@@ -64,7 +65,7 @@ export default function MobileUploadPage() {
 
         {loading && (
           <div style={{ marginTop: "20px", color: "white" }}>
-            분석 중입니다...
+            업로드 중입니다...
           </div>
         )}
       </div>
