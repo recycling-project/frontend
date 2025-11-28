@@ -56,9 +56,12 @@ export default function MobileUploadPage() {
           style={{
             marginTop: "20px",
             padding: "10px",
-            fontSize: "18px",
+            fontSize: "15px",
             background: "white",
             borderRadius: "10px",
+            width: "80%",        
+            maxWidth: "300px",   
+            textAlign: "center"
           }}
         />
 

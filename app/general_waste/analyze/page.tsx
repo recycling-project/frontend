@@ -50,6 +50,7 @@ export default function WasteAnalyze() {
       // 2) 실제 사용할 base64 결정
       // -----------------------------
       const finalImage = storedBase64 || photoFromQR;
+<<<<<<< HEAD
 
       // -----------------------------
       // 3) base64도 없고 text도 없으면 분석할 게 없음
@@ -76,6 +77,34 @@ export default function WasteAnalyze() {
         headers: { "Content-Type": "application/json" },
         body,
       });
+=======
+
+      // -----------------------------
+      // 3) base64도 없고 text도 없으면 분석할 게 없음
+      // -----------------------------
+      if (!finalImage && !text) return;
+
+      let body;
+
+      // -----------------------------
+      // 4) 사진 분석
+      // -----------------------------
+      if (finalImage) {
+        body = JSON.stringify({ image: finalImage });
+      }
+      // -----------------------------
+      // 5) 텍스트 분석
+      // -----------------------------
+      else if (text) {
+        body = JSON.stringify({ text });
+      }
+
+      const res = await fetch("/api/analyze", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body,
+});
+>>>>>>> dagyeong
 
       const data = await res.json();
 

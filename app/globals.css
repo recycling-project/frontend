@@ -702,3 +702,15 @@ html, body {
 
   margin-top: -60px; 
 }
+
+/*화면고정 키오스크스케일 전용 css*/
+.kiosk-viewport {
+  width: 100vw;
+  height: 100vh;
+  background: black;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  overflow: hidden;
+}
+
