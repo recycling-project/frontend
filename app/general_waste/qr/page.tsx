@@ -27,6 +27,21 @@ export default function QRPage() {
 
         <p className="qr-guide">QR을 휴대폰으로 스캔하세요</p>
 
+        <button
+          style={{
+            marginTop: "40px",
+            padding: "15px 30px",
+            background: "white",
+            borderRadius: "12px",
+            border: "none",
+            fontSize: "20px",
+            cursor: "pointer",
+          }}
+          onClick={() => router.push("/general_waste/wait")}
+        >
+          다음
+        </button>
+
       </div>
     </div>
   );
