@@ -75,13 +75,15 @@ export default function KeyboardModal({ value, onChange, onClose }: Props) {
       className="fixed inset-0 bg-black/70 z-[9999] flex flex-col justify-start"
       style={{
     position: "absolute",
-    top: "300px",   // 키보드 세로 위치 조절
+    top: "350px",   // 키보드 세로 위치 조절
     left: 0,
     width: "100%",
     zIndex: 9999,
     display: "flex",
     flexDirection: "column",
-    alignItems: "center"
+    alignItems: "center",
+    transform: "scale(1.2)",                 // 🔥 키보드 확대
+    transformOrigin: "bottom center"
   }}
 >
 
@@ -98,15 +100,19 @@ export default function KeyboardModal({ value, onChange, onClose }: Props) {
         {value}
       </div>
 
-      <div className="bg-gray-100 rounded-t-3xl px-6 py-6 shadow-2xl">
-
+      <div
+  className="bg-gray-100 rounded-t-3xl px-6 py-8 shadow-2xl"
+  style={{
+    height: "45vh",          // ✅ 키보드 전체 높이 증가
+  }}
+>
         {keys.map((row, idx) => (
           <div key={idx} className="flex justify-center gap-3 mb-4">
             {row.map((k) => (
               <button
                 key={k}
                 onClick={() => pressKey(k)}
-                className={`${k === "Back" ? "w-32" : "w-16"} 
+                className={`${k === "Back" ? "w-40" : "w-20"} 
                   h-16 bg-white rounded-xl text-2xl shadow active:bg-gray-200 
                   flex items-center justify-center`}
               >
