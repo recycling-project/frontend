@@ -7,7 +7,6 @@ import KeyboardModal from "@/app/components/KeyboardModal";
 export default function TestKeyboard() {
   const router = useRouter();
   const [text, setText] = useState("");
-  const [showKeyboard, setShowKeyboard] = useState(false);
   const [keyboardOffset, setKeyboardOffset] = useState(0);
 
   // ✅ 키보드 높이 자동 감지
@@ -60,11 +59,8 @@ export default function TestKeyboard() {
         style={{
           position: "fixed",
           left: "50%",
-          bottom: "50dvh",
-          transform: showKeyboard
-            ? `translate(-50%, -${keyboardOffset + 50}px)`
-            : "translate(-50%, 0)",
-          transition: "transform 0.35s cubic-bezier(.4,0,.2,1)",
+          bottom: "60dvh",
+          transform: "translateX(-50%)",
           zIndex: 120,
         }}
       >
@@ -73,8 +69,7 @@ export default function TestKeyboard() {
           className="questiontext-input"
           value={text}
           placeholder="텍스트로 질문하기"
-          onClick={() => setShowKeyboard(true)}
-        />
+          />
       </div>
 
       {/* ✅ 질문 버튼 - 절대 고정 */}
@@ -83,7 +78,7 @@ export default function TestKeyboard() {
   disabled={!text}
   style={{
     position: "fixed",
-    bottom: "25dvh",
+    bottom: "55dvh",
     left: "50%",
     transform: "translateX(-50%)",
     zIndex: 100,
@@ -115,11 +110,11 @@ export default function TestKeyboard() {
 </button>
 
       {/* 키보드 */}
-      {showKeyboard && (
+      { (
         <KeyboardModal
           value={text}
           onChange={setText}
-          onClose={() => setShowKeyboard(false)}
+          onClose={() => {}}
         />
       )}
     </div>

@@ -75,7 +75,7 @@ export default function KeyboardModal({ value, onChange, onClose }: Props) {
       className="fixed inset-0 bg-black/70 z-[9999] flex flex-col justify-start"
       style={{
     position: "absolute",
-    top: "350px",   // 키보드 세로 위치 조절
+    top: "500px",   // 키보드 세로 위치 조절
     left: 0,
     width: "100%",
     zIndex: 9999,
