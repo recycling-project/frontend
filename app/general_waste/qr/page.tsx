@@ -3,8 +3,8 @@ import { useRouter } from "next/navigation";
 import { QRCodeCanvas } from "qrcode.react";
 
 export default function QRPage() {
-  const uploadUrl =
-    "https://frontend-self-delta-10.vercel.app/general_waste/mobile-upload";
+  const uploadUrl = "https://backend-production-fc4f.up.railway.app/recycle/upload-mobile";
+
   const router = useRouter();
   return (
     <div className="page-bg">

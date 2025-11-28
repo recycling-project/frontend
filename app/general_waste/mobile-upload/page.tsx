@@ -18,10 +18,9 @@ export default function MobileUploadPage() {
     reader.onloadend = async () => {
       const base64 = reader.result as string;
 
-      // 백엔드로 업로드
       try {
         const res = await fetch(
-          process.env.NEXT_PUBLIC_API_URL + "/recycle/analyze",
+          `${process.env.NEXT_PUBLIC_API_URL}/recycle/analyze`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -33,7 +32,7 @@ export default function MobileUploadPage() {
 
         router.push(
           "/general_waste/result?type=photo&data=" +
-            encodeURIComponent(JSON.stringify(data))
+          encodeURIComponent(JSON.stringify(data))
         );
       } catch (err) {
         console.error("업로드 실패:", err);

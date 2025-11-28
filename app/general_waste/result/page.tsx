@@ -16,8 +16,18 @@ export default function WasteResult() {
   const [photo, setPhoto] = useState("");
 
   useEffect(() => {
-    const img = localStorage.getItem("wasteImage");
-    if (img) setPhoto(img);
+    let img = localStorage.getItem("wasteImage");
+
+    if (img) {
+      // prefix 없으면 붙여주기
+      if (!img.startsWith("data:image")) {
+        img = "data:image/jpeg;base64," + img;
+      }
+
+      setPhoto(img);
+    }
+
+    // 사진을 먼저 불러오고 바로 삭제
     localStorage.removeItem("wasteImage");
   }, []);
 
