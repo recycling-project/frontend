@@ -34,7 +34,7 @@ export default function MobileUploadPage() {
         // 그래서 아래처럼 '업로드 전용 API' 로 보내는 구조로 변경.
         // -----------------------------------------------------------
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/recycle/upload-mobile`,
+          `${process.env.NEXT_PUBLIC_API_URL}/recycle/mobile-upload`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
