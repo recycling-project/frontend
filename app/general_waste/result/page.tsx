@@ -23,79 +23,99 @@ export default function WasteResult() {
 
   return (
     <div className="page-bg">
-      <div className="kiosk" style={{ height: "100vh", position: "relative" }}>
 
-        {/* 🔙 뒤로가기 */}
-        <img
-          src="/back_icon.png"
-          alt="뒤로가기"
-          className="back-btn"
-          onClick={() => router.replace("/menu")}
-        />
+  {/* ✅ 뒤로가기 버튼 - 화면 고정 */}
+  <img
+    src="/back_icon.png"
+    alt="뒤로가기"
+    className="back-btn"
+    onClick={() => router.replace("/menu")}
+    style={{
+  position: "fixed",
+  top: "env(safe-area-inset-top)",
+  left: "3.4vw",
+  zIndex: 1000
+}}
+  />
 
-        {/* ✅ 사진 영역 */}
+  <div
+    className="kiosk"
+    style={{
+      height: "100vh",
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      paddingTop: "80px"
+    }}
+  >
+   
+        {/* ✅ 촬영 이미지 영역 */}
         <div
           style={{
-            marginTop: "80px",   // 🔥 뒤로가기와 간격
+            width: "75%",
+            maxWidth: "350px",
+            aspectRatio: "1 / 1",
+            background: "black",
+            borderRadius: "12px",
+            // border: "2px dashed red", // 네모칸 있는지 확인용
+            overflow: "hidden",
             display: "flex",
             justifyContent: "center",
+            alignItems: "center",
           }}
         >
-          <div
-            style={{
-              width: "70%",
-              aspectRatio: "1 / 1",  // ✅ 정사각형 유지
-              background: "black",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            {photo ? (
-              <img
-                src={photo}
-                alt="분석한 사진"
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                }}
-              />
-            ) : (
-              <p style={{ color: "white" }}>사진 없음</p>
-            )}
-          </div>
+          {photo ? (
+            <img
+              src={photo}
+              alt="분석한 사진"
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+              }}
+            />
+          ) : (
+            <p style={{ color: "white" }}>사진 없음</p>
+          )}
         </div>
 
-        {/* ✅ 결과 텍스트 영역 */}
+        {/* ✅ 결과 텍스트 박스 */}
         <div
           style={{
             marginTop: "30px",
-            padding: "20px",
+            width: "85%",
+            maxWidth: "500px",
+            height: "25vh",
+            background: "rgba(0,0,0,0.75)",
+            borderRadius: "14px",
+            padding: "18px",
             color: "white",
+            // border: "2px dashed red", // 네모칸 있는지 확인용
+            overflowY: "auto",
+            textAlign: "left",
+            lineHeight: "1.8",
+            fontSize: "15px",
           }}
         >
           {content ? (
-            <div
-              style={{
-                background: "rgba(0,0,0,0.6)",
-                borderRadius: "12px",
-                padding: "16px",
-              }}
-            >
-              <h3 style={{ marginBottom: "10px" }}>재활용 분석 결과</h3>
+            <>
+              <h3 style={{ marginBottom: "10px", textAlign: "center" }}>
+                재활용 분석 결과
+              </h3>
               <pre
                 style={{
                   whiteSpace: "pre-wrap",
-                  fontSize: "15px",
-                  lineHeight: "1.5",
+                  wordBreak: "break-word",
+                  margin: 0,
                 }}
               >
                 {content}
               </pre>
-            </div>
+            </>
           ) : (
-            <p>결과 데이터를 불러올 수 없습니다.</p>
+            <p style={{ textAlign: "center" }}>
+              결과 데이터를 불러올 수 없습니다.
+            </p>
           )}
         </div>
       </div>

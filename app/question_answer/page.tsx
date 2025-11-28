@@ -44,6 +44,7 @@ export default function WasteResult() {
     maxWidth: "700px",         // ✅ PC에서 크게 보이게
     height: "65vh",            // ✅ 높이 확장
     background: "rgba(0,0,0,0.75)",
+    // border: "2px dashed red", // 네모칸 있는지 확인용
     color: "white",
     padding: "24px",
     borderRadius: "16px",
