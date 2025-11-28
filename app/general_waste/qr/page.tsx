@@ -12,6 +12,12 @@ export default function QRPage() {
   //  업로드되면 자동으로 wait 페이지로 이동
 
   useEffect(() => {
+    // QR 페이지 처음 들어오면 이전 기록 초기화
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/recycle/reset`, {
+      method: "POST",
+    });
+
+    // 이후 업로드 감지 시작
     const timer = setInterval(async () => {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/recycle/check`);
       const data = await res.json();
