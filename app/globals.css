@@ -204,7 +204,7 @@ html, body {
 
 .loading-wrapper {
   position: absolute;
-  bottom: 300px;     
+  bottom: 290px;     
   left: 50%;
   transform: translateX(-50%);
   display: flex;

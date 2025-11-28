@@ -33,7 +33,7 @@ export default function WasteResult() {
     style={{
   position: "fixed",
   top: "env(safe-area-inset-top)",
-  left: "3.4vw",
+  left: "5.5vw",
   zIndex: 1000
 }}
   />
@@ -58,7 +58,7 @@ export default function WasteResult() {
             marginTop: "3vh",
             background: "black",
             borderRadius: "12px",
-            border: "2px dashed red", // 네모칸 있는지 확인용
+            // border: "2px dashed red", // 네모칸 있는지 확인용
             overflow: "hidden",
             display: "flex",
             justifyContent: "center",
@@ -86,18 +86,19 @@ export default function WasteResult() {
             marginTop: "30px",
             width: "85%",
             maxWidth: "500px",
-            height: "25vh",
+            height: "30vh",
             background: "rgba(0,0,0,0.75)",
             borderRadius: "14px",
             padding: "18px",
             color: "white",
-            border: "2px dashed red", // 네모칸 있는지 확인용
+            // border: "2px dashed red", // 네모칸 있는지 확인용
             overflowY: "auto",
             textAlign: "left",
             lineHeight: "1.8",
             fontSize: "15px",
           }}
         >
+
           {content ? (
             <>
               <h3 style={{ marginBottom: "10px", textAlign: "center" }}>
