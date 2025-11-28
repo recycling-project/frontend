@@ -4,7 +4,7 @@ import { QRCodeCanvas } from "qrcode.react";
 
 export default function QRPage() {
   const uploadUrl =
-  "https://recyclingfrontend.vercel.app/general_waste/mobile-upload";
+  "https://frontend-self-delta-10.vercel.app/general_waste/mobile-upload";
 
   const router = useRouter();
   return (
