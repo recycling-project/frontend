@@ -27,22 +27,21 @@ export default function WasteAnalyze() {
       const api = process.env.NEXT_PUBLIC_API_URL;
 
       // -----------------------------
-      // 1) QR 업로드인 경우 (type=photo + localStorage 없음)
+      // 1) QR 업로드인 경우 → 무조건 id 를 받아서 이미지 요청
       // -----------------------------
-      if (!storedBase64 && searchParams.get("type") === "photo") {
-        const resImg = await fetch(`${api}/recycle/mobile-image`);
+      const id = searchParams.get("id");  // wait 페이지가 전달해줌
+
+      if (id && !storedBase64) {
+        const resImg = await fetch(`${api}/recycle/image?id=${id}`);
         const dataImg = await resImg.json();
 
-        // 📌 QR base64를 state에 저장
+        // 서버에서 가져온 base64를 state에 저장
         setPhotoFromQR(dataImg.image);
 
-        // 📌 QR base64도 localStorage에 저장 해줘야
-        //    result 페이지에서 사진이 보임
+        // result 페이지에서 사용하기 위해 localStorage에도 저장
         localStorage.setItem("wasteImage", dataImg.image);
 
-        // 🔥 여기서 return 하지 않으면 analyze()가
-        //    state 업데이트 전에 다음 요청을 보내려고 하면서
-        //    finalBase64가 null이 되어버림 → 무한 로딩
+        // 분석은 이미지가 준비된 다음에만 진행해야 함
         return;
       }
 
@@ -114,12 +113,12 @@ export default function WasteAnalyze() {
       if (finalImage) {
         router.push(
           "/general_waste/result?type=photo&data=" +
-            encodeURIComponent(JSON.stringify(data))
+          encodeURIComponent(JSON.stringify(data))
         );
       } else {
         router.push(
           "/general_waste/result?type=text&data=" +
-            encodeURIComponent(JSON.stringify(data))
+          encodeURIComponent(JSON.stringify(data))
         );
       }
     }
