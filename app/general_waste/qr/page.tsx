@@ -1,12 +1,30 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { QRCodeCanvas } from "qrcode.react";
+import { useEffect } from "react";
 
 export default function QRPage() {
   const uploadUrl =
-  "https://frontend-self-delta-10.vercel.app/general_waste/mobile-upload";
+    "https://frontend-self-delta-10.vercel.app/general_waste/mobile-upload";
 
   const router = useRouter();
+
+  //  업로드되면 자동으로 wait 페이지로 이동
+
+  useEffect(() => {
+    const timer = setInterval(async () => {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/recycle/check`);
+      const data = await res.json();
+
+      if (data.id) {
+        clearInterval(timer);
+        router.push("/general_waste/wait");
+      }
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
   return (
     <div className="page-bg">
       <div className="kiosk">
@@ -27,20 +45,7 @@ export default function QRPage() {
 
         <p className="qr-guide">QR을 휴대폰으로 스캔하세요</p>
 
-        <button
-          style={{
-            marginTop: "40px",
-            padding: "15px 30px",
-            background: "white",
-            borderRadius: "12px",
-            border: "none",
-            fontSize: "20px",
-            cursor: "pointer",
-          }}
-          onClick={() => router.push("/general_waste/wait")}
-        >
-          다음
-        </button>
+
 
       </div>
     </div>
