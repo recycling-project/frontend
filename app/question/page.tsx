@@ -78,24 +78,41 @@ export default function TestKeyboard() {
       </div>
 
       {/* ✅ 질문 버튼 - 절대 고정 */}
-      <button
-        className="ask-btn"
-        disabled={!text}
-        style={{
-          position: "fixed",
-          bottom: "15dvh",
-          left: "50%",
-          transform: "translateX(-50%)",
-          zIndex: 100,
-        }}
-        onClick={() =>
-          router.push(
-            "/question_answer?text=" + encodeURIComponent(text)
-          )
-        }
-      >
-        질문하기
-      </button>
+<button
+  className="ask-btn"
+  disabled={!text}
+  style={{
+    position: "fixed",
+    bottom: "15dvh",
+    left: "50%",
+    transform: "translateX(-50%)",
+    zIndex: 100,
+  }}
+  onClick={async () => {
+    try {
+      const res = await fetch("/api/analyze", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ text }),   // ✅ 서버로 질문 보내기
+      });
+
+      const result = await res.json();
+
+      router.push(
+        `/question_answer?data=${encodeURIComponent(
+          JSON.stringify(result)
+        )}`
+      );
+    } catch (err) {
+      console.error("분석 요청 실패:", err);
+      alert("분석 처리 중 오류가 발생했습니다.");
+    }
+  }}
+>
+  질문하기
+</button>
 
       {/* 키보드 */}
       {showKeyboard && (
