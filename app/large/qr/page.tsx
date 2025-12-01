@@ -15,7 +15,7 @@ export default function LargeQRPage() {
   useEffect(() => {
     // 📌 2) 키오스크 화면이 열리면 가장 먼저 Spring에 "초기화 요청" 보냄
     // → Spring이 /trash/large/reset 호출됨 
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/recycle/reset`, {
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/large/reset`, {
       method: "POST",
     });
 
@@ -23,7 +23,7 @@ export default function LargeQRPage() {
     // → /recycle/check 를 Spring이 감지해 TRUE 하면 다음 화면 이동
     const timer = setInterval(async () => {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/recycle/check`
+        `${process.env.NEXT_PUBLIC_API_URL}/large/check`
       );
       const data = await res.json();
 
