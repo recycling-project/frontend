@@ -1,3 +1,5 @@
+//핸드폰 업로드 감지페이지 
+
 "use client";
 
 import { useEffect } from "react";

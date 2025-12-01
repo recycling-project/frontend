@@ -23,7 +23,7 @@ export default function MenuPage() {
   일반 재활용<br/>안내
 </button>
 
-  <button className="kiosk-button" onClick={() => router.push("/first_screen")} >
+  <button className="kiosk-button" onClick={() => router.push("/large/first_screen")} >
   대형 폐기물<br/>수거 신청
 </button>
 

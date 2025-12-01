@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-export default function MobileUploadPage() {
+export default function LargeMobileUploadPage() {
   const [loading, setLoading] = useState(false);
 
   const handleMobileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -17,9 +17,8 @@ export default function MobileUploadPage() {
       const base64 = reader.result as string;
 
       try {
-        // 모바일은 분석 요청 금지 → 업로드 전용 API 호출
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/recycle/mobile-upload`,
+          `${process.env.NEXT_PUBLIC_API_URL}/recycle/mobile-upload-large`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -27,16 +26,13 @@ export default function MobileUploadPage() {
           }
         );
 
-        const data = await res.json(); // { id: "abc123" }
+        const data = await res.json();
 
         console.log("업로드 된 ID:", data.id);
 
-        //   모바일은 이동 금지 → 결과는 키오스크에 표시됨
         alert("사진 업로드 완료!");
-
       } catch (err) {
         console.error("업로드 실패:", err);
-        
       } finally {
         setLoading(false);
       }
@@ -50,7 +46,6 @@ export default function MobileUploadPage() {
       <div className="kiosk" style={{ textAlign: "center", padding: "40px" }}>
         <h2 style={{ color: "white" }}>휴대폰에서 사진 선택</h2>
 
-        {/* 업로드만 수행 */}
         <input
           type="file"
           accept="image/*"
@@ -61,9 +56,9 @@ export default function MobileUploadPage() {
             fontSize: "15px",
             background: "white",
             borderRadius: "10px",
-            width: "80%",        
-            maxWidth: "300px",   
-            textAlign: "center"
+            width: "80%",
+            maxWidth: "300px",
+            textAlign: "center",
           }}
         />
 

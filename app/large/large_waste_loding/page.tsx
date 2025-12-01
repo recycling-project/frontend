@@ -8,7 +8,7 @@ export default function Large_waste_loding() {
   // 5초 뒤 자동 이동
   useEffect(() => {
     const timer = setTimeout(() => {
-      router.push("/Large_waste_kind");
+      router.push("/large/large_waste_kind");
     }, 4300);
 
     return () => clearTimeout(timer); // 페이지 벗어나면 타이머 정리

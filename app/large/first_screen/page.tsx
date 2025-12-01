@@ -66,7 +66,7 @@ export default function FirstScreen() {
             <div className="bottom-button-area">
               <button
                 className="first-btn"
-                onClick={() => router.push("Large_waste")}
+                onClick={() => router.push("/large/qr")}
               >
                 사진 첨부 파일 추가
               </button>
