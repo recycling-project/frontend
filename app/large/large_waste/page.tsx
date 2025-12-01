@@ -28,7 +28,7 @@ export default function Large_waste() {
         {/* 아래 버튼 영역 */}
           <div className="bottom-button-area">
             <button className="Large_waste-btn"
-            onClick={() => router.push("Large_waste_loding")}>
+            onClick={() => router.push("/large/large_waste_loding")}>
          버리실 쓰레기가 잘 찍히게 들어주세요<br/>
         </button>
 </div>

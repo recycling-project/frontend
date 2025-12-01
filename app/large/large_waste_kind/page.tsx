@@ -5,7 +5,7 @@ export default function Large_waste_kind() {
   const router = useRouter();
 
 const goDetails = (name: string) => {
-    router.push(`/Large_waste_details?item=${name}`);
+    router.push(`/large/large_waste_details?item=${name}`);
   };
 
 return (

@@ -77,7 +77,7 @@ export default function Large_waste_details() {
             <div className="bottom-price-button">
             <button 
     className="pay-btn"
-    onClick={() => router.push(`/Large_waste_result?item=${selectedItem}&price=${price}`)}>
+    onClick={() => router.push(`/large/large_waste_result?item=${selectedItem}&price=${price}`)}>
             결제하기</button>
           </div>
         </div>
