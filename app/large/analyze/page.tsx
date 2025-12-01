@@ -39,7 +39,7 @@ export default function LargeWasteAnalyze() {
 
             // 📌 HuggingFace FastAPI YOLO 서버 주소
             const url = process.env.NEXT_PUBLIC_FASTAPI_URL + "/predict/recycle_item";
-
+            console.log("YOLO URL >>>", url);  //실제 호출되는  URL확인
             // --------------------------------------
             // 📌 YOLO 서버로 이미지 업로드 & 분석 실행
             // --------------------------------------
