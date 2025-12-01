@@ -18,7 +18,7 @@ export default function LargeMobileUploadPage() {
 
       try {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/recycle/mobile-upload-large`,
+          `${process.env.NEXT_PUBLIC_API_URL}/large/mobile-upload`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
