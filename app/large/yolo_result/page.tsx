@@ -9,7 +9,7 @@ export default function Large_yolo_result() {
   const [photo, setPhoto] = useState("");
   const router = useRouter();
 
-  // 🔥 영어 → 한국어 변환 딕셔너리 (return 바깥)
+  // 영어 → 한국어
   const engToKor: Record<string, string> = {
     "bab-sang": "밥상",
     "seo-rap-jang": "서랍장",
@@ -18,8 +18,8 @@ export default function Large_yolo_result() {
     "jang-long": "장롱",
     "desk": "책상",
     "hwa-jang-dae": "화장대",
-    "bed": "매트리스",
-    "bicycle": "두발자전거",
+    "bed": "침대",
+    "bicycle": "자전거",
     "hang-a-ri": "항아리",
   };
 
@@ -34,9 +34,9 @@ export default function Large_yolo_result() {
     else if (imgLocal) setPhoto(imgLocal);
   }, []);
 
-  // 🔥 YOLO 클래스 추출 (안전 처리)
-  const cls = yolo?.best_detection?.class_name || "";
-  const korean = engToKor[cls] || cls;
+  // YOLO 클래스
+  const cls = yolo?.best_detection?.class_name || null;
+  const korean = cls ? engToKor[cls] || cls : null;
 
   return (
     <div className="container">
@@ -46,20 +46,22 @@ export default function Large_yolo_result() {
 
       <div className="buttonWrap">
 
-        <button
-          className="resultBtn"
-          onClick={() => router.push(`/large/select_menu/options/${cls}`)}
-        >
-          {korean}
-        </button>
+        {/* 인식된 경우만 버튼 표시 */}
+        {cls ? (
+          <button
+            className="resultBtn"
+            onClick={() => router.push(`/large/select_menu/options/${cls}`)}>
+            {korean}
+          </button>
+        ) : null}
 
+        {/* 항상 선택 가능 */}
         <button
           className="selectBtn"
           onClick={() => router.push("/large/select_menu")}
         >
           전체 목록에서 선택
         </button>
-
       </div>
 
       {/* CSS */}
@@ -79,35 +81,41 @@ export default function Large_yolo_result() {
         }
 
         .buttonWrap {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 14px;
-        margin-top: 25px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 14px;
+          margin-top: 25px;
         }
 
         .resultBtn {
-        width: 80%;
-        max-width: 300px;
-        padding: 16px;
-        background: black;
-        border: none;
-        color: white;
-        font-size: 20px;
-        font-weight: bold;
-        border-radius: 12px;
-      }
+          width: 80%;
+          max-width: 300px;
+          padding: 16px;
+          background: black;
+          border: none;
+          color: white;
+          font-size: 20px;
+          font-weight: bold;
+          border-radius: 12px;
+        }
+
+        .noResult {
+          font-size: 18px;
+          color: #555;
+          margin-bottom: 5px;
+        }
 
         .selectBtn {
-        width: 80%;
-        max-width: 300px;
-        padding: 14px;
-        background: black;
-        border: none;
-        color: white;
-        font-size: 18px;
-        border-radius: 12px;
-      }
+          width: 80%;
+          max-width: 300px;
+          padding: 14px;
+          background: black;
+          border: none;
+          color: white;
+          font-size: 18px;
+          border-radius: 12px;
+        }
       `}</style>
     </div>
   );
