@@ -31,7 +31,7 @@ export default function LargeWasteAnalyze() {
         const data = await res.json();
         base64 = data.image;
 
-        localStorage.setItem("large_waste_image", base64);
+        localStorage.setItem("large_waste_image", String(base64));
 
         console.log("📌 Spring base64 prefix:", base64?.substring(0, 40));
       }

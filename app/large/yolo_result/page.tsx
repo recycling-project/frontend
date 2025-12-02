@@ -4,21 +4,25 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function Large_yolo_result() {
-  const searchParams = useSearchParams();
+  const params = useSearchParams();
   const [yolo, setYolo] = useState(null);
   const [photo, setPhoto] = useState("");
 
   useEffect(() => {
-    // 1) YOLO 분석 결과 가져오기
-    const raw = searchParams.get("data");
+    // 1) YOLO 결과
+    const raw = params.get("data");
     if (raw) {
       setYolo(JSON.parse(raw));
     }
 
-    // 2) 촬영/업로드한 이미지 가져오기
-    const img = localStorage.getItem("large_waste_image");
-    if (img) {
-      setPhoto(img);
+    // 2) 이미지: 쿼리 → localStorage 순서로 가져옴
+    const imgQuery = params.get("img");
+    const imgLocal = localStorage.getItem("large_waste_image");
+
+    if (imgQuery) {
+      setPhoto(imgQuery);
+    } else if (imgLocal) {
+      setPhoto(imgLocal);
     }
   }, []);
 
@@ -26,7 +30,6 @@ export default function Large_yolo_result() {
     <div style={{ padding: 20 }}>
       <h2>대형 폐기물 종류 선택</h2>
 
-      {/* 업로드한 사진 출력 */}
       {photo && (
         <img
           src={photo}
@@ -39,7 +42,6 @@ export default function Large_yolo_result() {
         />
       )}
 
-      {/* YOLO 결과 표시 */}
       <pre style={{ marginTop: 20, fontSize: 16 }}>
         {JSON.stringify(yolo, null, 2)}
       </pre>
