@@ -45,9 +45,9 @@ export default function Large_yolo_result() {
 
       <div className="buttonWrap">
 
-      <button className="resultBtn">{korean}</button>
+        <button className="resultBtn">{korean}</button>
 
-      <button className="nextBtn">다음으로 이동</button>
+        <button className="nextBtn">다음으로 이동</button>
 
       </div>
 
@@ -67,30 +67,36 @@ export default function Large_yolo_result() {
           object-fit: cover;
         }
 
-        .resultBtn {
-          margin-top: 20px;
-          width: 80%;
-          max-width: 300px;
-          padding: 16px;
-          background: #000000ff;
-          border: none;
-          color: white;
-          font-size: 20px;
-          font-weight: bold;
-          border-radius: 12px;
+        .buttonWrap {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 14px;
+        margin-top: 25px;
         }
 
+        .resultBtn {
+        width: 80%;
+        max-width: 300px;
+        padding: 16px;
+        background: black;
+        border: none;
+        color: white;
+        font-size: 20px;
+        font-weight: bold;
+        border-radius: 12px;
+      }
+
         .nextBtn {
-          margin-top: 15px;
-          width: 80%;
-          max-width: 300px;
-          padding: 14px;
-          background: #000000ff;
-          border: none;
-          color: white;
-          font-size: 18px;
-          border-radius: 12px;
-        }
+        width: 80%;
+        max-width: 300px;
+        padding: 14px;
+        background: black;
+        border: none;
+        color: white;
+        font-size: 18px;
+        border-radius: 12px;
+      }
       `}</style>
     </div>
   );
