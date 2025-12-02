@@ -31,6 +31,8 @@ export default function LargeWasteAnalyze() {
         const data = await res.json();
         base64 = data.image;
 
+        localStorage.setItem("large_waste_image", base64);
+
         console.log("📌 Spring base64 prefix:", base64?.substring(0, 40));
       }
 
@@ -62,7 +64,8 @@ export default function LargeWasteAnalyze() {
 
       router.push(
         "/large/yolo_result?data=" +
-          encodeURIComponent(JSON.stringify(yoloResult))
+        encodeURIComponent(JSON.stringify(yoloResult)) +
+        "&img=" + encodeURIComponent(base64)
       );
     }
 
