@@ -45,7 +45,7 @@ export default function SofaPage() {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    amount: price,    // 결제할 최종 금액
+                    price,    // 결제할 최종 금액
                     orderName: "소파", // 토스 결제창에 표시될 주문명
                     person,
                     count,
