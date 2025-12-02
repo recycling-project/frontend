@@ -43,9 +43,13 @@ export default function Large_yolo_result() {
 
       {photo && <img src={photo} alt="업로드 사진" className="photo" />}
 
+      <div className="buttonWrap">
+
       <button className="resultBtn">{korean}</button>
 
       <button className="nextBtn">다음으로 이동</button>
+
+      </div>
 
       {/* CSS */}
       <style jsx>{`
@@ -68,7 +72,7 @@ export default function Large_yolo_result() {
           width: 80%;
           max-width: 300px;
           padding: 16px;
-          background: #00c853;
+          background: #000000ff;
           border: none;
           color: white;
           font-size: 20px;
@@ -81,7 +85,7 @@ export default function Large_yolo_result() {
           width: 80%;
           max-width: 300px;
           padding: 14px;
-          background: #2979ff;
+          background: #000000ff;
           border: none;
           color: white;
           font-size: 18px;
