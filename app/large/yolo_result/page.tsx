@@ -1,12 +1,13 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function Large_yolo_result() {
   const params = useSearchParams();
   const [yolo, setYolo] = useState<any>(null);
   const [photo, setPhoto] = useState("");
+  const router = useRouter();
 
   // 🔥 영어 → 한국어 변환 딕셔너리 (return 바깥)
   const engToKor: Record<string, string> = {
@@ -17,7 +18,7 @@ export default function Large_yolo_result() {
     "jang-long": "장롱",
     "desk": "책상",
     "hwa-jang-dae": "화장대",
-    "bed": "침대",
+    "bed": "매트리스",
     "bicycle": "두발자전거",
     "hang-a-ri": "항아리",
   };
@@ -39,15 +40,25 @@ export default function Large_yolo_result() {
 
   return (
     <div className="container">
-      <h2>대형 폐기물 종류 선택</h2>
+      <h2>대형 폐기물</h2>
 
       {photo && <img src={photo} alt="업로드 사진" className="photo" />}
 
       <div className="buttonWrap">
 
-        <button className="resultBtn">{korean}</button>
+        <button
+          className="resultBtn"
+          onClick={() => router.push(`/large/select_menu/options/${cls}`)}
+        >
+          {korean}
+        </button>
 
-        <button className="nextBtn">다음으로 이동</button>
+        <button
+          className="selectBtn"
+          onClick={() => router.push("/large/select_menu")}
+        >
+          전체 목록에서 선택
+        </button>
 
       </div>
 
@@ -87,7 +98,7 @@ export default function Large_yolo_result() {
         border-radius: 12px;
       }
 
-        .nextBtn {
+        .selectBtn {
         width: 80%;
         max-width: 300px;
         padding: 14px;
