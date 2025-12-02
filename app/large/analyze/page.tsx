@@ -48,6 +48,9 @@ export default function LargeWasteAnalyze() {
 
       const res = await fetch(url, {
         method: "POST",
+        headers: {
+          "Accept": "application/json"
+        },
         body: formData,
       });
 
@@ -56,7 +59,7 @@ export default function LargeWasteAnalyze() {
       // 결과 페이지로 이동
       router.push(
         "/large/yolo_result?data=" +
-          encodeURIComponent(JSON.stringify(yoloResult))
+        encodeURIComponent(JSON.stringify(yoloResult))
       );
     }
 
@@ -79,7 +82,7 @@ export default function LargeWasteAnalyze() {
     form.append("file", file);
 
     return form;
-    }
+  }
 
   return (
     <div className="page-bg">
