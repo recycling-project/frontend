@@ -9,11 +9,10 @@ export default function Large_yolo_result() {
   const [photo, setPhoto] = useState("");
 
   useEffect(() => {
-    // 1) YOLO 결과 가져오기
+    // 1) YOLO 분석 결과 가져오기
     const raw = searchParams.get("data");
     if (raw) {
-      const parsed = JSON.parse(raw);
-      setYolo(parsed);
+      setYolo(JSON.parse(raw));
     }
 
     // 2) 촬영/업로드한 이미지 가져오기
@@ -29,17 +28,19 @@ export default function Large_yolo_result() {
 
       {/* 업로드한 사진 출력 */}
       {photo && (
-        <div style={{ marginTop: 20 }}>
-          <img
-            src={photo}
-            alt="업로드 이미지"
-            style={{ width: "100%", borderRadius: 10 }}
-          />
-        </div>
+        <img
+          src={photo}
+          alt="업로드 사진"
+          style={{
+            width: "90%",
+            borderRadius: 10,
+            marginTop: 20,
+          }}
+        />
       )}
 
       {/* YOLO 결과 표시 */}
-      <pre style={{ marginTop: 20 }}>
+      <pre style={{ marginTop: 20, fontSize: 16 }}>
         {JSON.stringify(yolo, null, 2)}
       </pre>
     </div>
