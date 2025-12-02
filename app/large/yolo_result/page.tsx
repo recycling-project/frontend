@@ -28,15 +28,30 @@ export default function Large_yolo_result() {
 
       {/* 업로드한 사진 표시 */}
       {photo && (
-        <img
-          src={photo}
-          alt="업로드 사진"
+        <div
           style={{
-            width: "90%",
-            borderRadius: 10,
-            marginTop: 20,
+            width: "75%",
+            maxWidth: "350px",
+            aspectRatio: "1 / 1",
+            marginTop: "3vh",
+            background: "black",
+            borderRadius: "12px",
+            overflow: "hidden",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
           }}
-        />
+        >
+          <img
+            src={photo}
+            alt="업로드 사진"
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+            }}
+          />
+        </div>
       )}
 
       {/* YOLO 결과 */}
