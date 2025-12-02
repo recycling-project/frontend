@@ -15,13 +15,9 @@ export default function Large_yolo_result() {
       setYolo(JSON.parse(raw));
     }
 
-    // 2) 이미지: 쿼리 → localStorage 순서로 가져옴
-    const imgQuery = params.get("img");
+    // 2) 사진은 localStorage에서만 가져온다
     const imgLocal = localStorage.getItem("large_waste_image");
-
-    if (imgQuery) {
-      setPhoto(imgQuery);
-    } else if (imgLocal) {
+    if (imgLocal) {
       setPhoto(imgLocal);
     }
   }, []);
@@ -30,6 +26,7 @@ export default function Large_yolo_result() {
     <div style={{ padding: 20 }}>
       <h2>대형 폐기물 종류 선택</h2>
 
+      {/* 업로드한 사진 표시 */}
       {photo && (
         <img
           src={photo}
@@ -42,6 +39,7 @@ export default function Large_yolo_result() {
         />
       )}
 
+      {/* YOLO 결과 */}
       <pre style={{ marginTop: 20, fontSize: 16 }}>
         {JSON.stringify(yolo, null, 2)}
       </pre>

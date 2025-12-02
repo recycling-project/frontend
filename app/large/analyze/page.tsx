@@ -64,8 +64,7 @@ export default function LargeWasteAnalyze() {
 
       router.push(
         "/large/yolo_result?data=" +
-        encodeURIComponent(JSON.stringify(yoloResult)) +
-        "&img=" + encodeURIComponent(base64)
+        encodeURIComponent(JSON.stringify(yoloResult))
       );
     }
 
