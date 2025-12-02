@@ -38,25 +38,34 @@ export default function SofaPage() {
      * -----------------------------------------------------
      */
     const handlePayment = async () => {
-        if (!price) return; // 금액이 없으면 실행 X
+        if (!price) return;
 
         try {
             const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/payment/start`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                    price,    // 결제할 최종 금액
-                    orderName: "소파", // 토스 결제창에 표시될 주문명
+                    price,
+                    orderName: "소파",
                     person,
                     count,
                 }),
             });
 
-            const data = await res.json();
+            console.log("RAW RESPONSE:", res);
 
-            console.log("백엔드 응답:", data);
+            const data = await res.json().catch(err => {
+                console.log("JSON 파싱 에러:", err);
+                return null;
+            });
 
-            // 🔥 백엔드가 준 paymentUrl로 이동 → 토스 결제창 열림
+            console.log("백엔드 응답 JSON:", data);
+
+            if (!data || !data.paymentUrl) {
+                console.log("⚠️ paymentUrl 없음 → undefined 페이지로 이동됨");
+                return;
+            }
+
             window.location.href = data.paymentUrl;
 
         } catch (err) {

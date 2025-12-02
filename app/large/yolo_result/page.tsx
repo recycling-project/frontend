@@ -34,8 +34,10 @@ export default function Large_yolo_result() {
     else if (imgLocal) setPhoto(imgLocal);
   }, []);
 
-  // YOLO 클래스
-  const cls = yolo?.best_detection?.class_name || null;
+  // YOLO class_name 안전 처리 ("null" 문자열도 null 취급)
+  const rawCls = yolo?.best_detection?.class_name;
+  const cls = (!rawCls || rawCls === "null") ? null : rawCls;
+
   const korean = cls ? engToKor[cls] || cls : null;
 
   return (

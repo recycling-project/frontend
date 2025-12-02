@@ -34,31 +34,31 @@ export default function WasteResult() {
   return (
     <div className="page-bg">
 
-  {/* ✅ 뒤로가기 버튼 - 화면 고정 */}
-  <img
-    src="/back_icon.png"
-    alt="뒤로가기"
-    className="back-btn"
-    onClick={() => router.replace("/menu")}
-    style={{
-  position: "fixed",
-  top: "env(safe-area-inset-top)",
-  left: "5.5vw",
-  zIndex: 1000
-}}
-  />
+      {/* ✅ 뒤로가기 버튼 - 화면 고정 */}
+      <img
+        src="/back_icon.png"
+        alt="뒤로가기"
+        className="back-btn"
+        onClick={() => router.replace("/menu")}
+        style={{
+          position: "fixed",
+          top: "env(safe-area-inset-top)",
+          left: "5.5vw",
+          zIndex: 1000
+        }}
+      />
 
-  <div
-    className="kiosk"
-    style={{
-      height: "100vh",
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      paddingTop: "80px"
-    }}
-  >
-   
+      <div
+        className="kiosk"
+        style={{
+          height: "100vh",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          paddingTop: "80px"
+        }}
+      >
+
         {/* ✅ 촬영 이미지 영역 */}
         <div
           style={{
