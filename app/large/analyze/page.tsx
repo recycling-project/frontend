@@ -68,7 +68,8 @@ export default function LargeWasteAnalyze() {
 
   function base64ToFormData(base64: string) {
     const arr = base64.split(",");
-    const mime = arr[0].match(/:(.*?);/)?.[1] || "image/jpeg";
+    const mime = arr[0].match(/:(.*?);/)?.[1] || "application/octet-stream";
+
     const bstr = atob(arr[1]);
     let n = bstr.length;
     const u8arr = new Uint8Array(n);
@@ -77,7 +78,11 @@ export default function LargeWasteAnalyze() {
       u8arr[n] = bstr.charCodeAt(n);
     }
 
-    const file = new File([u8arr], "image.jpg", { type: mime });
+    // 확장자 자동 추출
+    const ext = mime.split("/")[1] || "bin";
+
+    const file = new File([u8arr], `image.${ext}`, { type: mime });
+
     const form = new FormData();
     form.append("file", file);
 
