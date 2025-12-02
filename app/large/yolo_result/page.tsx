@@ -1,41 +1,47 @@
 "use client";
 
+import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
-export default function Large_waste_kind() {
+export default function Large_yolo_result() {
+  const searchParams = useSearchParams();
   const [yolo, setYolo] = useState(null);
+  const [photo, setPhoto] = useState("");
 
   useEffect(() => {
-    async function fetchYolo() {
-
-      // 1) 업로드된 이미지 ID 가져오기
-      const idRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/large/check`);
-      const idData = await idRes.json();
-      const id = idData.id;
-
-      // 2) 이미지 base64 가져오기
-      const imgRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/large/image?id=${id}`);
-      const imgData = await imgRes.json();
-      const base64 = imgData.image;
-
-      // 3) Spring analyze 호출 → FastAPI YOLO 결과 받기
-      const yoloRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/large/analyze`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ image: base64 }),
-      });
-
-      const yoloData = await yoloRes.json();
-      setYolo(yoloData);
+    // 1) YOLO 결과 가져오기
+    const raw = searchParams.get("data");
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      setYolo(parsed);
     }
 
-    fetchYolo();
+    // 2) 촬영/업로드한 이미지 가져오기
+    const img = localStorage.getItem("large_waste_image");
+    if (img) {
+      setPhoto(img);
+    }
   }, []);
 
   return (
-    <div>
+    <div style={{ padding: 20 }}>
       <h2>대형 폐기물 종류 선택</h2>
-      <pre>{JSON.stringify(yolo, null, 2)}</pre> {/* YOLO결과 테스트 출력 */}
+
+      {/* 업로드한 사진 출력 */}
+      {photo && (
+        <div style={{ marginTop: 20 }}>
+          <img
+            src={photo}
+            alt="업로드 이미지"
+            style={{ width: "100%", borderRadius: 10 }}
+          />
+        </div>
+      )}
+
+      {/* YOLO 결과 표시 */}
+      <pre style={{ marginTop: 20 }}>
+        {JSON.stringify(yolo, null, 2)}
+      </pre>
     </div>
   );
 }
