@@ -5,40 +5,49 @@ import { useEffect, useState } from "react";
 
 export default function Large_yolo_result() {
   const params = useSearchParams();
-  const [yolo, setYolo] = useState(null);
+  const [yolo, setYolo] = useState<any>(null);
   const [photo, setPhoto] = useState("");
 
-  useEffect(() => {
-    // 1) YOLO 결과
-    const raw = params.get("data");
-    if (raw) {
-      setYolo(JSON.parse(raw));
-    }
+  // 🔥 영어 → 한국어 변환 딕셔너리 (return 바깥)
+  const engToKor: Record<string, string> = {
+    "bab-sang": "밥상",
+    "seo-rap-jang": "서랍장",
+    "sofa": "소파",
+    "chair": "의자",
+    "jang-long": "장롱",
+    "desk": "책상",
+    "hwa-jang-dae": "화장대",
+    "bed": "침대",
+    "bicycle": "두발자전거",
+    "hang-a-ri": "항아리",
+  };
 
-    // 2) 이미지: 쿼리 → localStorage 순서로 가져옴
+  useEffect(() => {
+    const raw = params.get("data");
+    if (raw) setYolo(JSON.parse(raw));
+
     const imgQuery = params.get("img");
     const imgLocal = localStorage.getItem("large_waste_image");
 
-    if (imgQuery) {
-      setPhoto(imgQuery);
-    } else if (imgLocal) {
-      setPhoto(imgLocal);
-    }
+    if (imgQuery) setPhoto(imgQuery);
+    else if (imgLocal) setPhoto(imgLocal);
   }, []);
+
+  // 🔥 YOLO 클래스 추출 (안전 처리)
+  const cls = yolo?.best_detection?.class_name || "";
+  const korean = engToKor[cls] || cls;
 
   return (
     <div className="container">
       <h2>대형 폐기물 종류 선택</h2>
 
-      {photo && (
-        <img src={photo} alt="업로드 사진" className="photo" />
-      )}
+      {photo && <img src={photo} alt="업로드 사진" className="photo" />}
 
-      <pre className="yoloBox">
-        {JSON.stringify(yolo, null, 2)}
-      </pre>
+      <button className="resultBtn">{korean}</button>
 
-      {/* 여기 아래가 CSS */}
+      <button className="nextBtn">다음으로 이동</button>
+
+      {/* CSS */}
       <style jsx>{`
         .container {
           padding: 20px;
@@ -48,25 +57,35 @@ export default function Large_yolo_result() {
         .photo {
           width: 75%;
           max-width: 350px;
-          aspect-ratio: 1 / 1;
+          aspect-ratio: 1/1;
           border-radius: 12px;
           margin-top: 20px;
           object-fit: cover;
         }
 
-        .yoloBox {
+        .resultBtn {
           margin-top: 20px;
-          padding: 20px;
-          width: 85%;
-          max-width: 500px;
-          height: 30vh;
-          background: rgba(0, 0, 0, 0.75);
-          border-radius: 12px;
+          width: 80%;
+          max-width: 300px;
+          padding: 16px;
+          background: #00c853;
+          border: none;
           color: white;
-          overflow-y: auto;
-          text-align: left;
-          white-space: pre-wrap;
-          word-break: break-word;
+          font-size: 20px;
+          font-weight: bold;
+          border-radius: 12px;
+        }
+
+        .nextBtn {
+          margin-top: 15px;
+          width: 80%;
+          max-width: 300px;
+          padding: 14px;
+          background: #2979ff;
+          border: none;
+          color: white;
+          font-size: 18px;
+          border-radius: 12px;
         }
       `}</style>
     </div>
