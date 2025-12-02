@@ -1,82 +1,75 @@
+/* ============================================
+   0. 기본 리셋
+============================================ */
 html, body {
   margin: 0;
   padding: 0;
   width: 100%;
   height: 100%;
-  overflow: hidden;   }
+  overflow: hidden;
+  background: #000;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+               Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue",
+               sans-serif;
+}
 
-/* 전체 사이트 배경 */
+button {
+  border: none;
+  outline: none;
+}
+
+/* 예전 코드 호환용 (안 써도 상관 없음) */
 .page-bg {
   width: 100%;
-  height: 100dvh; /* ✅ 모바일 주소창 포함 대응 */
-  background: white;
+  height: 100dvh;
+  background: #000;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-/* 키오스크 전체 화면(검정) */
+/* ============================================
+   1. 공통 루트 컨테이너 (A방식)
+   - .page : 새 구조
+   - .kiosk : 예전 구조와 호환용 (둘 다 동일하게 처리)
+============================================ */
+.page,
 .kiosk {
-  position: fixed;
-  inset: 0;
-  width: 100%;            /* 너비 */
-  max-width: 100%;
-  height: 100dvh;              /* 전체 키오스크 높이 */
-  background: #000000;        /* 전체를 검정으로 */
-  display: flex;
-  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  background: #000;
   position: relative;
-  align-items: center;
-  padding-top: 0px;          /* 위쪽 여백 */
-  border-radius: 0px;
   overflow: hidden;
-  padding-top: env(safe-area-inset-top);
-  padding-bottom: env(safe-area-inset-bottom);
-  z-index: 10;
 }
 
-/*카메라화면result하단바*/
-.bottom-bar{
+/* ============================================
+   2. 공통 요소들
+============================================ */
+/* 뒤로가기 아이콘 */
+.back-btn,
+.question_back {
+  position: absolute;
+  top: 40px;
+  left: 40px;
+  width: 60px;
+  height: 60px;
+  z-index: 2000;
+  cursor: pointer;
+}
+
+/* 하단 바(결과 화면 등에서 사용) */
+.bottom-bar {
   position: fixed;
   bottom: 0;
   z-index: 5;
 }
 
-/* 버튼 영역(검정 안에 위치) */
-.button-zone {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;   /* ✅ 세로 중앙 정렬 */
-  align-items: center;
-  gap: 40px;
-}
-
-/* 버튼 */
-.kiosk-button {
-  width: 260px;
-  height: 150px;
-  background: #C9C9C9;
-  border-radius: 25px;
-  border: 4px solid white;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  color: white;
-  font-size: 22px;
-  font-weight: 500;
-  text-align: center;
-  line-height: 1.4;
-  cursor: pointer;
-}
-
-/* ===== 인트로 화면 스타일 ===== */
-
+/* ============================================
+   3. 인트로 화면(/)
+============================================ */
 .start-screen {
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   background: #000;
   color: white;
 
@@ -87,584 +80,73 @@ html, body {
 
   padding-bottom: 120px;
   text-align: center;
-
   cursor: pointer;
 }
 
 .start-text {
-  font-size: 24px;
+  font-size: 32px;
   line-height: 1.5;
   margin-bottom: 60px;
   opacity: 0.9;
 }
 
 .start-sub {
-  font-size: 18px;
+  font-size: 24px;
   line-height: 1.4;
   opacity: 0.6;
 }
 
-/* first_screen 페이지 전용 스타일 */
+/* ============================================
+   4. 메뉴 화면(/menu)
+============================================ */
+.menu-buttons {
+  width: 100%;
+  height: 100%;
 
-.detect-content {
-  flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 30px;
+
+  gap: 50px;
 }
 
-.detect-icon {
-  width: 120px;
-  height: 120px;
-}
+.menu-btn,
+.kiosk-button {
+  width: 380px;
+  height: 160px;
 
-.detect-text {
-  color: white;
-  font-size: 24px;
-  line-height: 1.5;
-  text-align: center;
-}
-
-.bottom-button-area {
-  margin-top: auto;
-  padding-bottom: 20px;
-  display: flex;
-  justify-content: center;
-  
-}
-
-/* first_screen 전용 독립 버튼. 같은 이름으로 하면 중복오류떠서 앞으로 버튼 이름은 파일 들어간 폴더 명으로 하겠습니다 */ 
-.first-btn {
-  width: 240px;      /* ← 너 원하는 크기 */
-  height: 70px;      /* ← 너 원하는 크기 */
   background: #C9C9C9;
-  border-radius: 0px;
+  border-radius: 30px;
   border: 4px solid white;
 
   color: white;
-  font-size: 22px;
-  font-weight: 500;
-  text-align: center;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  cursor: pointer;
-
-  transform: translateY(-150px);
-}
-
-/* Latge_waste*/
-
-/* 뒤로가기 */
-.back-btn {
-  z-index: 10;   /* 다른 요소보다 위에 위치 */
-  position: fixed;                /* 화면 기준 고정 */
-  transform: translate(10px, 30px); /*제가 위치 조절할때 자주쓰는건데 좌표 하나만 쓰려면
-  trabslateX나 Y 하나만 쓰세요. 두 개 다쓸려면 지금 코드로 해야해. 트렌스레이트 두 개이상 못씀*/
-  left: 20px;
-  width: 50px;
-  height: 50px;
-  z-index: 1000;
-}
-
-/* 프레임 */
-.frame-icon {
-  width: 350px;
-  height: 350px;
-  position: absolute;
-  top: 150px;
-}
-
-.Large_waste-btn {
-  width: 350px;      /* ← 너 원하는 크기 */
-  height: 50px;      /* ← 너 원하는 크기 */
-  background: #C9C9C9;
-  border-radius: 0px;
-  border: 4px solid white;
-
-  color: white;
-  font-size: 18px;
-  font-weight: 500;
-  text-align: center;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  cursor: pointer;
-
-  transform: translateY(-20px);
-}
-
-/* Latge_waste_loding*/
-
-.loading-wrapper {
-  position: absolute;
-  bottom: 290px;     
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.loading-gif {
-  width: 200px;
-  height: 200px;
-}
-
-/* Latge_waste_kind*/
-
-.kind-text {
-  font-size: 24px;
-  line-height: 1.5;
-  margin-top: 120px;     /* ← 텍스트를 버튼 위로 확실히 내림 */
-  margin-bottom: 40px;   /* ← 버튼과 간격 확보 */
-  color: white;          /* ← 반드시 검정 배경에서 보이게 */
-  text-align: center;
-  z-index: 999;          /* ← 뒤로가기 버튼과 겹침 방지 */
-  position: relative;    /* ← 위치가 사라지는 문제 방지 */
-}
-
-.kind-wrapper {
-  margin-top: 70px;
-  display: flex;
-  flex-direction: column;  /* 세로 정렬 */
-  align-items: center;
-  gap: 50px;  /* ← 여기서 간격 조절 */
-}
-
-.kind-btn {
-  width: 300px;
-  height: 100px;
-  border-radius: 10px;
-  font-size: 30px;
-  
-}
-
-/* Large_waste_details*/
-
-/* 제목 */
-.detail-title {
-  color: white;
-  font-size: 28px;
-  font-weight: 700;
-  text-align: center;
-  margin-top: 120px;
-  margin-bottom: 40px;
-}
-
-/* 옵션 박스 공통 */
-.option-box {
-  background: rgba(255, 255, 255, 0.2);
-  width: 320px;
-  padding: 20px;
-  border-radius: 16px;
-  margin: 20px auto;
-  text-align: center;
-}
-
-/* 소제목 */
-.option-title {
-  color: white;
-  font-size: 20px;
-  margin-top: -5px;    /* ← 이걸 음수로 주면 바로 위로 올라감! */
-  margin-bottom: 12px;
-}
-
-/* ------------ 문짝 너비 버튼 그룹 ------------- */
-.width-btn-box {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 20px; /* ← 버튼 간격 조절 */
-}
-
-/* 너비 버튼 기본 */
-.width-btn {
-  width: 120px;
-  height: 60px;
-  background: #E5E5E5;
-  border-radius: 12px;
-  color: black;
-  border: 3px solid white;
-  font-size: 18px;
-  cursor: pointer;
-  transition: 0.2s ease;
-}
-
-/* 선택된 너비 버튼 */
-.width-btn.selected {
-  background: white;
-  color: black;
-  font-weight: bold;
-  border: 3px solid #26d542; /* 초록 포인트 */
-}
-
-/* ------------ 문짝 개수 카운터 ------------- */
-.count-box-wrapper {
-  margin-top: 50px;   /* ← 여기 숫자 늘리면 간격 더 넓어짐 */
-}
-
-.count-box {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 25px; /* ← 화살표 간격 조절 */
-}
-
-.count-arrow {
-  width: 40px;
-  height: 40px;
-  font-size: 20px;
-  background: #bbb;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-}
-
-.count-number {
-  color: white;
-  font-size: 24px;
-  width: 40px;
-  text-align: center;
-}
-
-/* ------------ 결제 금액 + 버튼 ------------- */
-.price-box {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px; /* ← 버튼 간격 조절 */
-  margin-top: 150px;
-}
-
-.price-inner {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 30px; /* ← 결제 금액 - 버튼 간격 */
-}
-
-.price-amount {
-  color: white;
-  font-size: 24px;
-  font-weight: bold;
-}
-
-.pay-btn {
-  width: 120px;
-  height: 50px;
-  background: #ddd;
-  border-radius: 12px;
-  border: 2px solid white;
-  cursor: pointer;
-}
-
-/* Large_waste_result*/
-/* 결과 박스 전체 */
-.result-box {
-  position: absolute;
-  bottom: 40px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 320px;
-  background: rgba(255, 255, 255, 0.85);
-  padding: 20px 18px;
-  border-radius: 12px;
-  text-align: center;
-}
-
-/* 텍스트 */
-.result-text {
-  font-size: 18px;
-  font-weight: 500;
-  margin-bottom: 8px;
-}
-
-/* 버튼들 */
-.result-btn-area {
-  margin-top: 14px;
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-}
-
-.result-btn {
-  flex: 1;
-  height: 40px;
-  border-radius: 8px;
-  background: #e3e3e3;
-  border: 2px solid #000;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-/*----------------------------------------------------------------*/
-
-/* Waste 파일 첨부 영역 */
-.bottom-button-area {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 15px;
-  margin-top: auto;
-  transform: translateY(100px);
-}
-
-/* 파일 업로드 input */
-.file-input {
-  width: 260px;
-  padding: 12px;
-  border-radius: 10px;
-  background: white;
-  font-size: 16px;
-}
-
-/* 텍스트 입력 input */
-.text-input {
-  width: 260px;
-  height: 60px;             /* ✅ 버튼과 동일 */
-  border-radius: 12px;
-  border: 2px solid #fff;
-  background: #ffffff;
-  font-size: 20px;
+  font-size: 38px;
   font-weight: 600;
   text-align: center;
-  box-sizing: border-box;
-}
-
-/* 버튼 공통 */
-.photo-btn,
-.ask-btn {
-  width: 260px;
-  height: 60px;
-  padding: 14px;
-  background: #ffffff;
-  border-radius: 10px;
-  border: 2px solid #fff;
-  color: rgb(0, 0, 0);
-  font-size: 20px;
-  font-weight: 600;
+  line-height: 1.4;
   cursor: pointer;
 }
 
-
-.camera-preview { /* 이거 카메라 화면크기가아니라 촬영하기 qr버튼 있는 쪽 아이콘 위치 조절 코드 */
-  width: 100%;
-  height: 45vh;       /* 상단 50% 카메라 영역 */
-  object-fit: cover;
-  background: #000;   /* 화면 검게 */
-  border-radius: 10px;
-}
-
-.detect-content {
-  margin-top: 20px;
-  z-index: 10;
-  position: relative;
-}
-
-/*generak_waste_page.tsx 용*/
-
-.kiosk {
-  position: fixed;
+/* ============================================
+   5. 카메라 공통 (general_waste, first_screen 등)
+============================================ */
+.camera-wrap {
+  position: absolute;
   inset: 0;
   width: 100%;
-  height: 100dvh;
-  background: black;
+  height: 100%;
   overflow: hidden;
 }
-/* .general_waste {
-  position: relative;
-  height: 100%;
-}
 
-.general_waste .detect-content {
-  transform: translateY(-220px);    /* ✅ 전체 그룹을 위로 올리는 핵심 */
-/*}
-
-.general_waste .bottom-button-area {
-  position: absolute;
-  bottom: 280px;        /* ✅ 하단 기준으로 위로 이동 */
- /* width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-} */
-
-/*큐알 코드 위치*/
-.qr-wrapper {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;  /* 가로 중앙 */
-  align-items: center;      /* 세로 중앙 */
-}
-
-/*질문하기 채팅창*/
-/* 채팅 영역 */
-.questiontext-input {
-  transform: translateY(-50px);
-}
-
-/* 뒤로가기 */
-.question_back{
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  width: 50px;
-  z-index: 9999;
-}
-
-
-/* 🔥 채팅 박스 */
-.chat-box {
-  width: 85%;
-  max-width: 480px;
-  height: 260px;
-  background: white;
-  border-radius: 20px;
-  margin-top: 90px;
-  padding: 20px;
-  overflow-y: auto;
-}
-
-/* 분석 결과 텍스트 */
-.chat-text {
-  white-space: pre-wrap;
-  font-size: 18px;
-  line-height: 1.8;
-  color: black;
-}
-
-.chat-placeholder {
-  text-align: center;
-  font-size: 18px;
-  color: gray;
-  margin-top: 80px;
-}
-
-
-/* ✅ 입력 + 버튼 영역 전체 */
-.ask-container {
-  position: fixed;
-  left: 50%;
-  bottom: 12dvh;   /* ✅ 입력칸 기본 위치 */
-  transform: translateX(-50%);
-  transition: transform 0.35s cubic-bezier(.4,0,.2,1);
-  z-index: 120;
-}
-
-/* 키보드 열릴 때 위로 */
-.ask-container.up {
-  transform: translate(-50%, -60px);
-}
-
-
-/* 입력칸 */
-.questiontext-input {
-  width: 260px;
-  height: 60px;
-  background: white;
-  color: black;
-  border-radius: 14px;
-  border: none;
-  font-size: 20px;
-  text-align: center;
-}
-
-
-.ask-btn {
-  position: fixed;
-  bottom: 4dvh;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 260px;
-  height: 60px;
-  background: white;
-  color: black;
-  border-radius: 14px;
-  border: none;
-  font-size: 20px;
-  font-weight: 600;
-  z-index: 100;
-}
-
-/* ✅ 키보드 올라오면 버튼만 위로 */
-.ask-btn.up {
-  bottom: 48dvh;
-}
-
-
-
-/* 아이콘 위치 */
-.recyleset {
-  margin-top:100px;
-}
-
-
-
-
-/*---------*/
-
-/* 카메라 화면 (상단 60%) */
-/* .camera-preview {
-  width: 100%;
-  height: 60vh;
-  object-fit: cover;
-  display: block;
-  background: #ffffff;
-} */
-
-/* 로딩 영역 */
-/* .loading-wrapper {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-} */
-
-/* .loading-gif {
-  width: 180px;
-  height: 180px;
-} */
-
-
-/* general_waste 아이콘 위치 조정 */
-.nomalset {
-  margin-top: -250px;
-  text-align: center;
-}
-
-/* 카메라 기능 */
-.camera-wrap {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  background: black;
-  /* border: 4px solid lime; *//*카메라 됐는지 확인하는 표시*/
-}
-
-/* 실제 카메라 */
 .camera-preview {
   position: absolute;
   inset: 0;
-
   width: 100%;
   height: 100%;
-
-  object-fit: cover;
-  background: #444; /* PC 확인용 */
+  object-fit: cover;      /* ✔ 원본 비율 유지 + 꽉 채우기 */
+  background: #000000;
 }
-
-
 
 /* UI 오버레이 */
 .camera-overlay {
@@ -676,41 +158,370 @@ html, body {
   justify-content: space-between;
   align-items: center;
 
-  padding: 80px 0 40px;
-  pointer-events: none;
+  padding-top: 180px;
+  padding-bottom: 200px;
+
+  pointer-events: none; /* 오버레이 자체는 클릭 막기 */
 }
 
-
-/* 간격 조절*/
-.camera-bottom-button-area {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  align-items: center;
-}
-
-/* 버튼 활성화 */
 .camera-overlay button {
-  pointer-events: auto;
+  pointer-events: auto;  /* 버튼만 클릭 가능 */
 }
 
-
+/* 안내 텍스트 */
 .detect-content {
   text-align: center;
   color: white;
-
-  margin-top: -60px; 
 }
 
-/*화면고정 키오스크스케일 전용 css*/
-.kiosk-viewport {
-  width: 100vw;
-  height: 100vh;
-  background: black;
+.detect-icon {
+  width: 140px;
+  height: 140px;
+}
+
+.detect-text {
+  margin-top: 20px;
+  font-size: 30px;
+  line-height: 1.5;
+}
+
+/* 카메라 하단 버튼 */
+.camera-bottom-button-area,
+.bottom-button-area {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  align-items: center;
+}
+
+.photo-btn,
+.first-btn {
+  width: 300px;
+  height: 80px;
+  font-size: 26px;
+  font-weight: 600;
+
+  background: #fff;
+  color: #000;
+  border-radius: 14px;
+  border: 3px solid #fff;
+
+  cursor: pointer;
+}
+
+/* first_screen 전용 (텍스트/아이콘 위치 조금 내리고 싶을 때 썼던 것) */
+.recyleset {
+  margin-top: 100px;
+}
+
+/* ============================================
+   6. 대형 폐기물 메인(/Large_waste)
+============================================ */
+/* 촬영 프레임 */
+.frame-icon {
+  position: absolute;
+  top: 260px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 420px;
+  height: 420px;
+}
+
+/* 아래 안내 버튼 */
+.Large_waste-btn {
+  width: 540px;
+  height: 90px;
+
+  background: #C9C9C9;
+  border-radius: 20px;
+  border: 4px solid white;
+
+  color: white;
+  font-size: 26px;
+  font-weight: 500;
+  text-align: center;
+}
+
+/* Large_waste에서 사용하던 bottom-button-area 재사용 */
+
+/* ============================================
+   7. 대형 폐기물 로딩(/Large_waste_loding)
+============================================ */
+.loading-wrapper {
+  position: absolute;
+  bottom: 280px;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
   justify-content: center;
-  align-items: flex-start;
-  overflow: hidden;
+  align-items: center;
 }
 
+.loading-gif {
+  width: 260px;
+  height: 260px;
+}
+
+/* ============================================
+   8. 대형 폐기물 종류 선택(/Large_waste_kind)
+============================================ */
+.kind-text {
+  font-size: 40px;
+  line-height: 1.5;
+  margin-top: 160px;
+  margin-bottom: 60px;
+  color: white;
+  text-align: center;
+}
+
+.kind-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 70px;
+}
+
+.kind-btn {
+  width: 360px;
+  height: 140px;
+  border-radius: 20px;
+  font-size: 40px;
+  font-weight: 600;
+}
+
+/* ============================================
+   9. 대형 폐기물 상세(/Large_waste_details)
+============================================ */
+.detail-title {
+  color: white;
+  font-size: 40px;
+  font-weight: 700;
+  text-align: center;
+  margin-top: 160px;
+  margin-bottom: 60px;
+}
+
+/* 옵션 박스 공통 */
+.option-box {
+  background: rgba(255, 255, 255, 0.15);
+  width: 380px;
+  padding: 24px;
+  border-radius: 20px;
+  margin: 24px auto;
+  text-align: center;
+}
+
+.option-title {
+  color: white;
+  font-size: 28px;
+  margin-top: 0;
+  margin-bottom: 16px;
+}
+
+/* 문짝 너비 버튼 그룹 */
+.width-btn-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.width-btn {
+  width: 140px;
+  height: 70px;
+  background: #E5E5E5;
+  border-radius: 14px;
+  color: black;
+  border: 3px solid white;
+  font-size: 24px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.width-btn.selected {
+  background: white;
+  color: black;
+  font-weight: bold;
+  border: 3px solid #26d542;
+}
+
+/* 문짝 개수 카운터 */
+.count-box-wrapper {
+  margin-top: 60px;
+}
+
+.count-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+}
+
+.count-arrow {
+  width: 48px;
+  height: 48px;
+  font-size: 26px;
+  background: #bbb;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+}
+
+.count-number {
+  color: white;
+  font-size: 28px;
+  width: 60px;
+  text-align: center;
+}
+
+/* 결제 금액 + 버튼 */
+.price-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  margin-top: 160px;
+}
+
+.price-inner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+}
+
+.price-amount {
+  color: white;
+  font-size: 32px;
+  font-weight: bold;
+}
+
+.pay-btn {
+  width: 160px;
+  height: 60px;
+  background: #ddd;
+  border-radius: 14px;
+  border: 2px solid white;
+  cursor: pointer;
+}
+
+/* ============================================
+   10. 대형 폐기물 결과(/Large_waste_result)
+============================================ */
+.result-box {
+  position: absolute;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 420px;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 24px 20px;
+  border-radius: 16px;
+  text-align: center;
+}
+
+.result-text {
+  font-size: 24px;
+  font-weight: 500;
+  margin-bottom: 12px;
+}
+
+.result-btn-area {
+  margin-top: 18px;
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.result-btn {
+  flex: 1;
+  height: 48px;
+  border-radius: 10px;
+  background: #e3e3e3;
+  border: 2px solid #000;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* ============================================
+   11. QR 업로드 화면(/general_waste/qr 등)
+============================================ */
+.qr-wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ============================================
+   12. 질문하기(/question) & 답변(/question_answer)
+============================================ */
+.chat-box {
+  width: 80%;
+  max-width: 800px;
+  height: 280px;
+  background: white;
+  border-radius: 24px;
+  margin-top: 120px;
+  padding: 30px;
+  overflow-y: auto;
+}
+
+.chat-text {
+  white-space: pre-wrap;
+  font-size: 26px;
+  line-height: 1.7;
+  color: black;
+}
+
+.chat-placeholder {
+  text-align: center;
+  font-size: 24px;
+  color: gray;
+  margin-top: 80px;
+}
+
+/* 입력칸 + 버튼 */
+.ask-container {
+  position: fixed;
+  left: 50%;
+  bottom: 140px;
+  transform: translateX(-50%);
+  z-index: 1000;
+}
+
+.questiontext-input {
+  width: 330px;
+  height: 80px;
+  background: white;
+  color: black;
+  border-radius: 14px;
+  border: none;
+  font-size: 28px;
+  text-align: center;
+}
+
+.ask-btn {
+  position: fixed;
+  left: 50%;
+  bottom: 40px;
+  transform: translateX(-50%);
+  width: 330px;
+  height: 80px;
+  background: white;
+  color: black;
+  border-radius: 14px;
+  font-size: 28px;
+  font-weight: 600;
+  z-index: 900;
+}
+
+/* 키보드 떠있을 때 위로 올리는 클래스 (예전 코드 호환) */
+.ask-btn.up {
+  bottom: 48dvh;
+}
+
+.ask-container.up {
+  transform: translate(-50%, -60px);
+}

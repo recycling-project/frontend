@@ -14,8 +14,8 @@ export default function Large_waste_result() {
   const price = params.get("price") || "0";
 
   return (
-    <div className="page-bg">
-      <div className="kiosk">
+    <div className="page">
+   
 
         {/* 뒤로가기 */}
         <img
@@ -42,7 +42,7 @@ export default function Large_waste_result() {
           <div className="result-btn-area">
             <button className="result-btn">다음 결제하기</button>
             <button className="result-btn">카드로 결제하기</button>
-          </div>
+       
         </div>
 
       </div>

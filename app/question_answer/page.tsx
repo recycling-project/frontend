@@ -22,7 +22,7 @@ export default function WasteResult() {
   }, []);
 
   return (
-    <div className="page-bg">
+    <div className="page">
       <div className="kiosk" style={{ height: "100vh", position: "relative" }}>
 
         {/* 🔙 뒤로가기 */}

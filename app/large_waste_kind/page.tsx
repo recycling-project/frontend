@@ -4,37 +4,62 @@ import { useRouter } from "next/navigation";
 export default function Large_waste_kind() {
   const router = useRouter();
 
-const goDetails = (name: string) => {
+  const goDetails = (name: string) => {
     router.push(`/Large_waste_details?item=${name}`);
   };
 
-return (
-    <div className="page-bg">
-      <div className="kiosk">
-        
-        <img
-          src="/back_icon.png"
-          alt="뒤로가기"
-          className="back-btn"
-          onClick={() => router.back()}
-        />
+  return (
+    <div className="page">
 
-        <p className="kind-text">
-          대형 폐기물 종류를<br />
-          선택해주세요.
-        </p>
+      {/* 뒤로가기 */}
+      <img
+        src="/back_icon.png"
+        alt="뒤로가기"
+        className="back-btn"
+        onClick={() => router.back()}
+      />
 
-        <div className="kind-wrapper">
-          <button className="kind-btn" onClick={() => goDetails("장롱")}>장롱</button>
-          <button className="kind-btn" onClick={() => goDetails("책상")}>책상</button>
-          <button className="kind-btn" onClick={() => goDetails("서랍장")}>서랍장</button>
-        </div>
-/*| 함수         | 정체              | 목적               | 인자                        |
-| ------------- | ------------      | -------------      | -----------------           |
-| **goToMenu**  | Next.js 라우터용   | 페이지 이동         | 필요 없음                    | 
-| **goDetails** | 네가 만든 함수     | 버튼에 따른          |                            |
-                                    |    데이터 처리       | `"장롱"` 같은 값 전달 가능   |
- */
+      {/* 안내 텍스트 */}
+      <p
+        style={{
+          fontSize: "clamp(18px, 3.2vw, 28px)",
+          marginTop: "12vh",
+          textAlign: "center",
+          color: "white",
+          lineHeight: 1.4,
+        }}
+      >
+        대형 폐기물 종류를<br />선택해주세요.
+      </p>
+
+      {/* 버튼 리스트 */}
+      <div
+        style={{
+          marginTop: "5vh",
+          display: "flex",
+          flexDirection: "column",
+          gap: "4vh",
+          alignItems: "center",
+        }}
+      >
+        {["장롱", "책상", "서랍장"].map((label) => (
+          <button
+            key={label}
+            onClick={() => goDetails(label)}
+            style={{
+              width: "min(70vw, 320px)",
+              height: "min(12vh, 100px)",
+              borderRadius: "12px",
+              fontSize: "clamp(18px, 4vw, 28px)",
+              background: "#C9C9C9",
+              border: "3px solid white",
+              color: "black",
+              fontWeight: 600,
+            }}
+          >
+            {label}
+          </button>
+        ))}
       </div>
     </div>
   );

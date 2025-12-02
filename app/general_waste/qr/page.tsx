@@ -32,8 +32,8 @@ export default function QRPage() {
   }, []);
 
   return (
-    <div className="page-bg">
-      <div className="kiosk">
+    <div className="page">
+      
 
         {/* 상단 뒤로가기 버튼 */}
         <img
@@ -51,9 +51,7 @@ export default function QRPage() {
 
         <p className="qr-guide">QR을 휴대폰으로 스캔하세요</p>
 
-
-
       </div>
-    </div>
+  
   );
 }

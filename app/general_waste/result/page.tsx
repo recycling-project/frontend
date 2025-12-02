@@ -32,7 +32,7 @@ export default function WasteResult() {
   }, []);
 
   return (
-    <div className="page-bg">
+    <div className="page">
 
   {/* ✅ 뒤로가기 버튼 - 화면 고정 */}
   <img

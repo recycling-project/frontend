@@ -24,9 +24,8 @@ export default function Large_waste_details() {
   }, []);
 
   return (
-    <div className="page-bg">
-      <div className="kiosk">
-
+    <div className="page">
+     
         <img
           src="/back_icon.png"
           alt="뒤로가기"
@@ -83,6 +82,6 @@ export default function Large_waste_details() {
         </div>
 </div>
       </div>
-    </div>
+   
   );
 }
