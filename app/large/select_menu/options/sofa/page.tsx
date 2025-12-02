@@ -54,6 +54,8 @@ export default function SofaPage() {
 
             const data = await res.json();
 
+            console.log("백엔드 응답:", data);
+
             // 🔥 백엔드가 준 paymentUrl로 이동 → 토스 결제창 열림
             window.location.href = data.paymentUrl;
 
