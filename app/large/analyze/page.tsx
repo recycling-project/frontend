@@ -9,57 +9,60 @@ export default function LargeWasteAnalyze() {
   const router = useRouter();
   const params = useSearchParams();
 
-  const id = params.get("id"); // 모바일 업로드 시 전달되는 값
+  const id = params.get("id");
   let base64 =
     typeof window !== "undefined"
-      ? localStorage.getItem("large_waste_image") // 카메라 촬영 시 저장됨
+      ? localStorage.getItem("large_waste_image")
       : null;
 
   useEffect(() => {
     async function analyze() {
-      // ★ 모바일 업로드 방식이면 Spring에서 image 불러오기
-      if (!base64 && id) {
-        try {
-          const res = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/large/image?id=${id}`
-          );
+      console.log("1) 초기 base64:", base64);
+      console.log("2) id:", id);
 
-          const data = await res.json();
-          base64 = data.image; // 스프링 저장소에서 가져온 base64
-          console.log("모바일 업로드 base64 불러옴:", base64);
-        } catch (e) {
-          console.error("이미지 불러오기 실패:", e);
-          return;
-        }
+      // 모바일 업로드 방식
+      if (!base64 && id) {
+        console.log("📌 Spring에서 이미지 불러오는 중...");
+
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/large/image?id=${id}`
+        );
+
+        const data = await res.json();
+        base64 = data.image;
+
+        console.log("📌 Spring base64 prefix:", base64?.substring(0, 40));
       }
 
-      // base64 자체가 없다면 분석 불가능
       if (!base64) {
         alert("이미지가 없습니다.");
         return;
       }
 
-      // base64 → formData로 변환
+      // base64 → 파일 변환
+      console.log("3) base64 변환 시작");
       const formData = base64ToFormData(base64);
+      console.log("4) formData:", formData);
 
-      // YOLO FastAPI 주소
-      const url =
-        process.env.NEXT_PUBLIC_FASTAPI_URL + "/predict/recycle_item";
+      // FastAPI 호출
+      const url = process.env.NEXT_PUBLIC_FASTAPI_URL + "/predict/recycle_item";
+      console.log("📌 FastAPI URL:", url);
+
+      console.log("5) FastAPI POST 요청 시작");
 
       const res = await fetch(url, {
         method: "POST",
-        headers: {
-          "Accept": "application/json"
-        },
         body: formData,
       });
 
-      const yoloResult = await res.json();
+      console.log("📌 FastAPI 응답 status:", res.status);
 
-      // 결과 페이지로 이동
+      const yoloResult = await res.json();
+      console.log("📌 YOLO 결과:", yoloResult);
+
       router.push(
         "/large/yolo_result?data=" +
-        encodeURIComponent(JSON.stringify(yoloResult))
+          encodeURIComponent(JSON.stringify(yoloResult))
       );
     }
 
@@ -70,6 +73,8 @@ export default function LargeWasteAnalyze() {
     const arr = base64.split(",");
     const mime = arr[0].match(/:(.*?);/)?.[1] || "application/octet-stream";
 
+    console.log("📌 MIME 타입:", mime);
+
     const bstr = atob(arr[1]);
     let n = bstr.length;
     const u8arr = new Uint8Array(n);
@@ -78,11 +83,11 @@ export default function LargeWasteAnalyze() {
       u8arr[n] = bstr.charCodeAt(n);
     }
 
-    // 확장자 자동 추출
     const ext = mime.split("/")[1] || "bin";
 
-    const file = new File([u8arr], `image.${ext}`, { type: mime });
+    console.log("📌 확장자:", ext);
 
+    const file = new File([u8arr], `image.${ext}`, { type: mime });
     const form = new FormData();
     form.append("file", file);
 
