@@ -15,49 +15,60 @@ export default function Large_yolo_result() {
       setYolo(JSON.parse(raw));
     }
 
-    // 2) 사진은 localStorage에서만 가져온다
+    // 2) 이미지: 쿼리 → localStorage 순서로 가져옴
+    const imgQuery = params.get("img");
     const imgLocal = localStorage.getItem("large_waste_image");
-    if (imgLocal) {
+
+    if (imgQuery) {
+      setPhoto(imgQuery);
+    } else if (imgLocal) {
       setPhoto(imgLocal);
     }
   }, []);
 
   return (
-    <div style={{ padding: 20 }}>
+    <div className="container">
       <h2>대형 폐기물 종류 선택</h2>
 
-      {/* 업로드한 사진 표시 */}
       {photo && (
-        <div
-          style={{
-            width: "75%",
-            maxWidth: "350px",
-            aspectRatio: "1 / 1",
-            marginTop: "3vh",
-            background: "black",
-            borderRadius: "12px",
-            overflow: "hidden",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <img
-            src={photo}
-            alt="업로드 사진"
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-            }}
-          />
-        </div>
+        <img src={photo} alt="업로드 사진" className="photo" />
       )}
 
-      {/* YOLO 결과 */}
-      <pre style={{ marginTop: 20, fontSize: 16 }}>
+      <pre className="yoloBox">
         {JSON.stringify(yolo, null, 2)}
       </pre>
+
+      {/* 여기 아래가 CSS */}
+      <style jsx>{`
+        .container {
+          padding: 20px;
+          text-align: center;
+        }
+
+        .photo {
+          width: 75%;
+          max-width: 350px;
+          aspect-ratio: 1 / 1;
+          border-radius: 12px;
+          margin-top: 20px;
+          object-fit: cover;
+        }
+
+        .yoloBox {
+          margin-top: 20px;
+          padding: 20px;
+          width: 85%;
+          max-width: 500px;
+          height: 30vh;
+          background: rgba(0, 0, 0, 0.75);
+          border-radius: 12px;
+          color: white;
+          overflow-y: auto;
+          text-align: left;
+          white-space: pre-wrap;
+          word-break: break-word;
+        }
+      `}</style>
     </div>
   );
 }
