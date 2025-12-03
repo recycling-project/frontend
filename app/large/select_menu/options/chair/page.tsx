@@ -23,6 +23,15 @@ export default function ChairPage() {
     calculatePrice();
   }, [count]);
 
+  const goToPayment = () => {
+    if (price === null) {
+      alert("가격 정보가 없습니다.");
+      return;
+    }
+    const orderName = `의자 ${count}개`;
+    router.push(`/payment?amount=${price}&orderName=${orderName}`);
+  };
+
   return (
     <div className="container">
       <h2>의자 옵션 선택</h2>
@@ -45,11 +54,7 @@ export default function ChairPage() {
 
       <button
         className="btn"
-        onClick={() =>
-          router.push(
-            `/large/payment?type=chair&count=${count}&price=${price}`
-          )
-        }
+        onClick={goToPayment}
       >
         결제하기
       </button>

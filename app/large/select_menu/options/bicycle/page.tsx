@@ -23,6 +23,15 @@ export default function BicyclePage() {
     calculatePrice();
   }, [count]);
 
+  const goToPayment = () => {
+    if (price === null) {
+      alert("가격 정보가 없습니다.");
+      return;
+    }
+    const orderName = `자전거 ${count}개`;
+    router.push(`/payment?amount=${price}&orderName=${orderName}`);
+  };
+
   return (
     <div className="container">
       <h2>자전거 옵션 선택</h2>
@@ -45,11 +54,7 @@ export default function BicyclePage() {
 
       <button
         className="btn"
-        onClick={() =>
-          router.push(
-            `/large/payment?type=bicycle&count=${count}&price=${price}`
-          )
-        }
+        onClick={goToPayment}
       >
         결제하기
       </button>

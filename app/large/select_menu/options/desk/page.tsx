@@ -25,6 +25,15 @@ export default function DeskPage() {
     calculatePrice();
   }, [size, count]);
 
+  const goToPayment = () => {
+    if (price === null) {
+      alert("가격 정보가 없습니다.");
+      return;
+    }
+    const orderName = `책상 (${size}) ${count}개`;
+    router.push(`/payment?amount=${price}&orderName=${orderName}`);
+  };
+
   return (
     <div className="container">
       <h2>책상 옵션 선택</h2>
@@ -65,11 +74,7 @@ export default function DeskPage() {
 
       <button
         className="btn2"
-        onClick={() =>
-          router.push(
-            `/large/payment?type=desk&size=${size}&count=${count}&price=${price}`
-          )
-        }
+        onClick={goToPayment}
       >
         결제하기
       </button>

@@ -52,9 +52,12 @@ export default function BedSelectPage() {
 
   /** 🔥 결제 페이지로 이동 */
   const goToPayment = () => {
-    router.push(
-      `/large/payment?type=bed&part=${part}&size=${size}&count=${count}&price=${price}`
-    );
+    if (price === null) {
+        alert("가격 정보가 없습니다.");
+        return;
+    }
+    const orderName = `침대 (${part}, ${size}) ${count}개`;
+    router.push(`/payment?amount=${price}&orderName=${orderName}`);
   };
 
   return (
