@@ -17,13 +17,21 @@ export default function Large_waste_result() {
     <div className="page">
    
 
-        {/* 뒤로가기 */}
+        {/* 🔙 뒤로가기 버튼 */}
         <img
           src="/back_icon.png"
-          alt="뒤로가기"
-          className="back-btn"
-          onClick={() => router.back()}
+          onClick={() => router.push("/")}
+          style={{
+            position: "absolute",
+            top: "60px",
+            left: "40px",
+            width: "90px",
+            height: "90px",
+            cursor: "pointer",
+            // filter: "invert(100%)", // 아이콘이 흰색 없던 문제 해결용
+          }}
         />
+      
         <div className="result-box">
 
           <p className="result-text">

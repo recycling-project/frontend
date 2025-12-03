@@ -48,22 +48,18 @@ export default function QuestionPage() {
       setText(Hangul.assemble(dis));
       return;
     }
-
     if (k === "Shift") {
       setShift(!shift);
       return;
     }
-
     if (k === "#+=") {
       setNumMode(true);
       return;
     }
-
     if (k === " ") {
       setText(text + " ");
       return;
     }
-
     setText(applyHangul(text + k));
   };
 
@@ -75,60 +71,75 @@ export default function QuestionPage() {
         width: "1080px",
         height: "1920px",
         overflow: "hidden",
-        background: "#000",
+        background: "#ffffff",
       }}
     >
+      {/* 상단 바 */}
+      <div
+        style={{
+          width: "100%",
+          height: "220px",
+          background: "#36A64A",
+          position: "absolute",
+          top: 0,
+          left: 0,
+        }}
+      ></div>
 
-      {/* 뒤로가기 */}
+      {/* 🔙 뒤로가기 */}
       <img
         src="/back_icon.png"
+        alt="뒤로가기"
+        onClick={() => router.push("/menu")}
         style={{
           position: "absolute",
-          top: 30,
-          left: 20,
-          width: 50,
-          zIndex: 1000
+          top: "60px",
+          left: "40px",
+          width: "90px",
+          height: "90px",
+          zIndex: 999,
+          cursor: "pointer",
         }}
-        onClick={() => router.push("/")}
       />
 
       {/* 입력창 */}
-      <input
+      {/* <input
         readOnly
         value={text}
         placeholder="텍스트로 질문하기"
         style={{
           position: "absolute",
-          top: 320,
+          top: 450,
           left: "50%",
           transform: "translateX(-50%)",
-          width: 450,
-          height: 120,
-          borderRadius: 14,
-          fontSize: 30,
+          width: 600,
+          height: 150,
+          borderRadius: 20,
+          fontSize: 42,
           fontWeight: 600,
           textAlign: "center",
-          background: "white",
-          border: "none",
+          background: "#F5FBF7",
+          border: "4px solid #B8E6C0",
+          color: "#333",
           zIndex: 10,
         }}
-      />
+      /> */}
 
       {/* 질문하기 버튼 */}
       <button
         disabled={!text}
         style={{
           position: "absolute",
-          top: 550,
+          top: 650,
           left: "50%",
           transform: "translateX(-50%)",
-          width: 450,
-          height: 120,
-          background: "white",
-          borderRadius: 14,
-          fontSize: 30,
-          color: "#000",
-          border: "none",
+          width: 600,
+          height: 200,
+          background: "#F5FBF7",
+          borderRadius: 20,
+          border: "4px solid #B8E6C0",
+          fontSize: 42,
+          color: "#333",
           fontWeight: 700,
           cursor: text ? "pointer" : "default",
           opacity: text ? 1 : 0.5,
@@ -154,7 +165,7 @@ export default function QuestionPage() {
       <div
         style={{
           position: "absolute",
-          top: 1000,
+          top: 1300,
           left: "50%",
           transform: "translateX(-50%) scale(1.2)",
           transformOrigin: "top center",
@@ -165,13 +176,17 @@ export default function QuestionPage() {
         {/* 미리보기 */}
         <div
           style={{
-            color: "white",
-            fontSize: 30,
-            marginBottom: 15,
+            background: "#F5FBF7",
+            color: "#333",
+            fontSize: 32,
+            marginBottom: 20,
             textAlign: "center",
+            padding: "18px 24px",
+            borderRadius: 14,
+            border: "3px solid #B8E6C0",
           }}
         >
-          {text}
+          {text || "입력중..."}
         </div>
 
         {/* 패널 */}
@@ -231,7 +246,10 @@ export default function QuestionPage() {
                 borderRadius: 12,
                 fontSize: 26,
               }}
-              onClick={() => { setNumMode(!numMode); setShift(false); }}
+              onClick={() => {
+                setNumMode(!numMode);
+                setShift(false);
+              }}
             >
               {numMode ? "ABC" : "123"}
             </button>
@@ -276,7 +294,19 @@ export default function QuestionPage() {
                 fontSize: 26,
                 fontWeight: 700,
               }}
-            >
+            onClick={async () => {
+          const res = await fetch("/api/analyze", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ text }),
+          });
+
+          const result = await res.json();
+          router.push(
+            `/question_answer?data=${encodeURIComponent(JSON.stringify(result))}`
+          );
+        }}
+      >
               완료
             </button>
           </div>

@@ -19,22 +19,22 @@ button {
 }
 
 /* 예전 코드 호환용 (안 써도 상관 없음) */
-.page-bg {
-  width: 100%;
-  height: 100dvh;
-  background: #000;
+/* .page-bg {
+  width: 100vw;
+  height: 100vh;
   display: flex;
   justify-content: center;
-  align-items: center;
-}
+  align-items: center;   🔥 kiosk를 수직/수평 정중앙 배치 
+  background: #000;
+  overflow: hidden;
+} */
 
 /* ============================================
    1. 공통 루트 컨테이너 (A방식)
    - .page : 새 구조
    - .kiosk : 예전 구조와 호환용 (둘 다 동일하게 처리)
 ============================================ */
-.page,
-.kiosk {
+.page {
   width: 100%;
   height: 100%;
   background: #000;
@@ -49,10 +49,10 @@ button {
 .back-btn,
 .question_back {
   position: absolute;
-  top: 40px;
+  top: 60px;
   left: 40px;
-  width: 60px;
-  height: 60px;
+  width: 90px;
+  height: 90px;
   z-index: 2000;
   cursor: pointer;
 }
