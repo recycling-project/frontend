@@ -98,22 +98,56 @@ export default function WasteAnalyze() {
   }, [storedBase64, photoFromQR, text]);
 
   return (
-    <div className="page-bg">
-      <div className="kiosk">
+    <div
+      className="page"
+      style={{
+    position: "absolute",
+    left: "50%",
+    top: "50%",
+    transform: "translate(-50%, -50%)",
+    background: "linear-gradient(to bottom, #A0DDAB, #36A64A)",
+    width: "1080px",   // 캔버스 크기
+    height: "1920px",  // 캔버스 크기
+    overflow: "hidden",
+    
+  }}
+>
+      {/* 🔙 뒤로가기 버튼 */}
         <img
           src="/back_icon.png"
-          alt="뒤로가기"
-          className="back-btn"
-          onClick={() => router.back()}
+          onClick={() => router.push("/")}
+          style={{
+            position: "absolute",
+            top: "60px",
+            left: "40px",
+            width: "90px",
+            height: "90px",
+            cursor: "pointer",
+            // filter: "invert(100%)", // 아이콘이 흰색 없던 문제 해결용
+          }}
         />
 
-        <div className="loading-wrapper">
-          <img
-            src="/Loding.gif"
-            alt="로딩 움짤"
-            className="loading-gif"
-          />
-        </div>
+      {/* 🔥 가운데 정렬된 로딩 GIF */}
+      <div
+        style={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <img
+          src="/Loding.gif"
+          alt="로딩"
+          style={{
+            width: "260px",
+            height: "260px",
+          }}
+        />
       </div>
     </div>
   );
