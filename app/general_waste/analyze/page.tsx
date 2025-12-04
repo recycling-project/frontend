@@ -16,7 +16,7 @@ export default function WasteAnalyze() {
       ? localStorage.getItem("wasteImage")
       : null;
 
-  // 📌 QR 업로드로 받은 base64 저장
+  // 📌 QR 업로드로 받은 base64를 저장할 state
   const [photoFromQR, setPhotoFromQR] = useState(null);
 
   const text = searchParams.get("text");
@@ -46,15 +46,19 @@ export default function WasteAnalyze() {
 
       if (finalImage) {
         body = JSON.stringify({ image: finalImage });
-      } else if (text) {
+      }
+      // -----------------------------
+      // 5) 텍스트 분석
+      // -----------------------------
+      else if (text) {
         body = JSON.stringify({ text });
       }
 
-      const res = await fetch("/api/analyze", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body,
-      });
+      const res = await fetch(`${api}/recycle/analyze`, {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body,
+});
 
       const data = await res.json();
 
