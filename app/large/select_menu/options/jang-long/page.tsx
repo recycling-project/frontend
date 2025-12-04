@@ -1,0 +1,129 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+
+export default function ClosetPage() {
+  const router = useRouter();
+
+  const [width, setWidth] = useState<number>(80); // cm
+  const [count, setCount] = useState<number>(1);
+
+  const [price, setPrice] = useState<number | null>(null);
+
+  /** 자동 가격 계산 */
+  const calculatePrice = async () => {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/large/price`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        type: "jang-long",
+        width,
+        count,
+      }),
+    });
+
+    const data = await res.json();
+    setPrice(data.price);
+  };
+
+  useEffect(() => {
+    calculatePrice();
+  }, [width, count]);
+
+  const goToPayment = () => {
+    if (price === null) {
+      alert("가격 정보가 없습니다.");
+      return;
+    }
+    const orderName = `장롱 (너비 ${width}cm) ${count}개`;
+    router.push(`/payment?amount=${price}&orderName=${orderName}`);
+  };
+
+  return (
+    <div className="container">
+      <h2>장롱 옵션 선택</h2>
+
+      {/* 너비 입력 */}
+      <div className="section">
+        <p className="label">너비 (cm)</p>
+        <input
+          type="number"
+          min={50}
+          max={300}
+          value={width}
+          onChange={(e) => setWidth(Number(e.target.value))}
+          className="input"
+        />
+      </div>
+
+      {/* 개수 */}
+      <div className="section">
+        <p className="label">개수</p>
+        <input
+          type="number"
+          min={1}
+          value={count}
+          onChange={(e) => setCount(Number(e.target.value))}
+          className="input"
+        />
+      </div>
+
+      {/* 결과 */}
+      {price !== null && (
+        <div className="resultBox">
+          <p>총 수수료</p>
+          <h3>{price.toLocaleString()} 원</h3>
+        </div>
+      )}
+
+      {/* 결제 버튼 */}
+      <button
+        className="btn"
+        onClick={goToPayment}
+      >
+        결제하기
+      </button>
+
+      {/* CSS */}
+      <style jsx>{`
+        .container {
+          padding: 20px;
+          text-align: center;
+        }
+
+        .label {
+          margin-top: 20px;
+          font-size: 18px;
+        }
+
+        .input {
+          width: 120px;
+          padding: 10px;
+          border: 2px solid black;
+          border-radius: 8px;
+          text-align: center;
+          font-size: 16px;
+        }
+
+        .resultBox {
+          margin-top: 20px;
+          padding: 20px;
+          background: #f2f2f2;
+          border-radius: 12px;
+        }
+
+        .btn {
+          margin-top: 20px;
+          background: black;
+          color: white;
+          padding: 16px;
+          width: 80%;
+          max-width: 300px;
+          border-radius: 12px;
+          font-size: 18px;
+        }
+      `}</style>
+    </div>
+  );
+}
