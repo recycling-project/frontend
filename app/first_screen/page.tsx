@@ -95,7 +95,7 @@ export default function FirstScreen() {
       >
         <img
           src="/Green_camera.png"
-          style={{ width: "250px", height: "250px" }}
+          style={{ width: "250px", height: "250px", filter: "brightness(0%) invert(100%)", }}
         />
 
         <p style={{ marginTop: "20px", fontSize: "50px", lineHeight: 1.5 }}>

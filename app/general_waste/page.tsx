@@ -118,7 +118,7 @@ export default function GeneralWastePage() {
       >
         <img
           src="/Green_camera.png"
-          style={{ width: "250px", height: "250px" }}
+          style={{ width: "250px", height: "250px", filter: "brightness(0%) invert(100%)", }}
         />
         <p style={{ marginTop: "20px", fontSize: "50px", lineHeight: 1.5 }}>
           분리수거할 품목을 <br/> 카메라에 

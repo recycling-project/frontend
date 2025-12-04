@@ -83,8 +83,6 @@ export default function WasteResult() {
     boxSizing: "border-box",
   }}
 >
-
-
         
         {/* ======================== */}
         {/*   📸 촬영 이미지 박스     */}
