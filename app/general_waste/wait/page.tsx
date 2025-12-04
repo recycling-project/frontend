@@ -1,4 +1,4 @@
-//핸드폰 업로드 감지페이지 
+// 핸드폰 업로드 감지페이지
 
 "use client";
 
@@ -10,8 +10,10 @@ export default function WaitPage() {
 
   useEffect(() => {
     const timer = setInterval(async () => {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/recycle/check`);
-      const data = await res.json();   // { id: "abc123" } 또는 { id: null }
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/recycle/check`
+      );
+      const data = await res.json(); // { id: "abc123" } | { id: null }
 
       if (data.id) {
         clearInterval(timer);
@@ -23,10 +25,34 @@ export default function WaitPage() {
   }, []);
 
   return (
-    <div className="page-bg">
-      <div className="kiosk" style={{ textAlign: "center", paddingTop: "200px" }}>
-        <h2 style={{ color: "white" }}>휴대폰 업로드 대기 중...</h2>
-      </div>
+    <div
+      className="page"
+      style={{
+        position: "absolute",
+        width: "1080px",
+        height: "1920px",
+        left: "50%",
+        top: "50%",
+        transform: "translate(-50%, -50%)",
+        background: "linear-gradient(to bottom, #A0DDAB, #36A64A)",
+        overflow: "hidden",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        textAlign: "center",
+      }}
+    >
+      {/* 중앙 텍스트 */}
+      <h2
+        style={{
+          color: "white",
+          fontSize: "60px",
+          fontWeight: 700,
+          lineHeight: "1.4",
+        }}
+      >
+        휴대폰 업로드<br />대기 중...
+      </h2>
     </div>
   );
 }

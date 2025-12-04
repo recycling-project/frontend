@@ -63,8 +63,7 @@ export default function LargeWasteAnalyze() {
       console.log("📌 YOLO 결과:", yoloResult);
 
       router.push(
-        "/large/yolo_result?data=" +
-        encodeURIComponent(JSON.stringify(yoloResult))
+        `/large/yolo_result?data=${encodeURIComponent(JSON.stringify(yoloResult))}&img=${encodeURIComponent(base64)}`
       );
     }
 

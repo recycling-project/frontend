@@ -11,6 +11,8 @@ export default function WasteResult() {
 
   const decoded = data ? decodeURIComponent(data) : null;
   const result = decoded ? JSON.parse(decoded) : null;
+
+  // GPT 분석 텍스트 content 추출
   const content = result?.choices?.[0]?.message?.content;
 
   const [photo, setPhoto] = useState("");
@@ -19,22 +21,46 @@ export default function WasteResult() {
     let img = localStorage.getItem("wasteImage");
 
     if (img) {
-      // prefix 없으면 붙여주기
       if (!img.startsWith("data:image")) {
         img = "data:image/jpeg;base64," + img;
       }
-
       setPhoto(img);
     }
 
-    // 사진을 먼저 불러오고 바로 삭제
+    // 페이지 로딩 후 wasteImage 삭제
     localStorage.removeItem("wasteImage");
   }, []);
 
   return (
-    <div className="page-bg">
+    <div
+      className="page"
+      style={{
+        background: "#ffffff", // ⭐ 흰색 배경
+        width: "1080px",   // 캔버스 크기
+        height: "1920px",  // 캔버스 크기
+        overflow: "hidden",
 
-      {/* ✅ 뒤로가기 버튼 - 화면 고정 */}
+        position: "absolute",
+        left: "50%",
+        top: "0",
+        transform: "translateX(-50%)",
+      }}
+    >
+
+      {/* 상단 바 */}
+      <div
+        style={{
+          width: "100%",
+          height: "220px",
+          background: "#36A64A",
+          position: "absolute",
+          top: 0,
+          left: 0,
+        }}
+      >
+
+      </div>
+      {/* 뒤로가기 버튼 */}
       <img
         src="/back_icon.png"
         alt="뒤로가기"
@@ -42,33 +68,45 @@ export default function WasteResult() {
         onClick={() => router.replace("/menu")}
         style={{
           position: "fixed",
-          top: "env(safe-area-inset-top)",
-          left: "5.5vw",
-          zIndex: 1000
+          top: "60px",
+          left: "40px",
+          zIndex: 1000,
+          // filter: "invert(100%)",
         }}
       />
 
       <div
-        className="kiosk"
         style={{
-          height: "100vh",
+          position: "absolute",
+          top: "220px",
+          left: 0,
+          width: "100%",
+          height: "calc(100% - 220px)",
           display: "flex",
           flexDirection: "column",
+          justifyContent: "space-between",
           alignItems: "center",
-          paddingTop: "80px"
+          paddingTop: "80px",
+          paddingBottom: "120px",
+          boxSizing: "border-box",
         }}
       >
 
-        {/* ✅ 촬영 이미지 영역 */}
+
+
+        {/* ======================== */}
+        {/*   📸 촬영 이미지 박스     */}
+        {/* ======================== */}
+        {/* 📌 이미지 박스 */}
         <div
           style={{
             width: "75%",
-            maxWidth: "350px",
-            aspectRatio: "1/ 1",
-            marginTop: "3vh",
-            background: "black",
-            borderRadius: "12px",
-            // border: "2px dashed red", // 네모칸 있는지 확인용
+            maxWidth: "450px",
+            aspectRatio: "1 / 1",
+            marginTop: "4vh",
+            background: "#F5FBF7",
+            border: "4px solid #B8E6C0",
+            borderRadius: "20px",
             overflow: "hidden",
             display: "flex",
             justifyContent: "center",
@@ -86,32 +124,30 @@ export default function WasteResult() {
               }}
             />
           ) : (
-            <p style={{ color: "white" }}>사진 없음</p>
+            <p style={{ color: "#555" }}>사진 없음</p>
           )}
         </div>
 
-        {/* ✅ 결과 텍스트 박스 */}
+        {/* 📌 결과 텍스트 박스 */}
         <div
           style={{
-            marginTop: "30px",
+            marginTop: "120px",
             width: "85%",
-            maxWidth: "500px",
-            height: "30vh",
-            background: "rgba(0,0,0,0.75)",
-            borderRadius: "14px",
-            padding: "18px",
-            color: "white",
-            // border: "2px dashed red", // 네모칸 있는지 확인용
+            maxWidth: "800px",
+            height: "75vh",
+            background: "#F5FBF7",
+            border: "4px solid #B8E6C0",
+            borderRadius: "20px",
+            padding: "26px",
             overflowY: "auto",
-            textAlign: "left",
-            lineHeight: "1.8",
-            fontSize: "15px",
+            color: "#333",
+            fontSize: "35px",
+            lineHeight: 1.6,
           }}
         >
-
           {content ? (
             <>
-              <h3 style={{ marginBottom: "10px", textAlign: "center" }}>
+              <h3 style={{ marginBottom: "18px", textAlign: "center", fontSize: "30px" }}>
                 재활용 분석 결과
               </h3>
               <pre
@@ -125,11 +161,29 @@ export default function WasteResult() {
               </pre>
             </>
           ) : (
-            <p style={{ textAlign: "center" }}>
-              결과 데이터를 불러올 수 없습니다.
-            </p>
+            <p style={{ textAlign: "center" }}>결과 데이터를 불러올 수 없습니다.</p>
           )}
+
         </div>
+
+        <button
+          onClick={() => router.replace("/general_waste")}
+          style={{
+            marginTop: "150px",
+            width: "420px",
+            height: "160px",
+            background: "#A0DDAB",
+            color: "#fff",
+            borderRadius: "35px",
+            border: "none",
+            fontSize: "46px",
+            fontWeight: 700,
+            boxShadow: "0px 6px 14px rgba(0,0,0,0.08)",
+            cursor: "pointer"
+          }}
+        >
+          다시 촬영하기
+        </button>
       </div>
     </div>
   );

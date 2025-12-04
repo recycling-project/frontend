@@ -70,10 +70,10 @@ export default function WasteAnalyze() {
       }
 
       const res = await fetch(`${api}/recycle/analyze`, {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body,
-});
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body,
+      });
 
       const data = await res.json();
 
@@ -98,22 +98,54 @@ export default function WasteAnalyze() {
   }, [storedBase64, photoFromQR, text]);
 
   return (
-    <div className="page-bg">
-      <div className="kiosk">
-        <img
-          src="/back_icon.png"
-          alt="뒤로가기"
-          className="back-btn"
-          onClick={() => router.back()}
-        />
+    <div
+      className="page"
+      style={{
+        position: "absolute",
+        left: "50%",
+        top: "50%",
+        transform: "translate(-50%, -50%)",
+        background: "linear-gradient(to bottom, #A0DDAB, #36A64A)",
+        width: "1080px",
+        height: "1920px",
+        overflow: "hidden",
+      }}
+    >
+      {/* 뒤로가기 */}
+      <img
+        src="/back_icon.png"
+        onClick={() => router.push("/menu")}
+        style={{
+          position: "absolute",
+          top: "60px",
+          left: "40px",
+          width: "90px",
+          height: "90px",
+          cursor: "pointer",
+        }}
+      />
 
-        <div className="loading-wrapper">
-          <img
-            src="/Loding.gif"
-            alt="로딩 움짤"
-            className="loading-gif"
-          />
-        </div>
+      {/* 로딩 GIF — 정중앙 */}
+      <div
+        style={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <img
+          src="/Loding.gif"
+          alt="로딩"
+          style={{
+            width: "260px",
+            height: "260px",
+          }}
+        />
       </div>
     </div>
   );

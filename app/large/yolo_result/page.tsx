@@ -68,57 +68,33 @@ export default function Large_yolo_result() {
 
       {/* CSS */}
       <style jsx>{`
-        .container {
-          padding: 20px;
-          text-align: center;
-        }
+  .resultBtn {
+    width: 420px;
+    height: 160px;
+    background: #A0DDAB;
+    color: #fff;
+    border-radius: 35px;
+    border: none;
+    font-size: 46px;
+    font-weight: 700;
+    box-shadow: 0px 6px 14px rgba(0,0,0,0.08);
+    cursor: pointer;
+    margin-bottom: 40px;
+  }
 
-        .photo {
-          width: 75%;
-          max-width: 350px;
-          aspect-ratio: 1/1;
-          border-radius: 12px;
-          margin-top: 20px;
-          object-fit: cover;
-        }
-
-        .buttonWrap {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 14px;
-          margin-top: 25px;
-        }
-
-        .resultBtn {
-          width: 80%;
-          max-width: 300px;
-          padding: 16px;
-          background: black;
-          border: none;
-          color: white;
-          font-size: 20px;
-          font-weight: bold;
-          border-radius: 12px;
-        }
-
-        .noResult {
-          font-size: 18px;
-          color: #555;
-          margin-bottom: 5px;
-        }
-
-        .selectBtn {
-          width: 80%;
-          max-width: 300px;
-          padding: 14px;
-          background: black;
-          border: none;
-          color: white;
-          font-size: 18px;
-          border-radius: 12px;
-        }
-      `}</style>
+  .selectBtn {
+    width: 420px;
+    height: 160px;
+    background: #A0DDAB;
+    color: #fff;
+    border-radius: 35px;
+    border: none;
+    font-size: 46px;
+    font-weight: 700;
+    box-shadow: 0px 6px 14px rgba(0,0,0,0.08);
+    cursor: pointer;
+  }
+`}</style>
     </div>
   );
 }
