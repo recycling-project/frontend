@@ -9,7 +9,6 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "@tosspayments/payment-widget-sdk": "^0.12.1",
     "hangul-js": "^0.2.6",
     "next": "^16.0.3",
     "qrcode": "^1.5.4",

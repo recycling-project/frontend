@@ -31,15 +31,6 @@ export default function DrawerPage() {
     calculatePrice();
   }, [drawers, count]);
 
-  const goToPayment = () => {
-    if (price === null) {
-      alert("가격 정보가 없습니다.");
-      return;
-    }
-    const orderName = `서랍장 (${drawers}단) ${count}개`;
-    router.push(`/payment?amount=${price}&orderName=${orderName}`);
-  };
-
   return (
     <div className="container">
       <h2>서랍장 옵션 선택</h2>
@@ -80,7 +71,11 @@ export default function DrawerPage() {
       {/* 결제 */}
       <button
         className="btn"
-        onClick={goToPayment}
+        onClick={() =>
+          router.push(
+            `/large/payment?type=seo-rap-jang&drawers=${drawers}&count=${count}&price=${price}`
+          )
+        }
       >
         결제하기
       </button>
