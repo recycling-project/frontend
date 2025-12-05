@@ -1,124 +1,41 @@
 "use client";
 
-import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-export default function Large_yolo_result() {
-  const params = useSearchParams();
-  const [yolo, setYolo] = useState<any>(null);
-  const [photo, setPhoto] = useState("");
-  const router = useRouter();
-
-  // 영어 → 한국어
-  const engToKor: Record<string, string> = {
-    "bab-sang": "밥상",
-    "seo-rap-jang": "서랍장",
-    "sofa": "소파",
-    "chair": "의자",
-    "jang-long": "장롱",
-    "desk": "책상",
-    "hwa-jang-dae": "화장대",
-    "bed": "침대",
-    "bicycle": "자전거",
-    "hang-a-ri": "항아리",
-  };
+export default function Large_waste_kind() {
+  const [yolo, setYolo] = useState(null);
 
   useEffect(() => {
-    const raw = params.get("data");
-    if (raw) setYolo(JSON.parse(raw));
+    async function fetchYolo() {
 
-    const imgQuery = params.get("img");
-    const imgLocal = localStorage.getItem("large_waste_image");
+      // 1) 업로드된 이미지 ID 가져오기
+      const idRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/trash/large/check`);
+      const idData = await idRes.json();
+      const id = idData.id;
 
-    if (imgQuery) setPhoto(imgQuery);
-    else if (imgLocal) setPhoto(imgLocal);
+      // 2) 이미지 base64 가져오기
+      const imgRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/trash/large/image?id=${id}`);
+      const imgData = await imgRes.json();
+      const base64 = imgData.image;
+
+      // 3) 스프링 analyze 호출 → FastAPI YOLO 결과 받기
+      const yoloRes = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/trash/large/analyze`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ image: base64 }),
+      });
+
+      const yoloData = await yoloRes.json();
+      setYolo(yoloData);
+    }
+
+    fetchYolo();
   }, []);
 
-  // YOLO class_name 안전 처리 ("null" 문자열도 null 취급)
-  const rawCls = yolo?.best_detection?.class_name;
-  const cls = (!rawCls || rawCls === "null") ? null : rawCls;
-
-  const korean = cls ? engToKor[cls] || cls : null;
-
   return (
-    <div className="container">
-      <h2>대형 폐기물</h2>
-
-      {photo && <img src={photo} alt="업로드 사진" className="photo" />}
-
-      <div className="buttonWrap">
-
-        {/* 인식된 경우만 버튼 표시 */}
-        {cls ? (
-          <button
-            className="resultBtn"
-            onClick={() => router.push(`/large/select_menu/options/${cls}`)}>
-            {korean}
-          </button>
-        ) : null}
-
-        {/* 항상 선택 가능 */}
-        <button
-          className="selectBtn"
-          onClick={() => router.push("/large/select_menu")}
-        >
-          전체 목록에서 선택
-        </button>
-      </div>
-
-      {/* CSS */}
-      <style jsx>{`
-        .container {
-          padding: 20px;
-          text-align: center;
-        }
-
-        .photo {
-          width: 75%;
-          max-width: 350px;
-          aspect-ratio: 1/1;
-          border-radius: 12px;
-          margin-top: 20px;
-          object-fit: cover;
-        }
-
-        .buttonWrap {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 14px;
-          margin-top: 25px;
-        }
-
-        .resultBtn {
-          width: 80%;
-          max-width: 300px;
-          padding: 16px;
-          background: black;
-          border: none;
-          color: white;
-          font-size: 20px;
-          font-weight: bold;
-          border-radius: 12px;
-        }
-
-        .noResult {
-          font-size: 18px;
-          color: #555;
-          margin-bottom: 5px;
-        }
-
-        .selectBtn {
-          width: 80%;
-          max-width: 300px;
-          padding: 14px;
-          background: black;
-          border: none;
-          color: white;
-          font-size: 18px;
-          border-radius: 12px;
-        }
-      `}</style>
+    <div>
+      <h2>대형 폐기물 종류 선택</h2>
+      <pre>{JSON.stringify(yolo, null, 2)}</pre> {/* YOLO결과 테스트 출력 */}
     </div>
   );
 }

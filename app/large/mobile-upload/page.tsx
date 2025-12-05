@@ -16,8 +16,6 @@ export default function LargeMobileUploadPage() {
     reader.onloadend = async () => {
       const base64 = reader.result as string;
 
-      localStorage.setItem("large_waste_image", base64);
-
       try {
         const res = await fetch(
           `${process.env.NEXT_PUBLIC_API_URL}/large/mobile-upload`,
