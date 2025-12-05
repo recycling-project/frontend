@@ -1,13 +1,14 @@
 "use client";
 
 export const dynamic = "force-dynamic";
+export const fetchCache = "force-no-store";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import KioskScaler from "@/app/components/KioskScaler";
 
-export default function WasteAnalyze() {
+function WasteAnalyzeContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -29,7 +30,7 @@ export default function WasteAnalyze() {
       // -----------------------------
       // 1) QR 업로드인 경우 → 무조건 id 를 받아서 이미지 요청
       // -----------------------------
-      const id = searchParams.get("id");  // wait 페이지가 전달해줌
+      const id = searchParams.get("id"); // wait 페이지가 전달해줌
 
       if (id && !storedBase64) {
         const resImg = await fetch(`${api}/recycle/image?id=${id}`);
@@ -84,12 +85,12 @@ export default function WasteAnalyze() {
       if (finalImage) {
         router.push(
           "/general_waste/result?type=photo&data=" +
-          encodeURIComponent(JSON.stringify(data))
+            encodeURIComponent(JSON.stringify(data))
         );
       } else {
         router.push(
           "/general_waste/result?type=text&data=" +
-          encodeURIComponent(JSON.stringify(data))
+            encodeURIComponent(JSON.stringify(data))
         );
       }
     }
@@ -151,5 +152,13 @@ export default function WasteAnalyze() {
         </div>
       </div>
     </KioskScaler>
+  );
+}
+
+export default function WasteAnalyzePage() {
+  return (
+    <Suspense>
+      <WasteAnalyzeContent />
+    </Suspense>
   );
 }
