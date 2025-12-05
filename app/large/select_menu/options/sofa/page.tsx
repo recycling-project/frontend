@@ -30,15 +30,47 @@ export default function SofaPage() {
     useEffect(() => {
         calculatePrice();
     }, [person, count]);
+    /**
+     * -----------------------------------------------------
+     * 🔥 결제하기 (Toss Payments)
+     * price(최종 금액)를 백엔드로 보내 결제 준비 요청
+     * 백엔드가 Toss 결제창 URL(paymentUrl)을 보내주면 이동
+     * -----------------------------------------------------
+     */
+    const handlePayment = async () => {
+        if (!price) return;
 
-    // 결제하기
-    const handlePayment = () => {
-        if (price === null) {
-            alert("가격 정보가 없습니다.");
-            return;
+        try {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/payment/start`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    price,
+                    orderName: "소파",
+                    person,
+                    count,
+                }),
+            });
+
+            console.log("RAW RESPONSE:", res);
+
+            const data = await res.json().catch(err => {
+                console.log("JSON 파싱 에러:", err);
+                return null;
+            });
+
+            console.log("백엔드 응답 JSON:", data);
+
+            if (!data || !data.paymentUrl) {
+                console.log("⚠️ paymentUrl 없음 → undefined 페이지로 이동됨");
+                return;
+            }
+
+            window.location.href = data.paymentUrl;
+
+        } catch (err) {
+            console.error("결제 요청 실패:", err);
         }
-        const orderName = `소파 ${person}인용 ${count}개`;
-        router.push(`/payment?amount=${price}&orderName=${orderName}`);
     };
 
 

@@ -31,15 +31,6 @@ export default function JarPage() {
     calculatePrice();
   }, [height, count]);
 
-  const goToPayment = () => {
-    if (price === null) {
-      alert("가격 정보가 없습니다.");
-      return;
-    }
-    const orderName = `항아리 (높이 ${height}cm) ${count}개`;
-    router.push(`/payment?amount=${price}&orderName=${orderName}`);
-  };
-
   return (
     <div className="container">
       <h2>항아리 옵션 선택</h2>
@@ -80,7 +71,11 @@ export default function JarPage() {
       {/* 결제 버튼 */}
       <button
         className="btn"
-        onClick={goToPayment}
+        onClick={() =>
+          router.push(
+            `/large/payment?type=hang-a-ri&height=${height}&count=${count}&price=${price}`
+          )
+        }
       >
         결제하기
       </button>
