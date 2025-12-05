@@ -1,4 +1,10 @@
+
 "use client";
+export const dynamic = "force-dynamic";
+export const fetchCache = "force-no-store";
+
+
+
 import { useEffect } from "react";
 
 const BASE_WIDTH = 1080;

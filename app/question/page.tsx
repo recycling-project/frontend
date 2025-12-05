@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+
 import Hangul from "hangul-js";
 import KioskScaler from "@/app/components/KioskScaler";
 
