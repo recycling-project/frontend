@@ -20,11 +20,23 @@ export default function Home() {
 
         display: "flex",
         flexDirection: "column",
-        justifyContent: "center",
+        // justifyContent: "center",
         alignItems: "center",
         textAlign: "center",
       }}
     >
+
+      <div
+    style={{
+      height: "25%",
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "center",
+      alignItems: "center",
+    }}
+  >
+
+  </div>
       {/* 로고 텍스트 */}
       <div style={{ marginBottom: "200px" }}>
         <span
@@ -71,19 +83,23 @@ export default function Home() {
 
       {/* 버튼 */}
       <button
-        onClick={() => router.push("/menu")}
-        style={{
-          width: "450px",
-          height: "150px",
-          background: "#A0DDAB",
-          borderRadius: "20px",
-          border: "none",
-          fontSize: "60px",
-          fontWeight: 700,
-          color: "#000",
-          cursor: "pointer",
-        }}
-      >
+    onClick={() => router.push("/menu")}
+    style={{
+      position: "absolute",
+      bottom: "240px",
+      left: "50%",
+      transform: "translateX(-50%)",
+      width: "450px",
+      height: "150px",
+      background: "#A0DDAB",
+      borderRadius: "20px",
+      border: "none",
+      fontSize: "60px",
+      fontWeight: 700,
+      color: "#000",
+      cursor: "pointer",
+    }}
+  >
         시작하기
       </button>
     </div>
