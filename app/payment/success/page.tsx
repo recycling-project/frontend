@@ -3,6 +3,8 @@
 import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
 
+export const fetchCache = "force-no-store";
+
 export default function SuccessPage() {
   const params = useSearchParams();
   const router = useRouter();

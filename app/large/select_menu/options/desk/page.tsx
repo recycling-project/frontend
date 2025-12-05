@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
+export const fetchCache = "force-no-store";
+
 export default function DeskPage() {
   const router = useRouter();
 

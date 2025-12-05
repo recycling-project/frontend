@@ -4,6 +4,8 @@ import { QRCodeCanvas } from "qrcode.react";
 import { useEffect } from "react";
 import KioskScaler from "@/app/components/KioskScaler";
 
+export const fetchCache = "force-no-store";
+
 export default function QRPage() {
   const uploadUrl =
     "https://frontend-self-delta-10.vercel.app/general_waste/mobile-upload";

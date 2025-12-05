@@ -3,6 +3,8 @@
 import { useSearchParams } from "next/navigation";
 import Checkout from "../components/Checkout";
 
+export const dynamic = "force-dynamic";
+
 export default function PaymentPage() {
   const params = useSearchParams();
   const amount = Number(params.get("amount"));

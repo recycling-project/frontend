@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 import Hangul from "hangul-js";
 import KioskScaler from "@/app/components/KioskScaler";
 
+export const fetchCache = "force-no-store";
+
 export default function QuestionPage() {
   const router = useRouter();
   const [text, setText] = useState("");

@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import KioskScaler from "@/app/components/KioskScaler";
 
+export const dynamic = "force-dynamic";
+
 export default function WasteResult() {
   const router = useRouter();
   const searchParams = useSearchParams();

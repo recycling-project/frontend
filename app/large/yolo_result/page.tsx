@@ -4,6 +4,8 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import KioskScaler from "@/app/components/KioskScaler";
 
+export const dynamic = "force-dynamic";
+
 export default function Large_yolo_result() {
   const params = useSearchParams();
   const [yolo, setYolo] = useState<any>(null);

@@ -5,6 +5,8 @@ import { QRCodeCanvas } from "qrcode.react";
 import { useEffect } from "react";
 import KioskScaler from "@/app/components/KioskScaler";
 
+export const fetchCache = "force-no-store";
+
 export default function LargeQRPage() {
   // 📌 1) QR 코드로 찍었을 때 이동할 모바일 업로드 페이지 주소
   // (휴대폰에서 이 주소로 접속해서 사진 업로드함)

@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
+export const fetchCache = "force-no-store";
+
 /**
  * 침대 옵션 선택 페이지
  * - part: 매트리스 / 틀

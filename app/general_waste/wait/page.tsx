@@ -6,6 +6,8 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import KioskScaler from "@/app/components/KioskScaler";
 
+export const fetchCache = "force-no-store";
+
 export default function WaitPage() {
   const router = useRouter();
 
