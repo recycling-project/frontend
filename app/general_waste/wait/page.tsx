@@ -4,6 +4,7 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import KioskScaler from "@/app/components/KioskScaler";
 
 export default function WaitPage() {
   const router = useRouter();
@@ -25,34 +26,33 @@ export default function WaitPage() {
   }, []);
 
   return (
-    <div
-      className="page"
-      style={{
-        position: "absolute",
-        width: "1080px",
-        height: "1920px",
-        left: "50%",
-        top: "50%",
-        transform: "translate(-50%, -50%)",
-        background: "linear-gradient(to bottom, #A0DDAB, #36A64A)",
-        overflow: "hidden",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        textAlign: "center",
-      }}
-    >
-      {/* 중앙 텍스트 */}
-      <h2
+    <KioskScaler>
+      <div
+        className="page"
         style={{
-          color: "white",
-          fontSize: "60px",
-          fontWeight: 700,
-          lineHeight: "1.4",
+          background: "#ffffff",
+          width: "1080px",
+          height: "1920px",
+          overflow: "hidden",
+
+          position: "absolute",
+          left: "50%",
+          top: "0",
+          transform: "translateX(-50%)",
         }}
       >
-        휴대폰 업로드<br />대기 중...
-      </h2>
-    </div>
+        {/* 중앙 텍스트 */}
+        <h2
+          style={{
+            color: "white",
+            fontSize: "60px",
+            fontWeight: 700,
+            lineHeight: "1.4",
+          }}
+        >
+          휴대폰 업로드<br />대기 중...
+        </h2>
+      </div>
+    </KioskScaler>
   );
 }

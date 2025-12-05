@@ -5,6 +5,7 @@ export const dynamic = "force-dynamic";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import KioskScaler from "@/app/components/KioskScaler";
 
 export default function WasteAnalyze() {
   const router = useRouter();
@@ -98,55 +99,57 @@ export default function WasteAnalyze() {
   }, [storedBase64, photoFromQR, text]);
 
   return (
-    <div
-      className="page"
-      style={{
-        position: "absolute",
-        left: "50%",
-        top: "50%",
-        transform: "translate(-50%, -50%)",
-        background: "linear-gradient(to bottom, #A0DDAB, #36A64A)",
-        width: "1080px",
-        height: "1920px",
-        overflow: "hidden",
-      }}
-    >
-      {/* 뒤로가기 */}
-      <img
-        src="/back_icon.png"
-        onClick={() => router.push("/menu")}
-        style={{
-          position: "absolute",
-          top: "60px",
-          left: "40px",
-          width: "90px",
-          height: "90px",
-          cursor: "pointer",
-        }}
-      />
-
-      {/* 로딩 GIF — 정중앙 */}
+    <KioskScaler>
       <div
+        className="page"
         style={{
           position: "absolute",
-          top: "50%",
           left: "50%",
+          top: "50%",
           transform: "translate(-50%, -50%)",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
+          background: "linear-gradient(to bottom, #A0DDAB, #36A64A)",
+          width: "1080px",
+          height: "1920px",
+          overflow: "hidden",
         }}
       >
+        {/* 뒤로가기 */}
         <img
-          src="/Loding.gif"
-          alt="로딩"
+          src="/back_icon.png"
+          onClick={() => router.push("/menu")}
           style={{
-            width: "260px",
-            height: "260px",
+            position: "absolute",
+            top: "60px",
+            left: "40px",
+            width: "90px",
+            height: "90px",
+            cursor: "pointer",
           }}
         />
+
+        {/* 로딩 GIF — 정중앙 */}
+        <div
+          style={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <img
+            src="/Loding.gif"
+            alt="로딩"
+            style={{
+              width: "260px",
+              height: "260px",
+            }}
+          />
+        </div>
       </div>
-    </div>
+    </KioskScaler>
   );
 }

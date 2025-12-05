@@ -1,11 +1,13 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import KioskScaler from "@/app/components/KioskScaler";
 
 export default function MenuPage() {
   const router = useRouter();
 
-  return (
+  return (  
+    <KioskScaler>   
     <div
       style={{
         position: "absolute",
@@ -84,5 +86,6 @@ export default function MenuPage() {
         ))}
       </div>
     </div>
+    </KioskScaler>
   );
 }

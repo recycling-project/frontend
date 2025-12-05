@@ -4,6 +4,7 @@ export const dynamic = "force-dynamic";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import KioskScaler from "@/app/components/KioskScaler";
 
 export default function LargeWasteAnalyze() {
   const router = useRouter();
@@ -20,7 +21,7 @@ export default function LargeWasteAnalyze() {
       console.log("1) 초기 base64:", base64);
       console.log("2) id:", id);
 
-      // 모바일 업로드 방식
+      // 모바일 업로드
       if (!base64 && id) {
         console.log("📌 Spring에서 이미지 불러오는 중...");
 
@@ -42,29 +43,28 @@ export default function LargeWasteAnalyze() {
       }
 
       // base64 → 파일 변환
-      console.log("3) base64 변환 시작");
       const formData = base64ToFormData(base64);
-      console.log("4) formData:", formData);
 
       // FastAPI 호출
-      const url = process.env.NEXT_PUBLIC_FASTAPI_URL + "/predict/recycle_item";
-      console.log("📌 FastAPI URL:", url);
-
-      console.log("5) FastAPI POST 요청 시작");
+      const url =
+        process.env.NEXT_PUBLIC_FASTAPI_URL + "/predict/recycle_item";
 
       const res = await fetch(url, {
         method: "POST",
         body: formData,
       });
 
-      console.log("📌 FastAPI 응답 status:", res.status);
-
       const yoloResult = await res.json();
       console.log("📌 YOLO 결과:", yoloResult);
 
-      router.push(
-        `/large/yolo_result?data=${encodeURIComponent(JSON.stringify(yoloResult))}&img=${encodeURIComponent(base64)}`
-      );
+      // 페이지 이동
+      setTimeout(() => {
+        router.push(
+          `/large/yolo_result?data=${encodeURIComponent(
+            JSON.stringify(yoloResult)
+          )}`
+        );
+      }, 50);
     }
 
     analyze();
@@ -73,22 +73,15 @@ export default function LargeWasteAnalyze() {
   function base64ToFormData(base64: string) {
     const arr = base64.split(",");
     const mime = arr[0].match(/:(.*?);/)?.[1] || "application/octet-stream";
-
-    console.log("📌 MIME 타입:", mime);
-
     const bstr = atob(arr[1]);
     let n = bstr.length;
     const u8arr = new Uint8Array(n);
 
-    while (n--) {
-      u8arr[n] = bstr.charCodeAt(n);
-    }
+    while (n--) u8arr[n] = bstr.charCodeAt(n);
 
     const ext = mime.split("/")[1] || "bin";
-
-    console.log("📌 확장자:", ext);
-
     const file = new File([u8arr], `image.${ext}`, { type: mime });
+
     const form = new FormData();
     form.append("file", file);
 
@@ -96,18 +89,51 @@ export default function LargeWasteAnalyze() {
   }
 
   return (
-    <div className="page-bg">
-      <div className="kiosk">
+    <KioskScaler>
+      <div
+        style={{
+          position: "absolute",
+          width: "1080px",
+          height: "1920px",
+          left: "50%",
+          top: "50%",
+          transform: "translate(-50%, -50%)",
+          background: "linear-gradient(to bottom, #A0DDAB, #36A64A)",
+          overflow: "hidden",
+        }}
+      >
+        {/* 뒤로가기 */}
         <img
           src="/back_icon.png"
           alt="뒤로가기"
-          className="back-btn"
           onClick={() => router.back()}
+          style={{
+            position: "absolute",
+            top: "60px",
+            left: "40px",
+            width: "90px",
+            height: "90px",
+            cursor: "pointer",
+            zIndex: 10,
+          }}
         />
-        <div className="loading-wrapper">
-          <img src="/Loding.gif" className="loading-gif" />
+
+        {/* 로딩 GIF */}
+        <div
+          style={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+          }}
+        >
+          <img
+            src="/Loding.gif"
+            alt="loading"
+            style={{ width: "260px", height: "260px" }}
+          />
         </div>
       </div>
-    </div>
+    </KioskScaler>
   );
 }
