@@ -77,7 +77,7 @@ export default function Home() {
           color: "#444",
           marginBottom: "80px",
         }}
-      >
+      > 
         시작하기 버튼을 눌러주세요
       </div>
 
