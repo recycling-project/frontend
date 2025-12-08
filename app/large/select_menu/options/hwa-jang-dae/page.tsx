@@ -31,15 +31,6 @@ export default function DressingTablePage() {
     calculatePrice();
   }, [type2, count]);
 
-  const goToPayment = () => {
-    if (price === null) {
-      alert("가격 정보가 없습니다.");
-      return;
-    }
-    const orderName = `화장대 (${type2}) ${count}개`;
-    router.push(`/payment?amount=${price}&orderName=${orderName}`);
-  };
-
   return (
     <div className="container">
       <h2>화장대 옵션 선택</h2>
@@ -88,7 +79,11 @@ export default function DressingTablePage() {
       {/* 결제 */}
       <button
         className="btn2"
-        onClick={goToPayment}
+        onClick={() =>
+          router.push(
+            `/large/payment?type=hwa-jang-dae&type2=${type2}&count=${count}&price=${price}`
+          )
+        }
       >
         결제하기
       </button>

@@ -40,12 +40,9 @@ export default function BabSangSelectPage() {
 
   /** 🔥 결제 페이지 이동 */
   const goToPayment = () => {
-    if (price === null) {
-      alert("가격 정보가 없습니다.");
-      return;
-    }
-    const orderName = `밥상 ${count}개`;
-    router.push(`/payment?amount=${price}&orderName=${orderName}`);
+    router.push(
+      `/large/payment?type=bab-sang&count=${count}&price=${price}`
+    );
   };
 
   return (
