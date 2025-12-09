@@ -94,6 +94,7 @@ export default function GeneralWastePage() {
         ref={videoRef}
         autoPlay
         playsInline
+        muted        // ← 이거 추가해야 아이폰에서 뜬다!!!
         className="camera-preview"
         style={{
           position: "absolute",
