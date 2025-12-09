@@ -1,10 +1,14 @@
 "use client";
 
+import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-export default function WasteResult() {
+// ====================================
+// 📌 내부 콘텐츠 컴포넌트 (훅 사용 OK)
+// ====================================
+function WasteResultContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const data = searchParams.get("data");
@@ -40,6 +44,9 @@ export default function WasteResult() {
     localStorage.removeItem("wasteImage");
   }, []);
 
+  // ===============================
+  // 📌 기존 JSX 그대로 유지
+  // ===============================
   return (
     <div
       className="page"
@@ -50,7 +57,6 @@ export default function WasteResult() {
         overflow: "hidden",
       }}
     >
-
       <div
         style={{
           width: "100%",
@@ -62,15 +68,18 @@ export default function WasteResult() {
         }}
       ></div>
 
+      {/* ⬅ 뒤로가기 */}
       <img
         src="/back_icon.png"
         alt="뒤로가기"
-        className="back-btn"
         onClick={() => router.replace("/menu")}
         style={{
           position: "fixed",
           top: "60px",
           left: "40px",
+          width: "90px",
+          height: "90px",
+          cursor: "pointer",
           zIndex: 1000,
         }}
       />
@@ -91,12 +100,12 @@ export default function WasteResult() {
           boxSizing: "border-box",
         }}
       >
+        {/* 사진 박스 */}
         <div
           style={{
             width: "75%",
             maxWidth: "450px",
             aspectRatio: "1 / 1",
-            marginTop: "4vh",
             background: "#F5FBF7",
             border: "4px solid #B8E6C0",
             borderRadius: "20px",
@@ -110,17 +119,14 @@ export default function WasteResult() {
             <img
               src={photo}
               alt="분석한 사진"
-              style={{
-                width: "100%",
-                height: "100%",
-                objectFit: "cover",
-              }}
+              style={{ width: "100%", height: "100%", objectFit: "cover" }}
             />
           ) : (
             <p style={{ color: "#555" }}>사진 없음</p>
           )}
         </div>
 
+        {/* 결과창 */}
         <div
           style={{
             marginTop: "120px",
@@ -166,6 +172,7 @@ export default function WasteResult() {
           )}
         </div>
 
+        {/* 다시 촬영하기 */}
         <button
           onClick={() => router.replace("/general_waste")}
           style={{
@@ -186,5 +193,16 @@ export default function WasteResult() {
         </button>
       </div>
     </div>
+  );
+}
+
+// ===============================
+// 📌 페이지 컴포넌트 (훅 사용 금지)
+// ===============================
+export default function WasteResultPage() {
+  return (
+    <Suspense fallback={<div></div>}>
+      <WasteResultContent />
+    </Suspense>
   );
 }

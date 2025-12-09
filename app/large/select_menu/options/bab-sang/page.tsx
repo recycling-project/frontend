@@ -41,7 +41,7 @@ export default function BabSangSelectPage() {
   /** 🔥 결제 페이지 이동 */
   const goToPayment = () => {
     router.push(
-      `/large/payment?type=bab-sang&count=${count}&price=${price}`
+      `/payment?amount=${price}&orderName=밥상 ${count}개`
     );
   };
 

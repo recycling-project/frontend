@@ -31,6 +31,15 @@ export default function ClosetPage() {
     calculatePrice();
   }, [width, count]);
 
+  /** 🔥 결제 페이지 이동 */
+  const goToPayment = () => {
+    if (!price) return;
+
+    const orderName = `장롱 (너비: ${width}cm) ${count}개`;
+
+    router.push(`/payment?amount=${price}&orderName=${orderName}`);
+  };
+
   return (
     <div className="container">
       <h2>장롱 옵션 선택</h2>
@@ -69,14 +78,7 @@ export default function ClosetPage() {
       )}
 
       {/* 결제 버튼 */}
-      <button
-        className="btn"
-        onClick={() =>
-          router.push(
-            `/large/payment?type=jang-long&width=${width}&count=${count}&price=${price}`
-          )
-        }
-      >
+      <button className="btn" onClick={goToPayment}>
         결제하기
       </button>
 

@@ -10,6 +10,7 @@ export default function DeskPage() {
   const [count, setCount] = useState(1);
   const [price, setPrice] = useState<number | null>(null);
 
+  /** 가격 계산 */
   const calculatePrice = async () => {
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/large/price`, {
       method: "POST",
@@ -24,6 +25,15 @@ export default function DeskPage() {
   useEffect(() => {
     calculatePrice();
   }, [size, count]);
+
+  /** 🔥 결제 페이지 이동 */
+  const goToPayment = () => {
+    if (!price) return;
+
+    const orderName = `책상 (${size}) ${count}개`;
+
+    router.push(`/payment?amount=${price}&orderName=${orderName}`);
+  };
 
   return (
     <div className="container">
@@ -63,14 +73,7 @@ export default function DeskPage() {
         </div>
       )}
 
-      <button
-        className="btn2"
-        onClick={() =>
-          router.push(
-            `/large/payment?type=desk&size=${size}&count=${count}&price=${price}`
-          )
-        }
-      >
+      <button className="btn2" onClick={goToPayment}>
         결제하기
       </button>
 

@@ -6,8 +6,8 @@ import { useRouter } from "next/navigation";
 export default function DrawerPage() {
   const router = useRouter();
 
-  const [drawers, setDrawers] = useState<number>(4);
-  const [count, setCount] = useState<number>(1);
+  const [drawers, setDrawers] = useState<number>(4); // 서랍 개수
+  const [count, setCount] = useState<number>(1);     // 개수
 
   const [price, setPrice] = useState<number | null>(null);
 
@@ -31,6 +31,16 @@ export default function DrawerPage() {
     calculatePrice();
   }, [drawers, count]);
 
+  /** 🔥 결제하기 버튼 */
+  const goToPayment = () => {
+    if (!price) return;
+
+    // 결제 페이지에서 표시될 상품명
+    const orderName = `서랍장 ${drawers}칸 ${count}개`;
+
+    router.push(`/payment?amount=${price}&orderName=${orderName}`);
+  };
+
   return (
     <div className="container">
       <h2>서랍장 옵션 선택</h2>
@@ -48,7 +58,7 @@ export default function DrawerPage() {
         />
       </div>
 
-      {/* 개수 */}
+      {/* 수량 */}
       <div className="section">
         <p className="label">수량</p>
         <input
@@ -68,15 +78,8 @@ export default function DrawerPage() {
         </div>
       )}
 
-      {/* 결제 */}
-      <button
-        className="btn"
-        onClick={() =>
-          router.push(
-            `/large/payment?type=seo-rap-jang&drawers=${drawers}&count=${count}&price=${price}`
-          )
-        }
-      >
+      {/* 결제 버튼 */}
+      <button className="btn" onClick={goToPayment}>
         결제하기
       </button>
 

@@ -23,6 +23,8 @@ export default function BicyclePage() {
     calculatePrice();
   }, [count]);
 
+
+
   return (
     <div className="container">
       <h2>자전거 옵션 선택</h2>
@@ -47,7 +49,7 @@ export default function BicyclePage() {
         className="btn"
         onClick={() =>
           router.push(
-            `/large/payment?type=bicycle&count=${count}&price=${price}`
+            `/payment?amount=${price}&orderName=자전거 ${count}대`
           )
         }
       >

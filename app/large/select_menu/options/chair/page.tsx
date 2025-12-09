@@ -9,12 +9,14 @@ export default function ChairPage() {
   const [count, setCount] = useState(1);
   const [price, setPrice] = useState<number | null>(null);
 
+  /** 가격 계산 */
   const calculatePrice = async () => {
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/large/price`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ type: "chair", count }),
     });
+
     const data = await res.json();
     setPrice(data.price);
   };
@@ -22,6 +24,15 @@ export default function ChairPage() {
   useEffect(() => {
     calculatePrice();
   }, [count]);
+
+  /** 🔥 결제 페이지 이동 */
+  const goToPayment = () => {
+    if (!price) return;
+
+    const orderName = `의자 ${count}개`;
+
+    router.push(`/payment?amount=${price}&orderName=${orderName}`);
+  };
 
   return (
     <div className="container">
@@ -43,26 +54,25 @@ export default function ChairPage() {
         </div>
       )}
 
-      <button
-        className="btn"
-        onClick={() =>
-          router.push(
-            `/large/payment?type=chair&count=${count}&price=${price}`
-          )
-        }
-      >
+      <button className="btn" onClick={goToPayment}>
         결제하기
       </button>
 
       <style jsx>{`
-        .container { padding: 20px; text-align: center; }
-        .label { margin-top: 20px; }
+        .container {
+          padding: 20px;
+          text-align: center;
+        }
+        .label {
+          margin-top: 20px;
+        }
         .input {
           width: 100px;
           padding: 10px;
           border: 2px solid black;
           border-radius: 8px;
           font-size: 16px;
+          text-align: center;
         }
         .resultBox {
           margin-top: 20px;
@@ -78,6 +88,7 @@ export default function ChairPage() {
           background: black;
           color: white;
           border-radius: 12px;
+          font-size: 18px;
         }
       `}</style>
     </div>

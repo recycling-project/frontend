@@ -1,4 +1,5 @@
 "use client";
+
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
@@ -15,7 +16,7 @@ export default function FirstScreen() {
     async function startCamera() {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: "environment" }, // 후면 카메라
+          video: { facingMode: "environment" },
         });
 
         if (videoRef.current) {
@@ -27,12 +28,11 @@ export default function FirstScreen() {
         console.warn("카메라 접근 실패", e);
       }
     }
-
     startCamera();
   }, []);
 
   // ================================
-  // 📌 사진 촬영 함수
+  // 📸 촬영 → base64 저장 후 analyze 이동
   // ================================
   const takePhoto = () => {
     if (!videoRef.current || !canvasRef.current) return;
@@ -40,88 +40,158 @@ export default function FirstScreen() {
     const video = videoRef.current;
     const canvas = canvasRef.current;
 
-    // 캔버스 사이즈 = 비디오 사이즈
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
 
-    // 캡쳐
-    const context = canvas.getContext("2d");
-    if (context) {
-      context.drawImage(video, 0, 0, canvas.width, canvas.height);
+    const ctx = canvas.getContext("2d");
+    if (ctx) {
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
     }
 
     const base64 = canvas.toDataURL("image/jpeg");
 
-    // 📌 촬영된 이미지 저장 → 이후 analyze 페이지에서 사용
     localStorage.setItem("large_waste_image", base64);
 
-    // 📌 다음 페이지로 이동
-    router.push("/large/analyze");
+    router.push("/large/analyze"); // ← 대형폐기물 분석
   };
 
   return (
-    <div className="page-bg">
-      <div className="kiosk">
-        
-        {/* 🔙 뒤로가기 */}
+    <div
+      style={{
+        position: "absolute",
+        width: "1080px",
+        height: "1920px",
+        left: "50%",
+        top: "50%",
+        transform: "translate(-50%, -50%)",
+        overflow: "hidden",
+        background: "#000",
+      }}
+    >
+
+      {/* 🔙 뒤로가기 */}
+      <img
+        src="/back_icon.png"
+        alt="뒤로가기"
+        onClick={() => router.replace("/menu")}
+        style={{
+          position: "absolute",
+          top: "60px",
+          left: "40px",
+          width: "90px",
+          height: "90px",
+          zIndex: 999,
+          cursor: "pointer",
+        }}
+      />
+
+      {/* 📸 카메라 */}
+      <video
+        ref={videoRef}
+        autoPlay
+        playsInline
+        style={{
+          position: "absolute",
+          inset: 0,
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+          zIndex: 1,
+        }}
+      />
+
+      <canvas ref={canvasRef} style={{ display: "none" }} />
+
+      {/* 🌈 그라데이션 */}
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          background: "linear-gradient(to bottom, #A0DDAB, #36A64A)",
+          opacity: 1,
+          pointerEvents: "none",
+          zIndex: 2,
+        }}
+      />
+
+      {/* 안내 텍스트 */}
+      <div
+        style={{
+          position: "absolute",
+          top: "350px",
+          left: "50%",
+          transform: "translateX(-50%)",
+          textAlign: "center",
+          color: "white",
+          zIndex: 10,
+        }}
+      >
         <img
-          src="/back_icon.png"
-          alt="뒤로가기"
-          className="back-btn"
-          onClick={() => router.replace("/menu")}
+          src="/Green_camera.png"
+          style={{
+            width: "250px",
+            height: "250px",
+            filter: "brightness(0%) invert(100%)",
+          }}
         />
+        <p style={{ marginTop: "20px", fontSize: "50px", lineHeight: 1.5 }}>
+          분리수거할 품목을 <br />
+          카메라에 잘 보이게 <br />
+          배치해 주세요.
+        </p>
+      </div>
 
-        {/* 📷 카메라 프리뷰 */}
-        <video
-          ref={videoRef}
-          autoPlay
-          playsInline
-          className="camera-preview"
-        />
+      {/* 🔽 버튼 2개 (GeneralWaste와 100% 동일 UI) */}
+      <div
+        style={{
+          position: "absolute",
+          bottom: "160px",
+          left: "50%",
+          transform: "translateX(-50%)",
+          display: "flex",
+          flexDirection: "column",
+          gap: "110px",
+          zIndex: 10,
+        }}
+      >
+        {/* 🎯 버튼1 : 촬영하기 → /large/analyze */}
+        <button
+          onClick={takePhoto}
+          style={{
+            width: "500px",
+            height: "200px",
+            background: "#A0DDAB",
+            borderRadius: "35px",
+            border: "none",
+            boxShadow: "0px 6px 14px rgba(0,0,0,0.15)",
+            color: "#ffffff",
+            fontSize: "48px",
+            fontWeight: 700,
+            cursor: "pointer",
+          }}
+        >
+          촬영하기
+        </button>
+           
 
-        {/* 사진 캡처용 캔버스 (숨김) */}
-        <canvas ref={canvasRef} style={{ display: "none" }} />
-
-        {/* UI 오버레이 */}
-        <div className="camera-overlay">
-
-          <div className="recyleset">
-            <div className="detect-content">
-              <img
-                src="/Green_camera.png"
-                alt="camera icon"
-                className="detect-icon"
-              />
-              <p className="detect-text">
-                분리수거할 품목을 카메라에<br />잘 보이게 배치해 주세요.
-              </p>
-            </div>
-          </div>
-
-          {/* 📌 촬영 버튼 + 파일 업로드 버튼 */}
-          <div className="bottom-button-area">
-
-            {/* 🔥 촬영 버튼 추가 */}
-            <button
-              className="first-btn"
-              disabled={!isCameraReady}
-              onClick={takePhoto}
-            >
-              사진 촬영하기
-            </button>
-
-            {/* 기존 파일 업로드 버튼 */}
-            <button
-              className="first-btn"
-              onClick={() => router.push("/large/qr")}
-            >
-              사진 첨부 파일 추가
-            </button>
-
-          </div>
-
-        </div>
-
+        {/* 🎯 버튼2 : QR 업로드 → /large/qr */}
+        <button
+          onClick={() => router.push("/large/qr")}
+          style={{
+            width: "500px",
+            height: "200px",
+            background: "#A0DDAB",
+            borderRadius: "35px",
+            border: "none",
+            boxShadow: "0px 6px 14px rgba(0,0,0,0.15)",
+            color: "#ffffff",
+            fontSize: "48px",
+            fontWeight: 700,
+            cursor: "pointer",
+          }}
+        >
+          QR로 사진 업로드
+        </button>
       </div>
     </div>
   );

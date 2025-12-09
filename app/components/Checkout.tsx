@@ -14,7 +14,7 @@ import { loadPaymentWidget } from "@tosspayments/payment-widget-sdk";
 import { useEffect, useRef, useState } from "react";
 
 // 🔐 클라이언트 키 (.env.local) gck test키 
-const clientKey = "test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm";
+const clientKey = process.env.NEXT_PUBLIC_TOSS_CLIENT_KEY!;
 
 // 🧾 주문 ID 생성기
 const generateOrderId = () =>
@@ -103,7 +103,7 @@ export default function Checkout({ amount, orderName }: CheckoutProps) {
   };
 
   return (
-    <div className="wrapper w-full max-w-2xl mx-auto p-8 bg-white rounded-lg shadow-lg">
+    <div className="w-screen min-h-screen p-4 bg-white">
       <h2 className="text-2xl font-bold mb-6">주문서</h2>
       <div id="payment-method" className="mb-4" />
       <div id="agreement" className="mb-6" />
@@ -120,6 +120,16 @@ export default function Checkout({ amount, orderName }: CheckoutProps) {
       >
         {isWidgetReady ? "결제하기" : "결제 위젯 불러오는 중..."}
       </button>
+
+      {/* 🔥 여기 아래에 스타일 추가 */}
+      <style jsx global>{`
+      #payment-method > div {
+        max-width: 100% !important;
+        width: 100% !important;
+        transform: scale(1.5); 
+        transform-origin: top center;
+      }
+    `}</style>
     </div>
   );
 }

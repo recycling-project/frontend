@@ -1,11 +1,14 @@
 "use client";
 export const dynamic = "force-dynamic";
 
-import { useSearchParams } from "next/navigation";
-import { useRouter } from "next/navigation";
+import { Suspense } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
 
-export default function LargeWasteAnalyze() {
+/* ----------------------------------------------------------
+   📌 실제 화면 + 로직은 여기서 모두 처리됨 (한 페이지)
+----------------------------------------------------------- */
+function AnalyzeContent() {
   const router = useRouter();
   const params = useSearchParams();
 
@@ -20,82 +23,97 @@ export default function LargeWasteAnalyze() {
       console.log("1) 초기 base64:", base64);
       console.log("2) id:", id);
 
-      // 모바일 업로드 방식
-      if (!base64 && id) {
+      let finalBase64 = base64 ?? null;
+
+      // 📌 모바일 업로드 → Spring에서 base64 가져오기
+      if (!finalBase64 && id) {
         console.log("📌 Spring에서 이미지 불러오는 중...");
 
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/large/image?id=${id}`
-        );
+        try {
+          const res = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/large/image?id=${id}`
+          );
+          const data = await res.json();
 
-        const data = await res.json();
-        base64 = data.image;
+          const serverBase64 = data?.image;
 
-        localStorage.setItem("large_waste_image", String(base64));
+          if (!serverBase64) {
+            alert("이미지가 없습니다.");
+            return;
+          }
 
-        console.log("📌 Spring base64 prefix:", base64?.substring(0, 40));
+          localStorage.setItem("large_waste_image", serverBase64);
+          finalBase64 = serverBase64;
+
+          console.log(
+            "📌 Spring base64 prefix:",
+            serverBase64.substring(0, 40)
+          );
+        } catch (err) {
+          console.error("Spring 이미지 로드 실패:", err);
+          alert("이미지를 불러오는 중 오류가 발생했습니다.");
+          return;
+        }
       }
 
-      if (!base64) {
+      // 최종 base64 없으면 중단
+      if (!finalBase64) {
         alert("이미지가 없습니다.");
         return;
       }
 
-      // base64 → 파일 변환
-      console.log("3) base64 변환 시작");
-      const formData = base64ToFormData(base64);
-      console.log("4) formData:", formData);
+      // 📌 base64 → File 변환
+      const form = base64ToFormData(finalBase64);
 
-      // FastAPI 호출
-      const url = process.env.NEXT_PUBLIC_FASTAPI_URL + "/predict/recycle_item";
-      console.log("📌 FastAPI URL:", url);
+      // 📌 FastAPI 호출
+      const url =
+        process.env.NEXT_PUBLIC_FASTAPI_URL + "/predict/recycle_item";
 
-      console.log("5) FastAPI POST 요청 시작");
+      try {
+        const res = await fetch(url, {
+          method: "POST",
+          body: form,
+        });
 
-      const res = await fetch(url, {
-        method: "POST",
-        body: formData,
-      });
+        const yoloResult = await res.json();
 
-      console.log("📌 FastAPI 응답 status:", res.status);
-
-      const yoloResult = await res.json();
-      console.log("📌 YOLO 결과:", yoloResult);
-
-      router.push(
-        "/large/yolo_result?data=" +
-        encodeURIComponent(JSON.stringify(yoloResult))
-      );
+        router.push(
+          "/large/yolo_result?data=" +
+          encodeURIComponent(JSON.stringify(yoloResult))
+        );
+      } catch (err) {
+        console.error("FastAPI 요청 실패:", err);
+        alert("분석 중 오류가 발생했습니다.");
+      }
     }
 
     analyze();
   }, []);
 
+  // --------------------------------------------------------
+  // base64 → FormData 변환 함수
+  // --------------------------------------------------------
   function base64ToFormData(base64: string) {
     const arr = base64.split(",");
     const mime = arr[0].match(/:(.*?);/)?.[1] || "application/octet-stream";
-
-    console.log("📌 MIME 타입:", mime);
 
     const bstr = atob(arr[1]);
     let n = bstr.length;
     const u8arr = new Uint8Array(n);
 
-    while (n--) {
-      u8arr[n] = bstr.charCodeAt(n);
-    }
+    while (n--) u8arr[n] = bstr.charCodeAt(n);
 
     const ext = mime.split("/")[1] || "bin";
-
-    console.log("📌 확장자:", ext);
-
     const file = new File([u8arr], `image.${ext}`, { type: mime });
+
     const form = new FormData();
     form.append("file", file);
-
     return form;
   }
 
+  // --------------------------------------------------------
+  // UI 표시
+  // --------------------------------------------------------
   return (
     <div className="page-bg">
       <div className="kiosk">
@@ -105,10 +123,22 @@ export default function LargeWasteAnalyze() {
           className="back-btn"
           onClick={() => router.back()}
         />
+
         <div className="loading-wrapper">
           <img src="/Loding.gif" className="loading-gif" />
         </div>
       </div>
     </div>
+  );
+}
+
+/* ----------------------------------------------------------
+   📌 여기서 Suspense로 감싸주기만 하면 끝 (파일은 1개)
+----------------------------------------------------------- */
+export default function Page() {
+  return (
+    <Suspense fallback={null}>
+      <AnalyzeContent />
+    </Suspense>
   );
 }

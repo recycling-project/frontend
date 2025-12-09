@@ -4,124 +4,90 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 export default function SofaPage() {
-    const router = useRouter();
+  const router = useRouter();
 
-    const [person, setPerson] = useState<number>(2); // 1~4인용
-    const [count, setCount] = useState<number>(1);
+  const [person, setPerson] = useState<number>(2);  // 인원수 (1~4)
+  const [count, setCount] = useState<number>(1);   // 개수
 
-    const [price, setPrice] = useState<number | null>(null);
+  const [price, setPrice] = useState<number | null>(null);
 
-    /** 자동 가격 계산 */
-    const calculatePrice = async () => {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/large/price`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                type: "sofa",
-                person,
-                count,
-            }),
-        });
+  /** 🔥 자동 가격 계산 */
+  const calculatePrice = async () => {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/large/price`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        type: "sofa",
+        person,
+        count,
+      }),
+    });
 
-        const data = await res.json();
-        setPrice(data.price);
-    };
+    const data = await res.json();
+    setPrice(data.price);
+  };
 
-    useEffect(() => {
-        calculatePrice();
-    }, [person, count]);
-    /**
-     * -----------------------------------------------------
-     * 🔥 결제하기 (Toss Payments)
-     * price(최종 금액)를 백엔드로 보내 결제 준비 요청
-     * 백엔드가 Toss 결제창 URL(paymentUrl)을 보내주면 이동
-     * -----------------------------------------------------
-     */
-    const handlePayment = async () => {
-        if (!price) return;
+  useEffect(() => {
+    calculatePrice();
+  }, [person, count]);
 
-        try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/payment/start`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    price,
-                    orderName: "소파",
-                    person,
-                    count,
-                }),
-            });
+  /** 🔥 Toss 결제 페이지 이동 */
+  const goToPayment = () => {
+    if (!price) return;
 
-            console.log("RAW RESPONSE:", res);
+    const order = `소파 ${person}인용 ${count}개`;
 
-            const data = await res.json().catch(err => {
-                console.log("JSON 파싱 에러:", err);
-                return null;
-            });
+    router.push(`/payment?amount=${price}&orderName=${order}`);
+  };
 
-            console.log("백엔드 응답 JSON:", data);
+  return (
+    <div className="container">
+      <h2>소파 옵션 선택</h2>
 
-            if (!data || !data.paymentUrl) {
-                console.log("⚠️ paymentUrl 없음 → undefined 페이지로 이동됨");
-                return;
-            }
+      {/* 인원 선택 */}
+      <div className="section">
+        <p className="label">인원수</p>
 
-            window.location.href = data.paymentUrl;
-
-        } catch (err) {
-            console.error("결제 요청 실패:", err);
-        }
-    };
-
-
-    return (
-        <div className="container">
-            <h2>소파 옵션 선택</h2>
-
-            {/* 인원수 */}
-            <div className="section">
-                <p className="label">인원수</p>
-
-                <div className="btnRow">
-                    {[1, 2, 3, 4].map((p) => (
-                        <button
-                            key={p}
-                            className={`btn ${person === p ? "active" : ""}`}
-                            onClick={() => setPerson(p)}
-                        >
-                            {p}인용
-                        </button>
-                    ))}
-                </div>
-            </div>
-
-            {/* 개수 */}
-            <div className="section">
-                <p className="label">개수</p>
-                <input
-                    type="number"
-                    min={1}
-                    value={count}
-                    onChange={(e) => setCount(Number(e.target.value))}
-                    className="input"
-                />
-            </div>
-
-            {/* 결과 */}
-            {price !== null && (
-                <div className="resultBox">
-                    <p>총 수수료</p>
-                    <h3>{price.toLocaleString()} 원</h3>
-                </div>
-            )}
-
-            {/* 결제 버튼 -> 토스결과창으로 이동*/}
-            <button className="btn2" onClick={handlePayment}>
-                결제하기
+        <div className="btnRow">
+          {[1, 2, 3, 4].map((p) => (
+            <button
+              key={p}
+              className={`btn ${person === p ? "active" : ""}`}
+              onClick={() => setPerson(p)}
+            >
+              {p}인용
             </button>
+          ))}
+        </div>
+      </div>
 
-            {/* CSS */}
-            <style jsx>{`
+      {/* 개수 선택 */}
+      <div className="section">
+        <p className="label">개수</p>
+        <input
+          type="number"
+          min={1}
+          value={count}
+          onChange={(e) => setCount(Number(e.target.value))}
+          className="input"
+        />
+      </div>
+
+      {/* 계산 결과 */}
+      {price !== null && (
+        <div className="resultBox">
+          <p>총 수수료</p>
+          <h3>{price.toLocaleString()} 원</h3>
+        </div>
+      )}
+
+      {/* 결제 버튼 */}
+      <button className="btn2" onClick={goToPayment}>
+        결제하기
+      </button>
+
+      {/* CSS */}
+      <style jsx>{`
         .container {
           padding: 20px;
           text-align: center;
@@ -180,6 +146,6 @@ export default function SofaPage() {
           font-size: 18px;
         }
       `}</style>
-        </div>
-    );
+    </div>
+  );
 }

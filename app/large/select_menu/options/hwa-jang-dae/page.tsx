@@ -18,7 +18,7 @@ export default function DressingTablePage() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         type: "hwa-jang-dae",
-        type2, // 일반용 or 미용실용
+        type2, 
         count,
       }),
     });
@@ -30,6 +30,15 @@ export default function DressingTablePage() {
   useEffect(() => {
     calculatePrice();
   }, [type2, count]);
+
+  /** 🔥 결제 페이지 이동 */
+  const goToPayment = () => {
+    if (!price) return;
+
+    const orderName = `화장대 (${type2}) ${count}개`;
+
+    router.push(`/payment?amount=${price}&orderName=${orderName}`);
+  };
 
   return (
     <div className="container">
@@ -77,14 +86,7 @@ export default function DressingTablePage() {
       )}
 
       {/* 결제 */}
-      <button
-        className="btn2"
-        onClick={() =>
-          router.push(
-            `/large/payment?type=hwa-jang-dae&type2=${type2}&count=${count}&price=${price}`
-          )
-        }
-      >
+      <button className="btn2" onClick={goToPayment}>
         결제하기
       </button>
 
