@@ -32,28 +32,70 @@ export default function QRPage() {
   }, []);
 
   return (
-    <div className="page-bg">
-      <div className="kiosk">
+    <div
+      className="page"
+      style={{
+        background: "#ffffff", // ⭐ 흰색 배경
+        width: "1080px",   // 캔버스 크기
+        height: "1920px",  // 캔버스 크기
+        overflow: "hidden",
+      }}
+    >
+      {/* 상단 바 */}
+      <div
+        style={{
+          width: "100%",
+          height: "220px",
+          background: "#36A64A",
+          position: "absolute",
+          top: 0,
+          left: 0,
+        }}
+      ></div>
 
-        {/* 상단 뒤로가기 버튼 */}
+        {/* 🔙 뒤로가기 버튼 */}
         <img
           src="/back_icon.png"
-          alt="뒤로가기"
-          className="back-btn"
           onClick={() => router.back()}
+          style={{
+            position: "absolute",
+            top: "60px",
+            left: "40px",
+            width: "90px",
+            height: "90px",
+            cursor: "pointer",
+            zIndex: 1000,
+            // filter: "invert(100%)", // 아이콘이 흰색 없던 문제 해결용
+          }}
         />
+<div
+  className="qr-wrapper"
+  style={{
+    position: "absolute",
+    top: "0px",  // ← QR코드 위치도 같이 더 아래로
+    left: "50%",
+    transform: "translateX(-50%)",
+  }}
+>
+  <QRCodeCanvas value={uploadUrl} size={260} />
+</div>
 
-        <h2 className="qr-title">휴대폰으로 사진을 업로드하세요</h2>
-
-        <div className="qr-wrapper">
-          <QRCodeCanvas value={uploadUrl} size={260} />
-        </div>
-
-        <p className="qr-guide">QR을 휴대폰으로 스캔하세요</p>
-
+<p
+  className="qr-guide"
+  style={{
+    position: "absolute",
+    top: "1100px",  // ← 안내문도 QR코드 아래로 이동
+    width: "100%",
+    textAlign: "center",
+    fontSize: "40px",
+    color: "#444",
+  }}
+>
+  QR을 휴대폰으로 스캔하세요
+</p>
 
 
       </div>
-    </div>
+  
   );
 }

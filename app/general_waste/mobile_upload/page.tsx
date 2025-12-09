@@ -46,7 +46,7 @@ export default function MobileUploadPage() {
   };
 
   return (
-    <div className="page-bg">
+    <div className="page">
       <div className="kiosk" style={{ textAlign: "center", padding: "40px" }}>
         <h2 style={{ color: "white" }}>휴대폰에서 사진 선택</h2>
 

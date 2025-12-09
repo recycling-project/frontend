@@ -1,21 +1,19 @@
 "use client";
 import { useEffect } from "react";
 
-const BASE_WIDTH = 900;
-const BASE_HEIGHT = 1600;
+const BASE_WIDTH = 1080;
+const BASE_HEIGHT = 1920;
 
 export default function KioskScaler({ children }: { children: React.ReactNode }) {
-
   useEffect(() => {
     const resize = () => {
       const scale = Math.min(
         window.innerWidth / BASE_WIDTH,
         window.innerHeight / BASE_HEIGHT
       );
-
-      const container = document.getElementById("kiosk-root");
-      if (container) {
-        container.style.transform = `scale(${scale})`;
+      const root = document.getElementById("kiosk-root");
+      if (root) {
+        root.style.transform = `scale(${scale})`;
       }
     };
 
@@ -25,17 +23,28 @@ export default function KioskScaler({ children }: { children: React.ReactNode })
   }, []);
 
   return (
-  <div className="kiosk-viewport">
     <div
-      id="kiosk-root"
+      id="kiosk-viewport"
       style={{
-        width: BASE_WIDTH,
-        height: BASE_HEIGHT,
-        transformOrigin: "top center",
+        width: "100vw",
+        height: "100vh",
+        background: "#000",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "flex-start",
+        overflow: "hidden",
       }}
     >
-      {children}
+      <div
+        id="kiosk-root"
+        style={{
+          width: BASE_WIDTH,
+          height: BASE_HEIGHT,
+          transformOrigin: "top center",
+        }}
+      >
+        {children}
+      </div>
     </div>
-  </div>
-);
+  );
 }

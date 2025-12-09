@@ -23,7 +23,7 @@ export default function WaitPage() {
   }, []);
 
   return (
-    <div className="page-bg">
+    <div className="page">
       <div className="kiosk" style={{ textAlign: "center", paddingTop: "200px" }}>
         <h2 style={{ color: "white" }}>휴대폰 업로드 대기 중...</h2>
       </div>
