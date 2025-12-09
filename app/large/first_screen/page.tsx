@@ -1,126 +1,197 @@
 "use client";
-import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
 
-export default function FirstScreen() {
+import { useRouter } from "next/navigation";
+import { useRef, useEffect } from "react";
+
+export default function GeneralWastePage() {
   const router = useRouter();
   const videoRef = useRef<HTMLVideoElement | null>(null);
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const [isCameraReady, setIsCameraReady] = useState(false);
 
-  // ================================
   // ✅ 카메라 실행
-  // ================================
   useEffect(() => {
     async function startCamera() {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: "environment" }, // 후면 카메라
+          video: { facingMode: "environment" },
         });
-
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
         }
-
-        setIsCameraReady(true);
-      } catch (e) {
-        console.warn("카메라 접근 실패", e);
+      } catch (err) {
+        console.warn("카메라 미지원 - 테스트 모드");
       }
     }
-
     startCamera();
   }, []);
 
-  // ================================
-  // 📌 사진 촬영 함수
-  // ================================
-  const takePhoto = () => {
-    if (!videoRef.current || !canvasRef.current) return;
+  // ✅ 촬영 기능
+  const capturePhoto = () => {
+    if (!videoRef.current) return;
 
     const video = videoRef.current;
-    const canvas = canvasRef.current;
+    const canvas = document.createElement("canvas");
 
-    // 캔버스 사이즈 = 비디오 사이즈
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
+    const width = video.videoWidth || 640;
+    const height = video.videoHeight || 480;
 
-    // 캡쳐
-    const context = canvas.getContext("2d");
-    if (context) {
-      context.drawImage(video, 0, 0, canvas.width, canvas.height);
-    }
+    canvas.width = width;
+    canvas.height = height;
 
-    const base64 = canvas.toDataURL("image/jpeg");
+    const ctx = canvas.getContext("2d")!;
+    ctx.drawImage(video, 0, 0, width, height);
 
-    // 📌 촬영된 이미지 저장 → 이후 analyze 페이지에서 사용
-    localStorage.setItem("large_waste_image", base64);
+    const base64 = canvas.toDataURL("image/png");
+    localStorage.setItem("wasteImage", base64);
 
-    // 📌 다음 페이지로 이동
-    router.push("/large/analyze");
+    router.push("/general_waste/analyze");
   };
 
   return (
-    <div className="page-bg">
-      <div className="kiosk">
-        
-        {/* 🔙 뒤로가기 */}
+    <div
+      className="page"
+      style={{
+        position: "absolute",
+        width: "1080px",
+        height: "1920px",
+        left: "50%",
+        top: "50%",
+        transform: "translate(-50%, -50%)",
+        background: "#000",
+        overflow: "hidden",
+      }}
+    >
+      {/* 🔙 뒤로가기 */}
+      <img
+        src="/back_icon.png"
+        alt="뒤로가기"
+        className="back-btn"
+        onClick={() => router.replace("/menu")}
+        style={{
+          position: "absolute",
+          top: "60px",
+          left: "40px",
+          width: "90px",
+          height: "90px",
+          zIndex: 999,
+          cursor: "pointer",
+        }}
+      />
+
+      {/* 📸 카메라 전체 */}
+      <video
+        ref={videoRef}
+        autoPlay
+        playsInline
+        className="camera-preview"
+        style={{
+          position: "absolute",
+          inset: 0,
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+        }}
+      />
+
+      {/* 🌈 투명 그라데이션 오버레이 */}
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          background: "linear-gradient(to bottom, #A0DDAB, #36A64A)",
+          pointerEvents: "none",
+          zIndex: 5,
+        }}
+      />
+
+      {/* 📝 위 텍스트 */}
+      <div
+        className="detect-content"
+        style={{
+          position: "absolute",
+          top: "350px",
+          left: "50%",
+          transform: "translateX(-50%)",
+          textAlign: "center",
+          color: "white",
+          zIndex: 10,
+        }}
+      >
         <img
-          src="/back_icon.png"
-          alt="뒤로가기"
-          className="back-btn"
-          onClick={() => router.replace("/menu")}
+          src="/Green_camera.png"
+          style={{ width: "250px", height: "250px", filter: "brightness(0%) invert(100%)", }}
         />
+        <p style={{ marginTop: "20px", fontSize: "50px", lineHeight: 1.5 }}>
+          분리수거할 품목을 <br/> 카메라에 
+          잘 보이게 <br/>배치해 주세요.
+        </p>
+      </div>
 
-        {/* 📷 카메라 프리뷰 */}
-        <video
-          ref={videoRef}
-          autoPlay
-          playsInline
-          className="camera-preview"
-        />
+      {/* 📌 버튼 2개 */}
+      <div
+        style={{
+          position: "absolute",
+          bottom: "160px",
+          left: "50%",
+          transform: "translateX(-50%)",
+          display: "flex",
+          flexDirection: "column",
+          gap: "110px",
+          zIndex: 10,
+        }}
+      >
+        <button
+          onClick={capturePhoto}
+          style={{
+            width: "500px",
+            height: "200px",
+            background: "#A0DDAB",
+            borderRadius: "35px",
+            border: "none",
+            boxShadow: "0px 6px 14px rgba(0,0,0,0.15)",
+            color: "#ffffff",
+            fontSize: "48px",
+            fontWeight: 700,
+            cursor: "pointer",
+          }}
+        >
+          촬영하기
+        </button>
 
-        {/* 사진 캡처용 캔버스 (숨김) */}
-        <canvas ref={canvasRef} style={{ display: "none" }} />
-
-        {/* UI 오버레이 */}
-        <div className="camera-overlay">
-
-          <div className="recyleset">
-            <div className="detect-content">
-              <img
-                src="/Green_camera.png"
-                alt="camera icon"
-                className="detect-icon"
-              />
-              <p className="detect-text">
-                분리수거할 품목을 카메라에<br />잘 보이게 배치해 주세요.
-              </p>
-            </div>
-          </div>
-
-          {/* 📌 촬영 버튼 + 파일 업로드 버튼 */}
-          <div className="bottom-button-area">
-
-            {/* 🔥 촬영 버튼 추가 */}
-            <button
-              className="first-btn"
-              disabled={!isCameraReady}
-              onClick={takePhoto}
-            >
-              사진 촬영하기
-            </button>
-
-            {/* 기존 파일 업로드 버튼 */}
-            <button
-              className="first-btn"
-              onClick={() => router.push("/large/qr")}
-            >
-              사진 첨부 파일 추가
-            </button>
-
-          </div>
-
-        </div>
+        <button
+          onClick={() => router.push("/large/mobile-upload")}
+          style={{
+            width: "500px",
+            height: "200px",
+            background: "#A0DDAB",
+            borderRadius: "35px",
+            border: "none",
+            boxShadow: "0px 6px 14px rgba(0,0,0,0.15)",
+            color: "#ffffff",
+            fontSize: "48px",
+            fontWeight: 700,
+            cursor: "pointer",
+          }}
+        >
+          사진 첨부 파일 추가
+        </button>
+        
+        <button
+          onClick={() => router.push("/large/select_menu")}
+          style={{
+            width: "100px",
+            height: "100px",
+            background: "#A0DDAB",
+            borderRadius: "35px",
+            border: "none",
+            boxShadow: "0px 6px 14px rgba(0,0,0,0.15)",
+            color: "#ffffff",
+            fontSize: "18px",
+            fontWeight: 700,
+            cursor: "pointer",
+          }}
+        >
+          임시대형버튼
+        </button>
 
       </div>
     </div>

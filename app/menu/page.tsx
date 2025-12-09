@@ -62,7 +62,7 @@ export default function MenuPage() {
         {/* 버튼 템플릿 */}
         {[
           { text: "일반 재활용 안내", link: "/general_waste" },
-          { text: "대형 폐기물\n수거 신청", link: "/first_screen" },
+          { text: "대형 폐기물\n수거 신청", link: "/large/first_screen" },
           { text: "질문하기", link: "/question" },
         ].map((btn, i) => (
           <button
