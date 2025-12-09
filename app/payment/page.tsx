@@ -1,9 +1,10 @@
 "use client";
 
+import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
-import Checkout from "../components/Checkout";;
+import Checkout from "../components/Checkout";
 
-export default function PaymentPage() {
+function PaymentInner() {
   const params = useSearchParams();
 
   const amount = Number(params.get("amount"));
@@ -14,4 +15,12 @@ export default function PaymentPage() {
   }
 
   return <Checkout amount={amount} orderName={orderName} />;
+}
+
+export default function PaymentPage() {
+  return (
+    <Suspense fallback={<div>로딩중...</div>}>
+      <PaymentInner />
+    </Suspense>
+  );
 }
