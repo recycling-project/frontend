@@ -97,11 +97,20 @@ export default function GeneralWastePage() {
         muted        // ← 이거 추가해야 아이폰에서 뜬다!!!
         className="camera-preview"
         style={{
+          // 다경님꺼
+          // position: "absolute",
+          // inset: 0,
+          // width: "100%",
+          // height: "100%",
+          // objectFit: "cover",
+
           position: "absolute",
-          inset: 0,
-          width: "100%",
-          height: "100%",
+          top: 0,
+          left: 0,
+          width: "100vw",
+          height: "100vh",
           objectFit: "cover",
+          zIndex: 1,
         }}
       />
 
