@@ -6,46 +6,47 @@ import { useRouter } from "next/navigation";
 export default function BabSangSelectPage() {
   const router = useRouter();
 
-  const [count, setCount] = useState(1);
+  const [count, setCount] = useState<number>(1);
   const [price, setPrice] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
 
-  // 📌 자동 가격 계산
+  /** 자동 가격 계산 */
   useEffect(() => {
-    const fetchPrice = async () => {
-      try {
-        setLoading(true);
-
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/large/price`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            type: "bab-sang",
-            count,
-          }),
-        });
-
-        const data = await res.json();
-        setPrice(data.price ?? null);
-      } catch (err) {
-        console.error("가격 계산 오류:", err);
-        setPrice(null);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchPrice();
+    calculatePrice();
   }, [count]);
 
-  // 📌 결제 페이지 이동
+  const calculatePrice = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/large/price`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: "bab-sang",
+          count,
+        }),
+      });
+
+      const data = await res.json();
+      setPrice(data.price);
+    } catch (e) {
+      console.error("가격 계산 오류:", e);
+    }
+    setLoading(false);
+  };
+
+  /** 🔥 결제 페이지 이동 */
   const goToPayment = () => {
-    if (!price) return; // ❗ null이면 눌러도 아무 반응 없음
+    if (price === null) {
+      alert("가격 정보가 없습니다.");
+      return;
+    }
 
     const orderName = `밥상 ${count}개`;
 
+    // ⭐ 절대 실패하지 않는 라우팅 방식 (정석)
     router.push(
-      `/payment?amount=${price}&orderName=${encodeURIComponent(orderName)}`
+      `/payment?amount=${encodeURIComponent(String(price))}&orderName=${encodeURIComponent(orderName)}`
     );
   };
 
@@ -89,7 +90,7 @@ export default function BabSangSelectPage() {
         밥상 옵션 선택
       </h1>
 
-      {/* 내용 박스 */}
+      {/* 카드 */}
       <div
         style={{
           background: "white",
@@ -146,7 +147,7 @@ export default function BabSangSelectPage() {
         {/* 결제 버튼 */}
         <button
           onClick={goToPayment}
-          disabled={loading || price === null}
+          disabled={loading}
           style={{
             width: "100%",
             height: "140px",
@@ -156,8 +157,7 @@ export default function BabSangSelectPage() {
             fontSize: "48px",
             fontWeight: 900,
             color: "#2F7239",
-            cursor: loading || price === null ? "not-allowed" : "pointer",
-            opacity: loading || price === null ? 0.5 : 1,
+            cursor: "pointer",
             boxShadow: "0px 6px 10px rgba(0,0,0,0.15)",
           }}
         >
