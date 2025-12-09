@@ -44,7 +44,6 @@ export default function LargeQRPage() {
         width: "1080px",
         height: "1920px",
         overflow: "hidden",
-        position: "relative",
       }}
     >
       {/* 상단 초록 바 */}
@@ -76,13 +75,13 @@ export default function LargeQRPage() {
 
       {/* QR 코드 */}
       <div
-        className="qr-wrapper"
-        style={{
-          position: "absolute",
-          top: "400px",
-          left: "50%",
-          transform: "translateX(-50%)",
-        }}
+  className="qr-wrapper"
+  style={{
+    position: "absolute",
+    top: "0px",  // ← QR코드 위치도 같이 더 아래로
+    left: "50%",
+    transform: "translateX(-50%)",
+  }}
       >
         <QRCodeCanvas value={uploadUrl} size={260} />
       </div>
