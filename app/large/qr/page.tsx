@@ -14,16 +14,17 @@ export default function LargeQRPage() {
   const router = useRouter();
 
   useEffect(() => {
-    // 📌 초기화 요청
+    // 📌 서버 초기화
     fetch(`${process.env.NEXT_PUBLIC_API_URL}/large/reset`, {
       method: "POST",
     });
 
+    // 📌 키오스크 로컬 이미지 초기화 (이전 사진 제거)
+    localStorage.removeItem("large_waste_image");
+
     // 📌 업로드 감지
     const timer = setInterval(async () => {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/large/check`
-      );
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/large/check`);
       const data = await res.json();
 
       if (data.id) {
