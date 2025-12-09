@@ -19,7 +19,7 @@ export default function MobileUploadPage() {
       try {
         // 모바일은 분석 요청 금지 → 업로드 전용 API 호출
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/recycle/mobile_upload`,
+          `${process.env.NEXT_PUBLIC_API_URL}/recycle/mobile-upload`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
