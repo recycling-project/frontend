@@ -1,15 +1,19 @@
 "use client";
 
+import { Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-export default function Large_yolo_result() {
+// ---------------------------
+// 🔥 내부 컴포넌트 (파일 분리 안함)
+// ---------------------------
+function YoloInner() {
   const params = useSearchParams();
-  const [yolo, setYolo] = useState<any>(null);
-  const [photo, setPhoto] = useState("");
   const router = useRouter();
 
-  // 영어 → 한국어
+  const [yolo, setYolo] = useState<any>(null);
+  const [photo, setPhoto] = useState("");
+
   const engToKor: Record<string, string> = {
     "bab-sang": "밥상",
     "seo-rap-jang": "서랍장",
@@ -34,7 +38,6 @@ export default function Large_yolo_result() {
     else if (imgLocal) setPhoto(imgLocal);
   }, []);
 
-  // YOLO class_name 안전 처리 ("null" 문자열도 null 취급)
   const rawCls = yolo?.best_detection?.class_name;
   const cls = (!rawCls || rawCls === "null") ? null : rawCls;
 
@@ -47,17 +50,15 @@ export default function Large_yolo_result() {
       {photo && <img src={photo} alt="업로드 사진" className="photo" />}
 
       <div className="buttonWrap">
-
-        {/* 인식된 경우만 버튼 표시 */}
-        {cls ? (
+        {cls && (
           <button
             className="resultBtn"
-            onClick={() => router.push(`/large/select_menu/options/${cls}`)}>
+            onClick={() => router.push(`/large/select_menu/options/${cls}`)}
+          >
             {korean}
           </button>
-        ) : null}
+        )}
 
-        {/* 항상 선택 가능 */}
         <button
           className="selectBtn"
           onClick={() => router.push("/large/select_menu")}
@@ -66,13 +67,11 @@ export default function Large_yolo_result() {
         </button>
       </div>
 
-      {/* CSS */}
       <style jsx>{`
         .container {
           padding: 20px;
           text-align: center;
         }
-
         .photo {
           width: 75%;
           max-width: 350px;
@@ -81,7 +80,6 @@ export default function Large_yolo_result() {
           margin-top: 20px;
           object-fit: cover;
         }
-
         .buttonWrap {
           display: flex;
           flex-direction: column;
@@ -89,36 +87,33 @@ export default function Large_yolo_result() {
           gap: 14px;
           margin-top: 25px;
         }
-
-        .resultBtn {
+        .resultBtn,
+        .selectBtn {
           width: 80%;
           max-width: 300px;
           padding: 16px;
           background: black;
-          border: none;
           color: white;
           font-size: 20px;
           font-weight: bold;
           border-radius: 12px;
-        }
-
-        .noResult {
-          font-size: 18px;
-          color: #555;
-          margin-bottom: 5px;
-        }
-
-        .selectBtn {
-          width: 80%;
-          max-width: 300px;
-          padding: 14px;
-          background: black;
           border: none;
-          color: white;
+        }
+        .selectBtn {
           font-size: 18px;
-          border-radius: 12px;
         }
       `}</style>
     </div>
+  );
+}
+
+// ---------------------------
+// 🔥 최상위 page.tsx (Suspense 적용)
+// ---------------------------
+export default function LargeYoloResultPage() {
+  return (
+    <Suspense fallback={<div>로딩중...</div>}>
+      <YoloInner />
+    </Suspense>
   );
 }
