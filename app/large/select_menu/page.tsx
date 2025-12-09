@@ -11,7 +11,7 @@ const ENG_TO_KOR: Record<string, string> = {
   "desk": "책상",
   "hwa-jang-dae": "화장대",
   "bed": "침대",
-  "bike": "자전거",
+  "bicycle": "자전거",
   "hang-a-ri": "항아리",
 };
 

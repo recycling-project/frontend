@@ -3,13 +3,6 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
-/**
- * 침대 옵션 선택 페이지
- * - part: 매트리스 / 틀
- * - size: 일인용 / 이인용
- * - count: 개수
- * 자동 계산 + 결제 버튼 포함
- */
 export default function BedSelectPage() {
   const router = useRouter();
 
@@ -20,15 +13,13 @@ export default function BedSelectPage() {
   const [price, setPrice] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
 
-  /** 🔥 옵션 변경될 때마다 자동 계산 */
+  /* 옵션 변경 시 자동 계산 */
   useEffect(() => {
     calculatePrice();
   }, [part, size, count]);
 
-  /** 가격 계산 */
   const calculatePrice = async () => {
     setLoading(true);
-
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/large/price`, {
         method: "POST",
@@ -46,175 +37,234 @@ export default function BedSelectPage() {
     } catch (e) {
       console.error("가격 계산 오류:", e);
     }
-
     setLoading(false);
   };
 
-  /** 🔥 결제 페이지로 이동 */
+  /* 결제 이동 */
   const goToPayment = () => {
     if (price === null) {
-        alert("가격 정보가 없습니다.");
-        return;
+      alert("가격 정보가 없습니다.");
+      return;
     }
+
     const orderName = `침대 (${part}, ${size}) ${count}개`;
-    router.push(`/payment?amount=${price}&orderName=${orderName}`);
+
+    router.push(
+      `/payment?amount=${encodeURIComponent(String(price))}&orderName=${encodeURIComponent(orderName)}`
+    );
   };
 
   return (
-    <div className="container">
-      <h2>침대 옵션 선택</h2>
+    <div
+      style={{
+        width: "1080px",
+        height: "1920px",
+        background: "linear-gradient(to bottom, #9EE0AE, #36A64A)",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        paddingTop: "150px",
+        position: "relative",
+        color: "#2F7239",
+      }}
+    >
+      {/* 뒤로가기 */}
+      <img
+        src="/back_icon.png"
+        onClick={() => router.back()}
+        style={{
+          position: "absolute",
+          top: "60px",
+          left: "40px",
+          width: "90px",
+          height: "90px",
+          cursor: "pointer",
+        }}
+      />
 
-      {/* 종류 선택 */}
-      <div className="section">
-        <p className="label">종류</p>
-        <div className="btnRow">
-
-          <button
-            className={`btn ${part === "매트리스" ? "active" : ""}`}
-            onClick={() => setPart("매트리스")}
-          >
-            매트리스
-          </button>
-
-          <button
-            className={`btn ${part === "틀" ? "active" : ""}`}
-            onClick={() => setPart("틀")}
-          >
-            틀
-          </button>
-
-        </div>
-      </div>
-
-      {/* 사이즈 선택 */}
-      <div className="section">
-        <p className="label">사이즈</p>
-        <div className="btnRow">
-
-          <button
-            className={`btn ${size === "일인용" ? "active" : ""}`}
-            onClick={() => setSize("일인용")}
-          >
-            일인용
-          </button>
-
-          <button
-            className={`btn ${size === "이인용" ? "active" : ""}`}
-            onClick={() => setSize("이인용")}
-          >
-            이인용
-          </button>
-
-        </div>
-      </div>
-
-      {/* 개수 */}
-      <div className="section">
-        <p className="label">개수</p>
-        <input
-          type="number"
-          min={1}
-          value={count}
-          onChange={(e) => setCount(Number(e.target.value))}
-          className="inputBox"
-        />
-      </div>
-
-      {/* 가격 표시 */}
-      {price !== null && (
-        <div className="priceBox">
-          <p>총 수수료</p>
-          <h3>{price.toLocaleString()} 원</h3>
-        </div>
-      )}
-
-      {/* 결제 버튼 */}
-      <button
-        className="payBtn"
-        onClick={goToPayment}
-        disabled={loading || price === null}
+      {/* 제목 */}
+      <h1
+        style={{
+          fontSize: "80px",
+          fontWeight: 900,
+          marginBottom: "60px",
+          color: "white",
+        }}
       >
-        {loading ? "계산 중..." : "결제하기"}
-      </button>
+        침대 옵션 선택
+      </h1>
 
-      {/* CSS */}
-      <style jsx>{`
-        .container {
-          padding: 30px;
-          text-align: center;
-          color: black;
-        }
+      {/* 카드 영역 */}
+      <div
+        style={{
+          background: "white",
+          width: "85%",
+          borderRadius: "40px",
+          padding: "60px",
+          textAlign: "center",
+          boxShadow: "0px 6px 20px rgba(0,0,0,0.1)",
+        }}
+      >
+        {/* 종류 */}
+        <div style={{ marginBottom: "50px" }}>
+          <p style={{ fontSize: "45px", marginBottom: "20px" }}>종류 선택</p>
 
-        h2 {
-          font-size: 26px;
-          font-weight: bold;
-          margin-bottom: 20px;
-        }
+          <div style={{ display: "flex", justifyContent: "center", gap: "40px" }}>
+            {["매트리스", "틀"].map((v) => (
+              <button
+                key={v}
+                onClick={() => setPart(v as any)}
+                style={{
+                  width: "260px",
+                  height: "100px",
+                  fontSize: "40px",
+                  fontWeight: 800,
+                  borderRadius: "25px",
+                  border: part === v ? "5px solid #36A64A" : "5px solid #8ED49A",
+                  background: part === v ? "#E3F8E8" : "white",
+                  color: "#2F7239",
+                  cursor: "pointer",
+                }}
+              >
+                {v}
+              </button>
+            ))}
+          </div>
+        </div>
 
-        .section {
-          margin-top: 25px;
-        }
+        {/* 사이즈 */}
+        <div style={{ marginBottom: "50px" }}>
+          <p style={{ fontSize: "45px", marginBottom: "20px" }}>사이즈 선택</p>
 
-        .label {
-          font-size: 18px;
-          margin-bottom: 10px;
-        }
+          <div style={{ display: "flex", justifyContent: "center", gap: "40px" }}>
+            {["일인용", "이인용"].map((v) => (
+              <button
+                key={v}
+                onClick={() => setSize(v as any)}
+                style={{
+                  width: "260px",
+                  height: "100px",
+                  fontSize: "40px",
+                  fontWeight: 800,
+                  borderRadius: "25px",
+                  border: size === v ? "5px solid #36A64A" : "5px solid #8ED49A",
+                  background: size === v ? "#E3F8E8" : "white",
+                  color: "#2F7239",
+                  cursor: "pointer",
+                }}
+              >
+                {v}
+              </button>
+            ))}
+          </div>
+        </div>
 
-        .btnRow {
-          display: flex;
-          justify-content: center;
-          gap: 10px;
-        }
+        {/* 개수 선택 */}
+<div style={{ marginBottom: "50px" }}>
+  <p style={{ fontSize: "45px", marginBottom: "20px" }}>개수 선택</p>
 
-        .btn {
-          padding: 12px 20px;
-          border: 2px solid black;
-          background: white;
-          color: black;
-          border-radius: 10px;
-          cursor: pointer;
-          font-size: 16px;
-        }
+  <div
+    style={{
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      gap: "40px",
+      border: "4px solid #8ED49A",
+      borderRadius: "20px",
+      width: "360px",
+      height: "120px",
+      margin: "0 auto",
+      background: "white",
+      position: "relative",
+    }}
+  >
+    {/* 🔻 왼쪽 삼각형 (감소) */}
+    <div
+      onClick={() => setCount((prev) => Math.max(1, prev - 1))}
+      style={{
+        width: 0,
+        height: 0,
+        borderTop: "40px solid transparent",
+        borderBottom: "40px solid transparent",
+        borderRight: "50px solid #8ED49A",
+        cursor: "pointer",
+        marginLeft: "-10px",
+      }}
+    ></div>
 
-        .btn.active {
-          background: black;
-          color: white;
-        }
+    {/* 개수 표시 */}
+    <span
+      style={{
+        fontSize: "55px",
+        fontWeight: 900,
+        color: "#2F7239",
+        width: "80px",
+        textAlign: "center",
+      }}
+    >
+      {count}
+    </span>
 
-        .inputBox {
-          width: 100px;
-          padding: 10px;
-          text-align: center;
-          border: 2px solid black;
-          border-radius: 8px;
-          font-size: 16px;
-        }
+    {/* 🔺 오른쪽 삼각형 (증가) */}
+    <div
+      onClick={() => setCount((prev) => prev + 1)}
+      style={{
+        width: 0,
+        height: 0,
+        borderTop: "40px solid transparent",
+        borderBottom: "40px solid transparent",
+        borderLeft: "50px solid #8ED49A",
+        cursor: "pointer",
+        marginRight: "-10px",
+      }}
+    ></div>
+  </div>
+</div>
 
-        .priceBox {
-          margin-top: 25px;
-          background: #f2f2f2;
-          padding: 20px;
-          border-radius: 12px;
-        }
 
-        h3 {
-          margin-top: 10px;
-          font-size: 24px;
-          font-weight: bold;
-        }
+        {/* 금액 */}
+        {price !== null && (
+          <div
+            style={{
+              background: "#F4FFF7",
+              border: "3px solid #8ED49A",
+              padding: "40px",
+              borderRadius: "25px",
+              marginBottom: "50px",
+            }}
+          >
+            <p style={{ fontSize: "38px", marginBottom: "15px" }}>총 금액</p>
+            <h2
+              style={{
+                fontSize: "60px",
+                fontWeight: 900,
+              }}
+            >
+              {price.toLocaleString()} 원
+            </h2>
+          </div>
+        )}
 
-        .payBtn {
-          margin-top: 25px;
-          width: 80%;
-          max-width: 300px;
-          padding: 16px;
-          background: black;
-          color: white;
-          border: none;
-          font-size: 20px;
-          border-radius: 12px;
-        }
-      `}</style>
+        {/* 결제 버튼 */}
+        <button
+          onClick={goToPayment}
+          disabled={loading}
+          style={{
+            width: "100%",
+            height: "140px",
+            background: "#A0DDAB",
+            border: "none",
+            borderRadius: "30px",
+            fontSize: "48px",
+            fontWeight: 900,
+            color: "#2F7239",
+            cursor: "pointer",
+            boxShadow: "0px 6px 10px rgba(0,0,0,0.15)",
+          }}
+        >
+          {loading ? "계산 중..." : "결제하기"}
+        </button>
+      </div>
     </div>
   );
 }

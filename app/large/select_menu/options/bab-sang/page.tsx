@@ -102,24 +102,67 @@ export default function BabSangSelectPage() {
         }}
       >
         {/* 개수 선택 */}
-        <div style={{ marginBottom: "50px" }}>
-          <p style={{ fontSize: "45px", marginBottom: "20px" }}>개수 선택</p>
+<div style={{ marginBottom: "50px" }}>
+  <p style={{ fontSize: "45px", marginBottom: "20px" }}>개수 선택</p>
 
-          <input
-            type="number"
-            min={1}
-            value={count}
-            onChange={(e) => setCount(Number(e.target.value))}
-            style={{
-              width: "180px",
-              height: "80px",
-              fontSize: "40px",
-              textAlign: "center",
-              border: "4px solid #8ED49A",
-              borderRadius: "20px",
-            }}
-          />
-        </div>
+  <div
+    style={{
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      gap: "40px",
+      border: "4px solid #8ED49A",
+      borderRadius: "20px",
+      width: "360px",
+      height: "120px",
+      margin: "0 auto",
+      background: "white",
+      position: "relative",
+    }}
+  >
+    {/* 🔻 왼쪽 삼각형 (감소) */}
+    <div
+      onClick={() => setCount((prev) => Math.max(1, prev - 1))}
+      style={{
+        width: 0,
+        height: 0,
+        borderTop: "40px solid transparent",
+        borderBottom: "40px solid transparent",
+        borderRight: "50px solid #8ED49A",
+        cursor: "pointer",
+        marginLeft: "-10px",
+      }}
+    ></div>
+
+    {/* 개수 표시 */}
+    <span
+      style={{
+        fontSize: "55px",
+        fontWeight: 900,
+        color: "#2F7239",
+        width: "80px",
+        textAlign: "center",
+      }}
+    >
+      {count}
+    </span>
+
+    {/* 🔺 오른쪽 삼각형 (증가) */}
+    <div
+      onClick={() => setCount((prev) => prev + 1)}
+      style={{
+        width: 0,
+        height: 0,
+        borderTop: "40px solid transparent",
+        borderBottom: "40px solid transparent",
+        borderLeft: "50px solid #8ED49A",
+        cursor: "pointer",
+        marginRight: "-10px",
+      }}
+    ></div>
+  </div>
+</div>
+
 
         {/* 가격 박스 */}
         {price !== null && (
