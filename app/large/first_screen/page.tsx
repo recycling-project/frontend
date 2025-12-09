@@ -155,43 +155,7 @@ export default function GeneralWastePage() {
           }}
         >
           촬영하기
-        </button>
-
-        <button
-          onClick={() => router.push("/large/mobile-upload")}
-          style={{
-            width: "500px",
-            height: "200px",
-            background: "#A0DDAB",
-            borderRadius: "35px",
-            border: "none",
-            boxShadow: "0px 6px 14px rgba(0,0,0,0.15)",
-            color: "#ffffff",
-            fontSize: "48px",
-            fontWeight: 700,
-            cursor: "pointer",
-          }}
-        >
-          사진 첨부 파일 추가
-        </button>
-        
-        <button
-          onClick={() => router.push("/large/select_menu")}
-          style={{
-            width: "100px",
-            height: "100px",
-            background: "#A0DDAB",
-            borderRadius: "35px",
-            border: "none",
-            boxShadow: "0px 6px 14px rgba(0,0,0,0.15)",
-            color: "#ffffff",
-            fontSize: "18px",
-            fontWeight: 700,
-            cursor: "pointer",
-          }}
-        >
-          임시대형버튼
-        </button>
+        </button>     
 
         {/* 🎯 버튼2 : QR 업로드 → /large/qr */}
         <button

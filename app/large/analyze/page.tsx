@@ -6,7 +6,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 /* ----------------------------------------------------------
-   📌 실제 화면 + 로직은 여기서 모두 처리됨 (한 페이지)
+   📌 실제 화면 + 로직 (이 부분은 변경 없음)
 ----------------------------------------------------------- */
 function AnalyzeContent() {
   const router = useRouter();
@@ -25,7 +25,7 @@ function AnalyzeContent() {
 
       let finalBase64 = base64 ?? null;
 
-      // 📌 모바일 업로드 → Spring에서 base64 가져오기
+      // 📌 모바일 업로드 → Spring 이미지 가져오기
       if (!finalBase64 && id) {
         console.log("📌 Spring에서 이미지 불러오는 중...");
 
@@ -45,10 +45,7 @@ function AnalyzeContent() {
           localStorage.setItem("large_waste_image", serverBase64);
           finalBase64 = serverBase64;
 
-          console.log(
-            "📌 Spring base64 prefix:",
-            serverBase64.substring(0, 40)
-          );
+          console.log("📌 Spring base64 prefix:", serverBase64.substring(0, 40));
         } catch (err) {
           console.error("Spring 이미지 로드 실패:", err);
           alert("이미지를 불러오는 중 오류가 발생했습니다.");
@@ -79,7 +76,7 @@ function AnalyzeContent() {
 
         router.push(
           "/large/yolo_result?data=" +
-          encodeURIComponent(JSON.stringify(yoloResult))
+            encodeURIComponent(JSON.stringify(yoloResult))
         );
       } catch (err) {
         console.error("FastAPI 요청 실패:", err);
@@ -111,29 +108,65 @@ function AnalyzeContent() {
     return form;
   }
 
-  // --------------------------------------------------------
-  // UI 표시
-  // --------------------------------------------------------
+  /* --------------------------------------------------------
+     📌 ⚡ 여기서부터 "위 CSS UI" 로 그대로 교체 (로직 수정 없음)
+  -------------------------------------------------------- */
   return (
-    <div className="page-bg">
-      <div className="kiosk">
-        <img
-          src="/back_icon.png"
-          alt="뒤로가기"
-          className="back-btn"
-          onClick={() => router.back()}
-        />
+    <div
+      className="page"
+      style={{
+        position: "absolute",
+        left: "50%",
+        top: "50%",
+        transform: "translate(-50%, -50%)",
+        background: "linear-gradient(to bottom, #A0DDAB, #36A64A)",
+        width: "1080px",
+        height: "1920px",
+        overflow: "hidden",
+      }}
+    >
+      {/* 뒤로가기 */}
+      <img
+        src="/back_icon.png"
+        onClick={() => router.push("/menu")}
+        style={{
+          position: "absolute",
+          top: "60px",
+          left: "40px",
+          width: "90px",
+          height: "90px",
+          cursor: "pointer",
+        }}
+      />
 
-        <div className="loading-wrapper">
-          <img src="/Loding.gif" className="loading-gif" />
-        </div>
+      {/* 로딩 GIF — 정중앙 */}
+      <div
+        style={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <img
+          src="/Loding.gif"
+          alt="로딩"
+          style={{
+            width: "260px",
+            height: "260px",
+          }}
+        />
       </div>
     </div>
   );
 }
 
 /* ----------------------------------------------------------
-   📌 여기서 Suspense로 감싸주기만 하면 끝 (파일은 1개)
+   📌 Suspense로 감싸주는 외부 Wrapper (변경 X)
 ----------------------------------------------------------- */
 export default function Page() {
   return (
