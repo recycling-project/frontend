@@ -1,62 +1,54 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useEffect } from "react";
 
-export default function FirstScreen() {
+export default function GeneralWastePage() {
   const router = useRouter();
   const videoRef = useRef<HTMLVideoElement | null>(null);
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const [isCameraReady, setIsCameraReady] = useState(false);
 
-  // ================================
   // ✅ 카메라 실행
-  // ================================
   useEffect(() => {
     async function startCamera() {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
           video: { facingMode: "environment" },
         });
-
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
         }
-
-        setIsCameraReady(true);
-      } catch (e) {
-        console.warn("카메라 접근 실패", e);
+      } catch (err) {
+        console.warn("카메라 미지원 - 테스트 모드");
       }
     }
     startCamera();
   }, []);
 
-  // ================================
-  // 📸 촬영 → base64 저장 후 analyze 이동
-  // ================================
+  // ✅ 촬영 기능
   const takePhoto = () => {
-    if (!videoRef.current || !canvasRef.current) return;
+    if (!videoRef.current) return;
 
     const video = videoRef.current;
-    const canvas = canvasRef.current;
+    const canvas = document.createElement("canvas");
 
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
+    const width = video.videoWidth || 640;
+    const height = video.videoHeight || 480;
 
-    const ctx = canvas.getContext("2d");
-    if (ctx) {
-      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-    }
+    canvas.width = width;
+    canvas.height = height;
 
-    const base64 = canvas.toDataURL("image/jpeg");
+    const ctx = canvas.getContext("2d")!;
+    ctx.drawImage(video, 0, 0, width, height);
 
-    localStorage.setItem("large_waste_image", base64);
+    const base64 = canvas.toDataURL("image/png");
+    localStorage.setItem("wasteImage", base64);
 
-    router.push("/large/analyze"); // ← 대형폐기물 분석
+    router.push("/large/analyze");
   };
 
   return (
     <div
+      className="page"
       style={{
         position: "absolute",
         width: "1080px",
@@ -64,15 +56,15 @@ export default function FirstScreen() {
         left: "50%",
         top: "50%",
         transform: "translate(-50%, -50%)",
-        overflow: "hidden",
         background: "#000",
+        overflow: "hidden",
       }}
     >
-
       {/* 🔙 뒤로가기 */}
       <img
         src="/back_icon.png"
         alt="뒤로가기"
+        className="back-btn"
         onClick={() => router.replace("/menu")}
         style={{
           position: "absolute",
@@ -85,37 +77,35 @@ export default function FirstScreen() {
         }}
       />
 
-      {/* 📸 카메라 */}
+      {/* 📸 카메라 전체 */}
       <video
         ref={videoRef}
         autoPlay
         playsInline
+        className="camera-preview"
         style={{
           position: "absolute",
           inset: 0,
           width: "100%",
           height: "100%",
           objectFit: "cover",
-          zIndex: 1,
         }}
       />
 
-      <canvas ref={canvasRef} style={{ display: "none" }} />
-
-      {/* 🌈 그라데이션 */}
+      {/* 🌈 투명 그라데이션 오버레이 */}
       <div
         style={{
           position: "absolute",
           inset: 0,
           background: "linear-gradient(to bottom, #A0DDAB, #36A64A)",
-          opacity: 1,
           pointerEvents: "none",
-          zIndex: 2,
+          zIndex: 5,
         }}
       />
 
-      {/* 안내 텍스트 */}
+      {/* 📝 위 텍스트 */}
       <div
+        className="detect-content"
         style={{
           position: "absolute",
           top: "350px",
@@ -128,20 +118,15 @@ export default function FirstScreen() {
       >
         <img
           src="/Green_camera.png"
-          style={{
-            width: "250px",
-            height: "250px",
-            filter: "brightness(0%) invert(100%)",
-          }}
+          style={{ width: "250px", height: "250px", filter: "brightness(0%) invert(100%)", }}
         />
         <p style={{ marginTop: "20px", fontSize: "50px", lineHeight: 1.5 }}>
-          분리수거할 품목을 <br />
-          카메라에 잘 보이게 <br />
-          배치해 주세요.
+          분리수거할 품목을 <br/> 카메라에 
+          잘 보이게 <br/>배치해 주세요.
         </p>
       </div>
 
-      {/* 🔽 버튼 2개 (GeneralWaste와 100% 동일 UI) */}
+      {/* 📌 버튼 2개 */}
       <div
         style={{
           position: "absolute",
@@ -154,7 +139,6 @@ export default function FirstScreen() {
           zIndex: 10,
         }}
       >
-        {/* 🎯 버튼1 : 촬영하기 → /large/analyze */}
         <button
           onClick={takePhoto}
           style={{
@@ -172,7 +156,42 @@ export default function FirstScreen() {
         >
           촬영하기
         </button>
-           
+
+        <button
+          onClick={() => router.push("/large/mobile-upload")}
+          style={{
+            width: "500px",
+            height: "200px",
+            background: "#A0DDAB",
+            borderRadius: "35px",
+            border: "none",
+            boxShadow: "0px 6px 14px rgba(0,0,0,0.15)",
+            color: "#ffffff",
+            fontSize: "48px",
+            fontWeight: 700,
+            cursor: "pointer",
+          }}
+        >
+          사진 첨부 파일 추가
+        </button>
+        
+        <button
+          onClick={() => router.push("/large/select_menu")}
+          style={{
+            width: "100px",
+            height: "100px",
+            background: "#A0DDAB",
+            borderRadius: "35px",
+            border: "none",
+            boxShadow: "0px 6px 14px rgba(0,0,0,0.15)",
+            color: "#ffffff",
+            fontSize: "18px",
+            fontWeight: 700,
+            cursor: "pointer",
+          }}
+        >
+          임시대형버튼
+        </button>
 
         {/* 🎯 버튼2 : QR 업로드 → /large/qr */}
         <button
