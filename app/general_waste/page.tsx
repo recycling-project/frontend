@@ -12,15 +12,27 @@ export default function GeneralWastePage() {
     async function startCamera() {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: "environment" },
+          video: {
+            facingMode: { ideal: "environment" }, // 후면 우선
+          },
+          audio: false, // 아이폰에서 안정화됨
         });
+
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
+
+          // 아이폰: metadata 로딩되고 나서 play() 해야 함
+          videoRef.current.onloadedmetadata = () => {
+            videoRef.current?.play().catch(() => {
+              console.log("아이폰 play() 강제 실행 실패");
+            });
+          };
         }
       } catch (err) {
-        console.warn("카메라 미지원 - 테스트 모드");
+        console.log("카메라 오류:", err);
       }
     }
+
     startCamera();
   }, []);
 
@@ -121,8 +133,8 @@ export default function GeneralWastePage() {
           style={{ width: "250px", height: "250px", filter: "brightness(0%) invert(100%)", }}
         />
         <p style={{ marginTop: "20px", fontSize: "50px", lineHeight: 1.5 }}>
-          분리수거할 품목을 <br/> 카메라에 
-          잘 보이게 <br/>배치해 주세요.
+          분리수거할 품목을 <br /> 카메라에
+          잘 보이게 <br />배치해 주세요.
         </p>
       </div>
 

@@ -12,15 +12,27 @@ export default function GeneralWastePage() {
     async function startCamera() {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: "environment" },
+          video: {
+            facingMode: { ideal: "environment" }, // 후면 우선
+          },
+          audio: false, // iOS에서 안정적
         });
+
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
+
+          // iPhone: metadata가 로드된 후 play() 해야 화면이 켜짐
+          videoRef.current.onloadedmetadata = () => {
+            videoRef.current?.play().catch(() => {
+              console.warn("iOS play() 실행 실패 — 사용자 터치 필요할 수 있음");
+            });
+          };
         }
       } catch (err) {
-        console.warn("카메라 미지원 - 테스트 모드");
+        console.error("카메라 실행 실패:", err);
       }
     }
+
     startCamera();
   }, []);
 
@@ -121,8 +133,8 @@ export default function GeneralWastePage() {
           style={{ width: "250px", height: "250px", filter: "brightness(0%) invert(100%)", }}
         />
         <p style={{ marginTop: "20px", fontSize: "50px", lineHeight: 1.5 }}>
-          분리수거할 품목을 <br/> 카메라에 
-          잘 보이게 <br/>배치해 주세요.
+          분리수거할 품목을 <br /> 카메라에
+          잘 보이게 <br />배치해 주세요.
         </p>
       </div>
 
@@ -155,7 +167,7 @@ export default function GeneralWastePage() {
           }}
         >
           촬영하기
-        </button>     
+        </button>
 
         {/* 🎯 버튼2 : QR 업로드 → /large/qr */}
         <button
