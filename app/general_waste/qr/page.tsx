@@ -5,7 +5,7 @@ import { useEffect } from "react";
 
 export default function QRPage() {
   const uploadUrl =
-    "https://frontend-self-delta-10.vercel.app/general_waste/mobile_upload";
+    "https://frontend-self-delta-10.vercel.app/general_waste/mobile-upload";
 
   const router = useRouter();
 

@@ -1,16 +1,11 @@
 "use client";
 
-import { Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import Checkout from "../components/Checkout";
 
-// ----------------------------
-// 내부 Payment 컴포넌트
-// ----------------------------
-function PaymentInner() {
+export default function PaymentPage() {
   const params = useSearchParams();
   const router = useRouter();
-
   const amount = Number(params.get("amount"));
   const orderName = params.get("orderName") ?? "대형폐기물 수수료";
 
@@ -33,15 +28,6 @@ function PaymentInner() {
       </div>
     );
   }
-
-  return <Checkout amount={amount} orderName={orderName} />;
-}
-
-// ----------------------------
-// 외부 PaymentPage
-// ----------------------------
-export default function PaymentPage() {
-  const router = useRouter();
 
   return (
     <div
@@ -81,25 +67,9 @@ export default function PaymentPage() {
         결제하기
       </h1>
 
-      {/* ----------------------------- */}
-      {/*     🔥 결제 UI 전체 확장      */}
-      {/* ----------------------------- */}
+      {/* 결제 위젯 박스 */}
       <div
 <<<<<<< HEAD
-        style={{
-          background: "white",
-          width: "90%",
-          height: "1300px",
-          margin: "80px auto 0",
-          borderRadius: "40px",
-          padding: "50px",
-          overflowY: "scroll",
-        }}
-      >
-        <Suspense fallback={<div>로딩중...</div>}>
-          <PaymentInner />
-        </Suspense>
-=======
   style={{
     background: "white",
     width: "80%",
@@ -113,7 +83,21 @@ export default function PaymentPage() {
   }}
 >
   <Checkout amount={amount} orderName={orderName} />
->>>>>>> dagyeong
+=======
+        style={{
+          background: "white",
+          width: "90%",
+          height: "1300px",
+          margin: "80px auto 0",
+          borderRadius: "40px",
+          padding: "50px",
+          overflowY: "scroll",
+        }}
+      >
+        <Suspense fallback={<div>로딩중...</div>}>
+          <PaymentInner />
+        </Suspense>
+>>>>>>> parent of 8683cf3 (Merge branch 'dagyeong')
       </div>
     </div>
   );

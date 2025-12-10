@@ -12,32 +12,20 @@ export default function GeneralWastePage() {
     async function startCamera() {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
-          video: {
-            facingMode: { ideal: "environment" }, // 후면 우선
-          },
-          audio: false, // iOS에서 안정적
+          video: { facingMode: "environment" },
         });
-
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
-
-          // iPhone: metadata가 로드된 후 play() 해야 화면이 켜짐
-          videoRef.current.onloadedmetadata = () => {
-            videoRef.current?.play().catch(() => {
-              console.warn("iOS play() 실행 실패 — 사용자 터치 필요할 수 있음");
-            });
-          };
         }
       } catch (err) {
-        console.error("카메라 실행 실패:", err);
+        console.warn("카메라 미지원 - 테스트 모드");
       }
     }
-
     startCamera();
   }, []);
 
   // ✅ 촬영 기능
-  const takePhoto = () => {
+  const capturePhoto = () => {
     if (!videoRef.current) return;
 
     const video = videoRef.current;
@@ -55,7 +43,7 @@ export default function GeneralWastePage() {
     const base64 = canvas.toDataURL("image/png");
     localStorage.setItem("wasteImage", base64);
 
-    router.push("/large/analyze");
+    router.push("/general_waste/analyze");
   };
 
   return (
@@ -94,28 +82,18 @@ export default function GeneralWastePage() {
         ref={videoRef}
         autoPlay
         playsInline
-        muted        // ← 이거 추가해야 아이폰에서 뜬다!!!
         className="camera-preview"
         style={{
-          // 다경님꺼
-          // position: "absolute",
-          // inset: 0,
-          // width: "100%",
-          // height: "100%",
-          // objectFit: "cover",
-
           position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100vw",
-          height: "100vh",
+          inset: 0,
+          width: "100%",
+          height: "100%",
           objectFit: "cover",
-          zIndex: 1,
         }}
       />
 
       {/* 🌈 투명 그라데이션 오버레이 */}
-      {/* <div
+      <div
         style={{
           position: "absolute",
           inset: 0,
@@ -123,7 +101,7 @@ export default function GeneralWastePage() {
           pointerEvents: "none",
           zIndex: 5,
         }}
-      /> */}
+      />
 
       {/* 📝 위 텍스트 */}
       <div
@@ -143,8 +121,8 @@ export default function GeneralWastePage() {
           style={{ width: "250px", height: "250px", filter: "brightness(0%) invert(100%)", }}
         />
         <p style={{ marginTop: "20px", fontSize: "50px", lineHeight: 1.5 }}>
-          분리수거할 품목을 <br /> 카메라에
-          잘 보이게 <br />배치해 주세요.
+          분리수거할 품목을 <br/> 카메라에 
+          잘 보이게 <br/>배치해 주세요.
         </p>
       </div>
 
@@ -162,7 +140,7 @@ export default function GeneralWastePage() {
         }}
       >
         <button
-          onClick={takePhoto}
+          onClick={capturePhoto}
           style={{
             width: "500px",
             height: "200px",
@@ -179,9 +157,8 @@ export default function GeneralWastePage() {
           촬영하기
         </button>
 
-        {/* 🎯 버튼2 : QR 업로드 → /large/qr */}
         <button
-          onClick={() => router.push("/large/qr")}
+          onClick={() => router.push("/large/mobile-upload")}
           style={{
             width: "500px",
             height: "200px",
@@ -195,12 +172,11 @@ export default function GeneralWastePage() {
             cursor: "pointer",
           }}
         >
-          QR로 사진 업로드
+          사진 첨부 파일 추가
         </button>
 <<<<<<< HEAD
-=======
         
-        {/* <button
+        <button
           onClick={() => router.push("/large/select_menu")}
           style={{
             width: "100px",
@@ -216,9 +192,10 @@ export default function GeneralWastePage() {
           }}
         >
           임시대형버튼
-        </button> */}
+        </button>
 
->>>>>>> dagyeong
+=======
+>>>>>>> parent of 8683cf3 (Merge branch 'dagyeong')
       </div>
     </div>
   );

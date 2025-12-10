@@ -8,20 +8,9 @@ export default function ChairPage() {
 
   const [count, setCount] = useState(1);
   const [price, setPrice] = useState<number | null>(null);
-  const [loading, setLoading] = useState(false);
 
-  /** 가격 계산 */
   const calculatePrice = async () => {
 <<<<<<< HEAD
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/large/price`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ type: "chair", count }),
-    });
-
-    const data = await res.json();
-    setPrice(data.price);
-=======
     setLoading(true);
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/large/price`, {
@@ -35,101 +24,52 @@ export default function ChairPage() {
       console.error("가격 계산 오류:", e);
     }
     setLoading(false);
->>>>>>> dagyeong
+=======
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/large/price`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ type: "chair", count }),
+    });
+
+    const data = await res.json();
+    setPrice(data.price);
+>>>>>>> parent of 8683cf3 (Merge branch 'dagyeong')
   };
 
   useEffect(() => {
     calculatePrice();
   }, [count]);
 
-  /** 🔥 결제 페이지 이동 */
   const goToPayment = () => {
-    if (!price) return;
-
+    if (price === null) {
+      alert("가격 정보가 없습니다.");
+      return;
+    }
     const orderName = `의자 ${count}개`;
 
 <<<<<<< HEAD
-    router.push(`/payment?amount=${price}&orderName=${orderName}`);
-=======
     router.push(
       `/payment?amount=${encodeURIComponent(String(price))}&orderName=${encodeURIComponent(orderName)}`
     );
->>>>>>> dagyeong
+=======
+    router.push(`/payment?amount=${price}&orderName=${orderName}`);
+>>>>>>> parent of 8683cf3 (Merge branch 'dagyeong')
   };
 
   return (
-    <div
-      style={{
-        width: "1080px",
-        height: "1920px",
-        background: "linear-gradient(to bottom, #9EE0AE, #36A64A)",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        paddingTop: "180px",
-        position: "relative",
-      }}
-    >
-      {/* 뒤로가기 */}
-      <img
-        src="/back_icon.png"
-        onClick={() => router.back()}
-        style={{
-          position: "absolute",
-          top: "60px",
-          left: "40px",
-          width: "90px",
-          height: "90px",
-          cursor: "pointer",
-        }}
+    <div className="container">
+      <h2>의자 옵션 선택</h2>
+
+      <p className="label">개수</p>
+      <input
+        type="number"
+        min={1}
+        value={count}
+        onChange={(e) => setCount(Number(e.target.value))}
+        className="input"
       />
 
 <<<<<<< HEAD
-      {price !== null && (
-        <div className="resultBox">
-          <p>총 수수료</p>
-          <h3>{price.toLocaleString()} 원</h3>
-        </div>
-      )}
-
-      <button className="btn" onClick={goToPayment}>
-        결제하기
-      </button>
-
-      <style jsx>{`
-        .container {
-          padding: 20px;
-          text-align: center;
-        }
-        .label {
-          margin-top: 20px;
-        }
-        .input {
-          width: 100px;
-          padding: 10px;
-          border: 2px solid black;
-          border-radius: 8px;
-          font-size: 16px;
-          text-align: center;
-        }
-        .resultBox {
-          margin-top: 20px;
-          padding: 20px;
-          background: #f2f2f2;
-          border-radius: 12px;
-        }
-        .btn {
-          margin-top: 20px;
-          width: 80%;
-          max-width: 300px;
-          padding: 16px;
-          background: black;
-          color: white;
-          border-radius: 12px;
-          font-size: 18px;
-        }
-      `}</style>
-=======
       {/* 제목 */}
       <h1
         style={{
@@ -266,7 +206,52 @@ export default function ChairPage() {
           {loading ? "계산 중..." : "결제하기"}
         </button>
       </div>
->>>>>>> dagyeong
+=======
+      {price !== null && (
+        <div className="resultBox">
+          <p>총 수수료</p>
+          <h3>{price.toLocaleString()} 원</h3>
+        </div>
+      )}
+
+      <button className="btn" onClick={goToPayment}>
+        결제하기
+      </button>
+
+      <style jsx>{`
+        .container {
+          padding: 20px;
+          text-align: center;
+        }
+        .label {
+          margin-top: 20px;
+        }
+        .input {
+          width: 100px;
+          padding: 10px;
+          border: 2px solid black;
+          border-radius: 8px;
+          font-size: 16px;
+          text-align: center;
+        }
+        .resultBox {
+          margin-top: 20px;
+          padding: 20px;
+          background: #f2f2f2;
+          border-radius: 12px;
+        }
+        .btn {
+          margin-top: 20px;
+          width: 80%;
+          max-width: 300px;
+          padding: 16px;
+          background: black;
+          color: white;
+          border-radius: 12px;
+          font-size: 18px;
+        }
+      `}</style>
+>>>>>>> parent of 8683cf3 (Merge branch 'dagyeong')
     </div>
   );
 }

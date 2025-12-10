@@ -2,20 +2,16 @@
 
 export const dynamic = "force-dynamic";
 
-import { Suspense } from "react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
-// ===================================================
-//  ⬇⬇ 기존 코드 전체를 Content 컴포넌트로 감싸기
-// ===================================================
-function WasteAnalyzeContent() {
+export default function WasteAnalyze() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
   const id = searchParams.get("id");     // QR 업로드 id
-  const text = searchParams.get("text"); // 텍스트 질문 입력값
+  const text = searchParams.get("text"); // 텍스트질문 입력값
 
   // 1) 카메라 촬영한 이미지 (localStorage)
   const storedBase64 =
@@ -56,16 +52,13 @@ function WasteAnalyzeContent() {
   // ------------------------------------------------------------------
   useEffect(() => {
     async function doAnalyze() {
-      // ⛔ 사진이 아직 로드되지 않았으면 실행 금지
+      // 아무 입력 없음 → 실행 X
       if (!photo && !text) return;
-      if (photo && photo.length < 50) return; // base64가 너무 짧으면 아직 준비 안 된 상태
 
       const body = photo ? { image: photo } : { text };
 
       try {
-        const api = process.env.NEXT_PUBLIC_API_URL;
-
-        const res = await fetch(`${api}/recycle/analyze`, {
+        const res = await fetch("/api/analyze", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(body),
@@ -87,11 +80,11 @@ function WasteAnalyzeContent() {
       }
     }
 
-    doAnalyze();
+    if (photo || text) doAnalyze();
   }, [photo, text]);
 
   // ------------------------------------------------------------------
-  // 📌 UI — 로딩 페이지 (CSS 그대로 유지)
+  // 📌 UI — 로딩 페이지 (절대 수정하지 말라고 했으니 그대로 유지)
   // ------------------------------------------------------------------
   return (
     <div
@@ -144,16 +137,5 @@ function WasteAnalyzeContent() {
         />
       </div>
     </div>
-  );
-}
-
-// ===================================================
-//  ⬇⬇ page.tsx 페이지 컴포넌트 (여기서는 훅 금지)
-// ===================================================
-export default function WasteAnalyzePage() {
-  return (
-    <Suspense fallback={<div></div>}>
-      <WasteAnalyzeContent />
-    </Suspense>
   );
 }
