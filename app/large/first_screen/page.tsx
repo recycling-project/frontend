@@ -93,7 +93,7 @@ export default function GeneralWastePage() {
       />
 
       {/* 🌈 투명 그라데이션 오버레이 */}
-      {/* <div
+      <div
         style={{
           position: "absolute",
           inset: 0,
@@ -101,7 +101,7 @@ export default function GeneralWastePage() {
           pointerEvents: "none",
           zIndex: 5,
         }}
-      /> */}
+      />
 
       {/* 📝 위 텍스트 */}
       <div
@@ -175,7 +175,7 @@ export default function GeneralWastePage() {
           사진 첨부 파일 추가
         </button>
         
-        {/* <button
+        <button
           onClick={() => router.push("/large/select_menu")}
           style={{
             width: "100px",
@@ -191,7 +191,7 @@ export default function GeneralWastePage() {
           }}
         >
           임시대형버튼
-        </button> */}
+        </button>
 
       </div>
     </div>
