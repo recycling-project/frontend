@@ -106,7 +106,7 @@ export default function GeneralWastePage() {
       />
 
       {/* 🌈 투명 그라데이션 오버레이 */}
-      <div
+      {/* <div
         style={{
           position: "absolute",
           inset: 0,
@@ -114,7 +114,7 @@ export default function GeneralWastePage() {
           pointerEvents: "none",
           zIndex: 5,
         }}
-      />
+      /> */}
 
       {/* 📝 위 텍스트 */}
       <div

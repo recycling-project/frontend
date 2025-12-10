@@ -81,8 +81,11 @@ export default function PaymentPage() {
         결제하기
       </h1>
 
-      {/* 결제 위젯 박스 */}
+      {/* ----------------------------- */}
+      {/*     🔥 결제 UI 전체 확장      */}
+      {/* ----------------------------- */}
       <div
+<<<<<<< HEAD
         style={{
           background: "white",
           width: "90%",
@@ -96,6 +99,21 @@ export default function PaymentPage() {
         <Suspense fallback={<div>로딩중...</div>}>
           <PaymentInner />
         </Suspense>
+=======
+  style={{
+    background: "white",
+    width: "80%",
+    height: "calc(1920px - 360px)",   
+    margin: "60px auto 40px",
+    borderRadius: "40px",
+    padding: "60px 70px",  // 여유 공간 확보
+    overflowY: "auto",     // 필요한 때만 스크롤
+    scrollbarWidth: "none",
+    msOverflowStyle: "none",
+  }}
+>
+  <Checkout amount={amount} orderName={orderName} />
+>>>>>>> dagyeong
       </div>
     </div>
   );

@@ -11,7 +11,7 @@ const ENG_TO_KOR: Record<string, string> = {
   "desk": "책상",
   "hwa-jang-dae": "화장대",
   "bed": "침대",
-  "bike": "자전거",
+  "bicycle": "자전거",
   "hang-a-ri": "항아리",
 };
 
@@ -72,6 +72,10 @@ export default function SelectMenuPage() {
           display: "flex",
           justifyContent: "center",
           overflowY: "auto",
+
+          /* ▼ 스크롤바 숨기기 */
+          scrollbarWidth: "none",     // Firefox
+          msOverflowStyle: "none",    // IE/Edge
         }}
       >
         <div
@@ -82,6 +86,11 @@ export default function SelectMenuPage() {
             gap: "50px 40px",
           }}
         >
+          <style jsx>{`
+    div::-webkit-scrollbar {
+      display: none; /* Chrome, Safari */
+    }
+  `}</style>
           {Object.entries(ENG_TO_KOR).map(([eng, kor]) => (
             <button
               key={eng}

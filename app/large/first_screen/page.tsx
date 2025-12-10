@@ -115,7 +115,7 @@ export default function GeneralWastePage() {
       />
 
       {/* 🌈 투명 그라데이션 오버레이 */}
-      <div
+      {/* <div
         style={{
           position: "absolute",
           inset: 0,
@@ -123,7 +123,7 @@ export default function GeneralWastePage() {
           pointerEvents: "none",
           zIndex: 5,
         }}
-      />
+      /> */}
 
       {/* 📝 위 텍스트 */}
       <div
@@ -197,6 +197,28 @@ export default function GeneralWastePage() {
         >
           QR로 사진 업로드
         </button>
+<<<<<<< HEAD
+=======
+        
+        {/* <button
+          onClick={() => router.push("/large/select_menu")}
+          style={{
+            width: "100px",
+            height: "100px",
+            background: "#A0DDAB",
+            borderRadius: "35px",
+            border: "none",
+            boxShadow: "0px 6px 14px rgba(0,0,0,0.15)",
+            color: "#ffffff",
+            fontSize: "18px",
+            fontWeight: 700,
+            cursor: "pointer",
+          }}
+        >
+          임시대형버튼
+        </button> */}
+
+>>>>>>> dagyeong
       </div>
     </div>
   );
